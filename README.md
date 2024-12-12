@@ -13,10 +13,11 @@
 
 如果是第一次執行這個專案，請參考以下步驟：
 
-- `poetry install`
-- `npm install`
-- `poetry shell`
-- `python manage.py runserver`
+- 建立環境變數文件，確保正確加載配置：`cp .env.example .env`
+- poetry install：`poetry install`
+- 安裝前端專案所需的依賴套件：`npm install`
+- 啟動 Poetry 的虛擬環境：`poetry shell`
+- 啟動 Django 開發伺服器：`python manage.py runserver`
 
 ## 環境安裝指令
 
