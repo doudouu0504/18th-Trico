@@ -8,31 +8,37 @@ from django.http import HttpResponse
 
 
 def register(request):
+    if request.user.is_authenticated:
+        return redirect("pages:home")
+
     if request.POST:
         form = UserCreationForm(request.POST)
 
         if form.is_valid():
             form.save()
-            messages.success(request, "註冊成功!!!歡迎登入")
+            messages.success(request, "註冊成功!歡迎登入。")
             return redirect("users:login")
         else:
-            messages.success(request, "很抱歉，您註冊失敗!!")
+            messages.error(request, "很抱歉！請確認您的密碼。")
             return redirect("users:register")
+
     return render(request, "users/register.html")
 
 
 def login(request):
+    if request.user.is_authenticated:
+        return redirect("pages:home")
+
     if request.POST:
         user = authenticate(
             username=request.POST.get("username"),
             password=request.POST.get("password"),
         )
-
-        if user is not None:
+        if user:
             login_user(request, user)
             return redirect("pages:home")
         else:
-            messages.success(request, "登入失敗，請重新登入一次。")
+            messages.error(request, "登入失敗，請重新登入一次。")
             return redirect("users:login")
     return render(request, "users/login.html")
 
@@ -41,7 +47,7 @@ def login(request):
 @login_required
 def logout(request):
     logout_user(request)
-    reponse = HttpResponse()
-    reponse["HX-Redirect"] = "/"
-    return reponse
+    response = HttpResponse()
+    response["HX-Redirect"] = "/"
+    return response
     # return redirect("pages:home")
