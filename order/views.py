@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+
+# from django.http import HttpResponse
 
 
 def order(request):
@@ -11,4 +12,4 @@ def failed(request):
 
 
 def successful(request):
-    return render(request, "order/sucessful.html")
+    return render(request, "order/order_successful.html")
