@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse
-
+from .forms import UserUpdateForm, ProfileUpdateForm
 
 def register(request):
     if request.user.is_authenticated:
@@ -51,3 +51,25 @@ def logout(request):
     response["HX-Redirect"] = "/"
     return response
     # return redirect("pages:home")
+
+@login_required
+def profile(request):
+
+    if request.POST:
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            return redirect("users:profile")
+    
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        "user_form": user_form,
+        "profile_form": profile_form
+    }
+
+    return render(request, "users/profile.html", context)
