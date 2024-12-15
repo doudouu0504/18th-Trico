@@ -1,4 +1,5 @@
-{% extends "shared/layout.html" %} {% block "content"%}{% load socialaccount %}
+{% extends "shared/layout.html" %} {% block "content"%} {% load socialaccount%}
+{% load static %}
 
 <div class="flex flex-col justify-center min-h-full px-6 py-12 lg:px-8">
   <div class="max-w-lg px-20 py-10 mx-auto bg-white border rounded-md">
@@ -72,14 +73,32 @@
           </button>
         </div>
       </form>
-      <a href="{% url 'line_login' %}">使用 LINE 登入</a>
+      <div class="flex items-center my-6 separator">
+        <div class="flex-grow border-t border-gray-300"></div>
+        <span class="mx-4 text-sm text-gray-500">使用其他方式登入</span>
+        <div class="flex-grow border-t border-gray-300"></div>
+      </div>
+
+      <div class="flex justify-center cursor-pointer">
+        <a
+          href="{% url 'line_login' %}"
+          class="flex items-center px-4 py-2 font-medium text-green-500 transition border border-green-500 rounded-md cursor-pointer hover:bg-green-100"
+          ><img
+            src="{% static 'images/line.png' %}"
+            alt="LINE Logo"
+            class="w-5 h-5 mr-2"
+          />
+          LINE 登入</a
+        >
+      </div>
       <p class="mt-10 text-center text-gray-500 text-sm/6">
-        還沒有會員？快加入我們！
+        還沒有會員？也可以使用
         <a
           href="{% url 'users:register'%}"
           class="font-semibold text-indigo-600 hover:text-indigo-500"
           >註冊</a
         >
+        方式加入我們！
       </p>
     </div>
   </div>
