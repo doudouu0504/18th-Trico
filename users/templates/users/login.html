@@ -1,4 +1,4 @@
-{% extends "shared/layout.html" %} {% block "content"%}
+{% extends "shared/layout.html" %} {% block "content"%}{% load socialaccount %}
 
 <div class="flex flex-col justify-center min-h-full px-6 py-12 lg:px-8">
   <div class="max-w-lg px-20 py-10 mx-auto bg-white border rounded-md">
@@ -72,7 +72,7 @@
           </button>
         </div>
       </form>
-
+      <a href="{% url 'line_login' %}">使用 LINE 登入</a>
       <p class="mt-10 text-center text-gray-500 text-sm/6">
         還沒有會員？快加入我們！
         <a
