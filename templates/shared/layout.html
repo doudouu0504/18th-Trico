@@ -8,12 +8,6 @@
     <script src="{% static 'scripts/app.js'%}" type="module"></script>
     <link rel="stylesheet" href="{% static 'styles/app.css' %}" />
     <script src="https://cdn.tailwindcss.com"></script>
-    {% comment %}
-    <link
-      href="https://cdn.jsdelivr.net/npm/daisyui@4.12.0/dist/full.css"
-      rel="stylesheet"
-    />
-    {% endcomment %}
   </head>
   <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     {% include "shared/navbar.html" %}
