@@ -68,20 +68,20 @@ def profile(request):
     if request.POST:
         user_form = UserUpdateForm(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-        
+
         # Debug: 印出表單驗證錯誤
         if not user_form.is_valid():
             print("User Form Errors:", user_form.errors)
-        
+
         if not profile_form.is_valid():
             print("Profile Form Errors:", profile_form.errors)
-        
+
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
             messages.success(request, "個人資料已成功更新")
             return redirect("users:profile")
-    
+
     else:
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
@@ -92,3 +92,15 @@ def profile(request):
     }
 
     return render(request, "users/profile.html", context)
+
+
+@login_required
+def switch_client(request):
+    request.session["role"] = "client"
+    return render(request, "users/switch_client.html")
+
+
+@login_required
+def switch_freelancer(request):
+    request.session["role"] = "freelancer"
+    return render(request, "users/switch_freelancer.html")
