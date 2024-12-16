@@ -10,6 +10,8 @@ python = "^3.13"
 django = "^5.1.4"
 psycopg = {extras = ["binary"], version = "^3.2.3"}
 pillow = "^11.0.0"
+boto3 = "^1.35.81"
+django-storages = "^1.14.4"
 
 
 [build-system]
