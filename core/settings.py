@@ -60,8 +60,10 @@ SOCIALACCOUNT_PROVIDERS = {
         "AUTH_PARAMS": {"response_type": "code"},
     }
 }
-
+LOGIN_URL = "/users/login/"
 LOGIN_REDIRECT_URL = "/"
+ACCOUNT_SIGNUP_REDIRECT_URL = "/"
+
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
