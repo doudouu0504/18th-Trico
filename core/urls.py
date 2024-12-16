@@ -9,6 +9,3 @@ urlpatterns = [
     path("users/", include("users.urls")),
     path("order/", include("order.urls")),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
