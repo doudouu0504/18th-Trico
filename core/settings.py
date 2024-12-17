@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     "users",
     "pages",
     "order",
-    "storages",
 ]
 
 MIDDLEWARE = [
