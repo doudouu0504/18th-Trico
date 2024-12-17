@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from dotenv import load_dotenv
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -52,11 +54,13 @@ INSTALLED_APPS += [
 ]
 SITE_ID = 1
 
+load_dotenv()
+
 SOCIALACCOUNT_PROVIDERS = {
     "line": {
         "APP": {
-            "client_id": "2006673281",
-            "secret": "c57178247340862fa1dca0b81b238963",
+            "client_id": os.getenv("LINE_CLIENT_ID"),
+            "secret": os.getenv("LINE_SECRET"),
             "key": "",
         },
         "SCOPE": ["profile", "openid", "email"],
