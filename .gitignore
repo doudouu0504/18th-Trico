@@ -3,5 +3,7 @@ node_modules/
 .venv/
 __pycache__/
 db.sqlite3
-static/
+static/scripts/app.js
+static/styles/app.css
 .vscode/
+media/
