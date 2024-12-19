@@ -1,0 +1,42 @@
+{% extends "shared/layout.html" %} {% block "content" %} {% load static %}
+
+<div class="w-4/5 mx-auto my-8 bg-blue-100 p-6 rounded-lg shadow-md">
+  <h1 class="text-2xl font-bold text-blue-700 mb-6">新增Service:</h1>
+  <form method="post" enctype="multipart/form-data" class="space-y-6">
+    {% csrf_token %}
+    <!-- Render Django form fields with custom styling -->
+    <div class="space-y-6">
+      {% for field in form %}
+      <div class="flex flex-col">
+        <label
+          for="{{ field.id_for_label }}"
+          class="text-gray-700 font-medium mb-2"
+        >
+          {{ field.label }}
+        </label>
+        {{ field }} {% if field.errors %}
+        <p class="text-red-500 text-sm mt-1">{{ field.errors }}</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-end mt-6 space-x-4">
+      <a
+        href="{% url 'services:freelancer_dashboard' id=request.user.id %}"
+        class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded transition duration-300"
+      >
+        取消新增
+      </a>
+      <button
+        type="submit"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300"
+      >
+        存檔
+      </button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

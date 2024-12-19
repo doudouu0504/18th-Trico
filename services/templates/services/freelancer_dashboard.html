@@ -1,0 +1,60 @@
+{% extends "shared/layout.html" %} {% block "content" %} {% load static %}
+
+<div class="w-4/5 mx-auto my-8 bg-blue-100 p-6 rounded-lg shadow-md">
+  <a
+    class="add-service-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-6 inline-block"
+    href="{% url 'services:create_service' id=request.user.id %}"
+  >
+    新增Service
+  </a>
+
+  <div class="services grid grid-cols-1 md:grid-cols-2 gap-6">
+    {% if services %} {% for service in services %}
+    <div class="service-card bg-white rounded-lg shadow-md overflow-hidden">
+      {% if service.photo %}
+      <img
+        class="w-full h-48 object-cover"
+        src="{% static 'images/chill_guy.jpg' %}"
+        alt="Service Photo"
+      />
+      {% else %}
+      <img
+        class="w-full h-48 object-cover"
+        src="{% static 'images/chill_guy.jpg' %}"
+        alt="Default Photo"
+      />
+      {% endif %}
+      <div class="p-4">
+        <h2 class="text-xl font-bold text-blue-700">{{ service.title }}</h2>
+        <p class="text-gray-600 mt-2">{{ service.description }}</p>
+        <div class="mt-4 flex space-x-4">
+          <a
+            class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded transition duration-300"
+            href="{% url 'services:edit_service' id=request.user.id service_id=service.id %}"
+          >
+            編輯
+          </a>
+          <a
+            class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300"
+            href="{% url 'services:delete_service' id=request.user.id service_id=service.id %}"
+          >
+            刪除
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <p class="text-center text-gray-700">
+      No services found.
+      <a
+        class="text-blue-500 hover:text-blue-700 font-medium"
+        href="{% url 'services:create_service' id=request.user.id %}"
+      >
+        Create a new service
+      </a>
+      .
+    </p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
