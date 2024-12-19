@@ -11,19 +11,11 @@
   <div class="services grid grid-cols-1 md:grid-cols-2 gap-6">
     {% if services %} {% for service in services %}
     <div class="service-card bg-white rounded-lg shadow-md overflow-hidden">
-      {% if service.photo %}
       <img
         class="w-full h-48 object-cover"
-        src="{% static 'images/chill_guy.jpg' %}"
+        src="{% if service.photo %}{{ service.photo.url }}{% else %}https://fakeimg.pl/300{% endif %}"
         alt="Service Photo"
       />
-      {% else %}
-      <img
-        class="w-full h-48 object-cover"
-        src="{% static 'images/chill_guy.jpg' %}"
-        alt="Default Photo"
-      />
-      {% endif %}
       <div class="p-4">
         <h2 class="text-xl font-bold text-blue-700">{{ service.title }}</h2>
         <p class="text-gray-600 mt-2">{{ service.description }}</p>
@@ -50,11 +42,11 @@
         class="text-blue-500 hover:text-blue-700 font-medium"
         href="{% url 'services:create_service' id=request.user.id %}"
       >
-        Create a new service
-      </a>
-      .
+        Create a new service </a
+      >.
     </p>
     {% endif %}
   </div>
 </div>
+
 {% endblock %}
