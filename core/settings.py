@@ -49,20 +49,33 @@ INSTALLED_APPS += [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.line",
+    "allauth.socialaccount.providers.google",
 ]
 SITE_ID = 1
+
+load_dotenv()
 
 SOCIALACCOUNT_PROVIDERS = {
     "line": {
         "APP": {
-            "client_id": "2006673281",
-            "secret": "c57178247340862fa1dca0b81b238963",
+            "client_id": os.getenv("LINE_CLIENT_ID"),
+            "secret": os.getenv("LINE_SECRET"),
             "key": "",
         },
         "SCOPE": ["profile", "openid", "email"],
         "AUTH_PARAMS": {"response_type": "code"},
-    }
+    },
+    "google": {
+        "APP": {
+            "client_id": os.getenv("GOOGLE_CLIENT_ID"),
+            "secret": os.getenv("GOOGLE_SECRET"),
+            "key": "",
+        },
+        "SCOPE": ["profile", "email"],
+        "AUTH_PARAMS": {"access_type": "online"},
+    },
 }
+
 LOGIN_URL = "/users/login/"
 LOGIN_REDIRECT_URL = "/"
 ACCOUNT_SIGNUP_REDIRECT_URL = "/"
