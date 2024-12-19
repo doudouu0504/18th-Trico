@@ -22,7 +22,7 @@
     height: 150px;
     border-radius: 20px;
 }
-.avatar {
+.avatarInpage {
     width: 40px;
     border-radius: 50%;
     border: 2px;
@@ -105,27 +105,27 @@
 /* 換頁按鈕 */
 .pagination {
     display: flex;
-    justify-content: center;
-    align-items: center;
     gap: 8px;
-}
-
-.new~button {
-    background-color: transparent;
+  }
+  
+  button.new {
+    width: 40px;
+    height: 40px;
     border: 1px solid #ccc;
-    border-radius: 50%;
-    padding: 10px;
+    border-radius: 50%; /* 圓形邊框 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
     cursor: pointer;
-    padding-right:16px;
-    padding-left:16px;
-}
-
-.new~button:disabled {
+  }
+  
+  button.new.active {
+    background-color: #007bff; /* 活動按鈕的背景顏色 */
+    color: white;
+  }
+  
+  button.new:disabled {
+    background-color: #e9ecef; /* 禁用按鈕的背景顏色 */
     cursor: not-allowed;
-    opacity: 0.5;
-}
-
-.new~button.active {
-    font-weight: bold;
-    border: 2px solid rgb(0, 157, 255);
-}
+  }

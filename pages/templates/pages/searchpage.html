@@ -51,7 +51,7 @@
               <img class="taskeradvertise" src= "{% static 'images/webdev.png' %}" />
               <div class="pt-1">
                 <div class="flex">
-                  <img class="avatar" src="{% static 'images/kao.jpg' %}" alt="" />
+                  <img class="avatarInpage" src="{% static 'images/kao.jpg' %}" alt="" />
                   <p class="pt-3.5 pl-1">龍哥團隊</p>
                 </div>
                 <p class="max-w-[250px]">
@@ -78,7 +78,7 @@
               />
               <div class="pt-1">
                 <div class="flex">
-                  <img class="avatar" src="{% static 'images/pika.jpg' %}" alt="" />
+                  <img class="avatarInpage" src="{% static 'images/pika.jpg' %}" alt="" />
                   <p class="pt-3.5 pl-1">皮卡丘聯盟</p>
                 </div>
                 <p class="max-w-[250px]">
@@ -105,7 +105,7 @@
               />
               <div class="pt-1">
                 <div class="flex">
-                  <img class="avatar" src="{% static 'images/ufo.jpg' %}" alt="" />
+                  <img class="avatarInpage" src="{% static 'images/ufo.jpg' %}" alt="" />
                   <p class="pt-3.5 pl-1">老高ufo說書</p>
                 </div>
                 <p class="max-w-[250px]">
@@ -133,7 +133,7 @@
               <div class="pt-1">
                 <div class="flex">
                   <img
-                    class="avatar"
+                    class="avatarInpage"
                     src="{% static 'images/redgirl.webp' %}"
                     alt=""
                   />
@@ -166,7 +166,7 @@
               <img class="taskeradvertise" src="{% static 'images/webdev.png'%}" />
               <div class="pt-1">
                 <div class="flex">
-                  <img class="avatar" src="{% static 'images/kao.jpg' %}" alt="" />
+                  <img class="avatarInpage" src="{% static 'images/kao.jpg' %}" alt="" />
                   <p class="pt-3.5 pl-1">龍哥團隊</p>
                 </div>
                 <p class="max-w-[250px]">
@@ -193,7 +193,7 @@
               />
               <div class="pt-1">
                 <div class="flex">
-                  <img class="avatar" src="{% static 'images/pika.jpg' %}" alt="" />
+                  <img class="avatarInpage" src="{% static 'images/pika.jpg' %}" alt="" />
                   <p class="pt-3.5 pl-1">皮卡丘聯盟</p>
                 </div>
                 <p class="max-w-[250px]">
@@ -220,7 +220,7 @@
               />
               <div class="pt-1">
                 <div class="flex">
-                  <img class="avatar" src="{% static 'images/ufo.jpg' %}" alt="" />
+                  <img class="avatarInpage" src="{% static 'images/ufo.jpg' %}" alt="" />
                   <p class="pt-3.5 pl-1">老高ufo說書</p>
                 </div>
                 <p class="max-w-[250px]">
@@ -248,7 +248,7 @@
               <div class="pt-1">
                 <div class="flex">
                   <img
-                    class="avatar"
+                    class="avatarInpage"
                     src="{% static 'images/redgirl.webp' %}"
                     alt=""
                   />
@@ -281,7 +281,7 @@
               <img class="taskeradvertise" src="{% static 'images/webdev.png' %}" />
               <div class="pt-1">
                 <div class="flex">
-                  <img class="avatar" src="{% static 'images/kao.jpg' %}" alt="" />
+                  <img class="avatarInpage" src="{% static 'images/kao.jpg' %}" alt="" />
                   <p class="pt-3.5 pl-1">龍哥團隊</p>
                 </div>
                 <p class="max-w-[250px]">
@@ -308,7 +308,7 @@
               />
               <div class="pt-1">
                 <div class="flex">
-                  <img class="avatar" src="{% static 'images/pika.jpg' %}" alt="" />
+                  <img class="avatarInpage" src="{% static 'images/pika.jpg' %}" alt="" />
                   <p class="pt-3.5 pl-1">皮卡丘聯盟</p>
                 </div>
                 <p class="max-w-[250px]">
@@ -335,7 +335,7 @@
               />
               <div class="pt-1">
                 <div class="flex">
-                  <img class="avatar" src="{% static 'images/ufo.jpg' %}" alt="" />
+                  <img class="avatarInpage" src="{% static 'images/ufo.jpg' %}" alt="" />
                   <p class="pt-3.5 pl-1">老高ufo說書</p>
                 </div>
                 <p class="max-w-[250px]">
@@ -363,7 +363,7 @@
               <div class="pt-1">
                 <div class="flex">
                   <img
-                    class="avatar"
+                    class="avatarInpage"
                     src="{% static 'images/redgirl.webp' %}"
                     alt=""
                   />
@@ -524,7 +524,7 @@
               <div class="flex gap-5">
                 <img
                   class="recommendcaser"
-                  src="{% static 'images/work-1.jpg' %}"
+                  src="{% static 'images/work1.jpg' %}"
                   alt=""
                 />
                 <ul class="listtype">
@@ -624,7 +624,7 @@
               <div class="flex gap-5">
                 <img
                   class="recommendcaser"
-                  src="../searchpage_img/work2.png"
+                  src="{% static 'images/work2.png' %}"
                   alt=""
                 />
                 <ul class="listtype">
@@ -647,51 +647,50 @@
       </div>
     </div>
   </body>
-      <!-- 換頁按鈕 -->
-      <div class="pagination">
-        <button class="new" id="prev" disabled>←</button>
-        <button class="new page" data-page="1">1</button>
-        <button class="new page" data-page="2">2</button>
-        <button class="new page" data-page="3">3</button>
-        <button class="new page" data-page="4">4</button>
-        <button class="new page" data-page="5">5</button>
-        <button class="new" id="next">→</button>
-      </div>
-  
-      <script>
-        const prevButton = document.getElementById("prev");
-        const nextButton = document.getElementById("next");
-        const pageButtons = document.querySelectorAll(".page");
-  
-        let currentPage = 1;
-        const totalPages = 5;
-  
-        function updateButtons() {
-        pageButtons.forEach(button => {
-            button.classList.toggle("active", button.dataset.page == currentPage);
-        });
-        prevButton.disabled = currentPage === 1;
-        nextButton.disabled = currentPage === totalPages;
-      }
-  
-        pageButtons.forEach(button => {
-            button.addEventListener("click", () => {
-            currentPage = parseInt(button.dataset.page);
-            updateButtons();
-          });
-        });
-  
-        prevButton.addEventListener("click", () => {
-            if (currentPage > 1) currentPage--;
-            updateButtons();
-        });
-  
-        nextButton.addEventListener("click", () => {
-            if (currentPage < totalPages) currentPage++;
-            updateButtons();
-        });
-  
-        updateButtons();
-      </script>
+  <!-- 換頁按鈕 -->
+  <div class="pagination justify-center pb-2">
+    <button class="new" id="prev" disabled>←</button>
+    <button class="new page" data-page="1">1</button>
+    <button class="new page" data-page="2">2</button>
+    <button class="new page" data-page="3">3</button>
+    <button class="new page" data-page="4">4</button>
+    <button class="new page" data-page="5">5</button>
+    <button class="new page" data-page="6">6</button>
+    <button class="new" id="next">→</button>
+  </div>
+
+  <script>
+    const prevButton = document.getElementById("prev");
+    const nextButton = document.getElementById("next");
+    const pageButtons = document.querySelectorAll(".page");
+
+    let currentPage = 1;
+    const totalPages = 6;
+
+    function updateButtons() {
+      pageButtons.forEach(button => {
+          button.classList.toggle("active", button.dataset.page == currentPage);
+      });
+      prevButton.disabled = currentPage === 1;
+      nextButton.disabled = currentPage === totalPages;
+    }
+    pageButtons.forEach(button => {
+      button.addEventListener("click", () => {
+      currentPage = parseInt(button.dataset.page);
+      updateButtons();
+    });
+  });
+
+  prevButton.addEventListener("click", () => {
+      if (currentPage > 1) currentPage--;
+      updateButtons();
+  });
+
+  nextButton.addEventListener("click", () => {
+      if (currentPage < totalPages) currentPage++;
+      updateButtons();
+  });
+  updateButtons();
+  </script>
 </html>
 {% endblock  %}
