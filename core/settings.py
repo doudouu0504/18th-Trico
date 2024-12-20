@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure-z5h2!)31w&8z!twedc-t#ktq@@z1mll51vu-2e+kehaykdr^f_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -208,3 +208,16 @@ STORAGES = {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
+
+# 設置gmail發送信件
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"  # django內建的郵件後端
+EMAIL_HOST = "smtp.gmail.com"  # Gmail 的 SMTP 服務器
+EMAIL_PORT = 587  # SMTP 服務器端口
+EMAIL_USE_TLS = True  # 啟用 TLS 加密
+EMAIL_HOST_USER = "selinafs880504@gmail.com"  # Gmail 地址
+EMAIL_HOST_PASSWORD = "pluwqnlchxytgeli"  # Gmail 應用密碼
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# 替換 `DEFAULT_DOMAIN` 和 `PROTOCOL` 為您的開發環境
+DEFAULT_DOMAIN = "127.0.0.1:8000"  # 本地開發使用
+PROTOCOL = "http"  # 開發環境使用 http，生產使用 https
