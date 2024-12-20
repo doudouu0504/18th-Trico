@@ -6,6 +6,8 @@ from django.views.decorators.http import require_POST
 from django.http import HttpResponse
 from .forms import UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.models import User
+from django.conf import settings
+from django.contrib.auth import views as auth_views
 
 
 def register(request):
@@ -104,3 +106,27 @@ def switch_client(request):
 def switch_freelancer(request):
     request.session["role"] = "freelancer"
     return render(request, "users/switch_freelancer.html")
+
+
+# 忘記密碼
+class CustomPasswordResetView(auth_views.PasswordResetView):
+    template_name = "users/password_reset.html"
+    email_template_name = "users/password_reset_email.html"
+    success_url = "/users/password_reset_done/"
+    extra_context = {
+        "protocol": settings.PROTOCOL,
+        "domain": settings.DEFAULT_DOMAIN,
+    }
+
+
+class CustomPasswordResetDoneView(auth_views.PasswordResetDoneView):
+    template_name = "users/password_reset_done.html"
+
+
+class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
+    template_name = "users/password_reset_confirm.html"
+    success_url = "/users/reset_done/"
+
+
+class CustomPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
+    template_name = "users/password_reset_complete.html"
