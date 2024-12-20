@@ -4,21 +4,17 @@ from .models import Service
 from .forms import ServiceForm
 
 
+# 檢查當前用戶是否有權訪問指定資源
 def has_permission(request, id):
     print(f"Checking permission for User ID: {request.user.id}, Requested ID: {id}")
     return request.user.id == id
-
-
-"""
-Utility function to check if the current user has permission to access resources.
-"""
 
 
 @login_required
 def freelancer_dashboard(request, id):
     if not has_permission(request, id):
         return redirect("services:error_page")
-    print(f"Current User ID: {request.user.id}, Requested ID: {id}")
+    # print(f"Current User ID: {request.user.id}, Requested ID: {id}")
 
     freelancer = request.user  # Get the current logged-in user
     services = Service.objects.filter(freelancer_user=request.user).order_by(
