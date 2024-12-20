@@ -1,6 +1,7 @@
 <div class="shadow-lg navbar bg-base-100">
   <div class="flex-1 px-5">
-    <a class="text-xl btn btn-ghost" href="{%url 'pages:home'%}">三合trico</a>
+    <a class="text-xl btn btn-ghost" href="{%url 'pages:home'%}">三合trico </a
+    >ID:{{ user.id }}
   </div>
   <div class="flex items-center flex-none px-5 space-x-4">
     {% if user.is_authenticated %}
