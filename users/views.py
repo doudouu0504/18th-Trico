@@ -63,11 +63,14 @@ def logout(request):
     return response
     # return redirect("pages:home")
 
+
 @login_required
 def profile(request):
     if request.POST:
         user_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        profile_form = ProfileUpdateForm(
+            request.POST, request.FILES, instance=request.user.profile
+        )
 
         # Debug: 印出表單驗證錯誤
         if not user_form.is_valid():
@@ -86,12 +89,10 @@ def profile(request):
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
 
-    context = {
-        "user_form": user_form,
-        "profile_form": profile_form
-    }
+    context = {"user_form": user_form, "profile_form": profile_form}
 
     return render(request, "users/profile.html", context)
+
 
 @login_required
 def user_dashboard(request):
@@ -99,10 +100,27 @@ def user_dashboard(request):
     profile = request.user.profile
 
     if profile.is_freelancer:
+<<<<<<< HEAD
         return render(request, "users/freelancer_dashboard.html")
     
+=======
+        return render(request, "users/freelancer.html")
+
+>>>>>>> e45eb7c (modify: services app)
     else:
         return render(request, "users/client_dashboard.html")
+
+
+def user_dashboard(request):
+
+    profile = request.user.profile
+
+    if profile.is_freelancer:
+        return render(request, "users/freelancer.html")
+
+    else:
+        return render(request, "users/client_dashboard.html")
+
 
 @login_required
 def apply_freelancer(request):
@@ -117,6 +135,7 @@ def apply_freelancer(request):
     return render(request, "users/apply_freelancer.html")
 
 
+<<<<<<< HEAD
 @login_required
 def switch_role(request):
     profile = request.user.profile
@@ -128,3 +147,16 @@ def switch_role(request):
         profile.save()
     
     return redirect("users:user_dashboard")
+=======
+def apply_freelancer(request):
+    profile = request.user.profile
+
+    if request.POST:
+        profile.is_freelancer = True
+        profile.is_client = False
+        profile.freelancer_verified = True
+        profile.save()
+        return redirect("users:user_dashboard")
+
+    return render(request, "users/apply_freelancer.html")
+>>>>>>> e45eb7c (modify: services app)
