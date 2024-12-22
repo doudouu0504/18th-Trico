@@ -112,6 +112,7 @@ def switch_freelancer(request):
 class CustomPasswordResetView(auth_views.PasswordResetView):
     template_name = "users/password_reset.html"
     email_template_name = "users/password_reset_email.html"
+    subject_template_name = "users/password_reset_subject.txt"  # 自定義郵件標題模板
     success_url = "/users/password_reset_done/"
     extra_context = {
         "protocol": settings.PROTOCOL,
