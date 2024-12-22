@@ -8,6 +8,11 @@ from .forms import UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.contrib.auth import views as auth_views
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode
 
 
 def register(request):
@@ -118,6 +123,34 @@ class CustomPasswordResetView(auth_views.PasswordResetView):
         "protocol": settings.PROTOCOL,
         "domain": settings.DEFAULT_DOMAIN,
     }
+
+    def form_valid(self, form):
+        """覆蓋郵件發送邏輯，避免重複發送"""
+        email = form.cleaned_data["email"]
+
+        for user in form.get_users(email):
+            context = {
+                "email": email,
+                "domain": settings.DEFAULT_DOMAIN,
+                "protocol": settings.PROTOCOL,
+                "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                "token": default_token_generator.make_token(user),
+            }
+            subject = render_to_string(self.subject_template_name, context).strip()
+            html_message = render_to_string(self.email_template_name, context)
+
+            # 發送郵件
+            email_msg = EmailMessage(
+                subject=subject,
+                body=html_message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[email],
+            )
+            email_msg.content_subtype = "html"  # 設置內容類型為 HTML
+            email_msg.send()
+
+        # 不再調用的郵件發送邏輯
+        return super(auth_views.PasswordResetView, self).form_valid(form)
 
 
 class CustomPasswordResetDoneView(auth_views.PasswordResetDoneView):
