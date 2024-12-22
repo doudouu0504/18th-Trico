@@ -27,7 +27,11 @@ SECRET_KEY = "django-insecure-z5h2!)31w&8z!twedc-t#ktq@@z1mll51vu-2e+kehaykdr^f_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "*",
+]
 
 
 # Application definition
@@ -215,11 +219,10 @@ EMAIL_HOST = "smtp.gmail.com"  # Gmail 的 SMTP 服務器
 EMAIL_PORT = 587  # SMTP 服務器端口
 EMAIL_USE_TLS = True  # 啟用 TLS 加密
 EMAIL_USE_SSL = False  # 不使用 SSL 加密
-EMAIL_HOST_USER = "selinafs880504@gmail.com"  # Gmail 地址
-EMAIL_HOST_PASSWORD = "pluwqnlchxytgeli"  # Gmail 應用密碼
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")  # Gmail 地址
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")  # Gmail 密碼
 DEFAULT_FROM_EMAIL = "三合平台 <selinafs880504@gmail.com>"
 
 # 替換 `DEFAULT_DOMAIN` 和 `PROTOCOL` 為您的開發環境
-DEFAULT_DOMAIN = "127.0.0.1:8000"  # 本地開發使用
-PROTOCOL = "http"  # 開發環境使用 http，生產使用 https
+DEFAULT_DOMAIN = os.getenv("DEFAULT_DOMAIN")  # 本地開發使用
+PROTOCOL = os.getenv("PROTOCOL", "http")  # 開發環境使用 http，生產使用 https
