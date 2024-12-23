@@ -10,6 +10,9 @@ from .views import (
     CustomPasswordResetDoneView,
     CustomPasswordResetConfirmView,
     CustomPasswordResetCompleteView,
+    user_dashboard,
+    apply_freelancer,
+    switch_role,
 )
 
 app_name = "users"
@@ -38,4 +41,8 @@ urlpatterns = [
         CustomPasswordResetCompleteView.as_view(),
         name="password_reset_complete",
     ),
+    path("", user_dashboard, name="user_dashboard"),
+    path("apply", apply_freelancer, name="apply_freelancer"),
+    path("switch_role", switch_role, name="switch_role")
 ]
+

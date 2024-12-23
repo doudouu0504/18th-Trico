@@ -100,11 +100,28 @@ def profile(request):
 
     return render(request, "users/profile.html", context)
 
+@login_required
+def user_dashboard(request):
+
+    profile = request.user.profile
+
+    if profile.is_freelancer:
+        return render(request, "users/freelancer_dashboard.html")
+    
+    else:
+        return render(request, "users/client_dashboard.html")
 
 @login_required
-def switch_client(request):
-    request.session["role"] = "client"
-    return render(request, "users/switch_client.html")
+def apply_freelancer(request):
+    profile = request.user.profile
+
+    if request.POST:
+        profile.is_freelancer = True
+        profile.freelancer_verified = True
+        profile.save()
+        return redirect("users:user_dashboard")
+
+    return render(request, "users/apply_freelancer.html")
 
 
 @login_required
@@ -164,3 +181,13 @@ class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
 
 class CustomPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
     template_name = "users/password_reset_complete.html"
+def switch_role(request):
+    profile = request.user.profile
+    if profile.is_freelancer:
+        profile.is_freelancer = False
+        profile.save()
+    else:
+        profile.is_freelancer = True
+        profile.save()
+    
+    return redirect("users:user_dashboard")
