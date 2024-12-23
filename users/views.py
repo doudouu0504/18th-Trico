@@ -112,6 +112,17 @@ def user_dashboard(request):
         return render(request, "users/client_dashboard.html")
 
 @login_required
+def user_dashboard(request):
+
+    profile = request.user.profile
+
+    if profile.is_freelancer:
+        return render(request, "users/freelancer_dashboard.html")
+    
+    else:
+        return render(request, "users/client_dashboard.html")
+
+@login_required
 def apply_freelancer(request):
     profile = request.user.profile
 
@@ -124,10 +135,6 @@ def apply_freelancer(request):
     return render(request, "users/apply_freelancer.html")
 
 
-@login_required
-def switch_freelancer(request):
-    request.session["role"] = "freelancer"
-    return render(request, "users/switch_freelancer.html")
 
 
 # 忘記密碼
