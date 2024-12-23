@@ -4,8 +4,6 @@ from .views import (
     login,
     logout,
     profile,
-    switch_client,
-    switch_freelancer,
     CustomPasswordResetView,
     CustomPasswordResetDoneView,
     CustomPasswordResetConfirmView,
@@ -22,8 +20,6 @@ urlpatterns = [
     path("login/", login, name="login"),
     path("logout/", logout, name="logout"),
     path("profile/", profile, name="profile"),
-    path("switch_client/", switch_client, name="switch_client"),
-    path("switch_freelancer/", switch_freelancer, name="switch_freelancer"),
     # 忘記密碼相關
     path("password_reset/", CustomPasswordResetView.as_view(), name="password_reset"),
     path(
