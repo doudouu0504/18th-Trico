@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from dotenv import load_dotenv
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +29,11 @@ SECRET_KEY = "django-insecure-z5h2!)31w&8z!twedc-t#ktq@@z1mll51vu-2e+kehaykdr^f_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "*",
+]
 
 
 # Application definition
@@ -42,6 +48,7 @@ INSTALLED_APPS = [
     "users",
     "pages",
     "order",
+    "services",
 ]
 INSTALLED_APPS += [
     "django.contrib.sites",
@@ -49,20 +56,33 @@ INSTALLED_APPS += [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.line",
+    "allauth.socialaccount.providers.google",
 ]
 SITE_ID = 1
+
+load_dotenv()
 
 SOCIALACCOUNT_PROVIDERS = {
     "line": {
         "APP": {
-            "client_id": "2006673281",
-            "secret": "c57178247340862fa1dca0b81b238963",
+            "client_id": os.getenv("LINE_CLIENT_ID"),
+            "secret": os.getenv("LINE_SECRET"),
             "key": "",
         },
         "SCOPE": ["profile", "openid", "email"],
         "AUTH_PARAMS": {"response_type": "code"},
-    }
+    },
+    "google": {
+        "APP": {
+            "client_id": os.getenv("GOOGLE_CLIENT_ID"),
+            "secret": os.getenv("GOOGLE_SECRET"),
+            "key": "",
+        },
+        "SCOPE": ["profile", "email"],
+        "AUTH_PARAMS": {"access_type": "online"},
+    },
 }
+
 LOGIN_URL = "/users/login/"
 LOGIN_REDIRECT_URL = "/"
 ACCOUNT_SIGNUP_REDIRECT_URL = "/"
@@ -134,7 +154,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "zh-hant"
 
 TIME_ZONE = "Asia/Taipei"
 
@@ -149,7 +169,9 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
+    BASE_DIR / "frontend",
 ]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -208,3 +230,17 @@ STORAGES = {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
+
+# 設置gmail發送信件
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"  # django內建的郵件後端
+EMAIL_HOST = "smtp.gmail.com"  # Gmail 的 SMTP 服務器
+EMAIL_PORT = 587  # SMTP 服務器端口
+EMAIL_USE_TLS = True  # 啟用 TLS 加密
+EMAIL_USE_SSL = False  # 不使用 SSL 加密
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")  # Gmail 地址
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")  # Gmail 密碼
+DEFAULT_FROM_EMAIL = "三合平台 <selinafs880504@gmail.com>"
+
+# 替換 `DEFAULT_DOMAIN` 和 `PROTOCOL` 為您的開發環境
+DEFAULT_DOMAIN = os.getenv("DEFAULT_DOMAIN")  # 本地開發使用
+PROTOCOL = os.getenv("PROTOCOL", "http")  # 開發環境使用 http，生產使用 https
