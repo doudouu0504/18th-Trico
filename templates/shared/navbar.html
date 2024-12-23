@@ -1,4 +1,4 @@
-<div class="shadow-lg navbar bg-base-100">
+<div class="shadow-lg navbar bg-base-100 bg-white">
   <div class="flex-1 px-5">
     <a class="text-xl btn btn-ghost" href="{%url 'pages:home'%}">三合trico </a
     >ID:{{ user.id }}
@@ -38,7 +38,7 @@
     <!-- 頭像 -->
     <div class="dropdown dropdown-end">
       <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-        <div class="w-10 rounded-full">
+        <div class="rounded-full">
           <img
             alt="Tailwind CSS Navbar component"
             src="{% if user.profile.photo %}{{ user.profile.photo.url }}{% else %}https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp{% endif %}"
