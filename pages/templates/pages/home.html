@@ -4,351 +4,42 @@
 <!DOCTYPE html>
 <html lang="en">
   <body class="bg-white">
-    <!-- 搜尋後顯示 -->
-    <div class="main ">
-      <div
-        class="visualBox flex justify-center pt-3 pb-3 my-5 w-full sm:max-w-[600px] md:max-w-[800px] lg:max-w-[1200px] mx-auto bg-gray-200 rounded-md shadow-md"
-      >
-        <div class="flex gap-10">
-          <a href="" target="_blank">
-            <div class="item transition-transform duration-300 hover:scale-105">
-              <img class="taskeradvertise" src= "{% static 'images/webdev.png' %}" />
-              <div class="pt-1">
-                <div class="flex">
-                  <img class="avatarInpage" src="{% static 'images/kao.jpg' %}" alt="" />
-                  <p class="pt-3.5 pl-1">龍哥團隊</p>
-                </div>
-                <p class="max-w-[250px]">
-                  I will do frontend and backend in django as full stack
-                  developer
-                </p>
-                <div class="flex">
-                  <div class="relative w-5 h-5">
-                    <div
-                      class="absolute w-full h-full bg-black clip-star"
-                    ></div>
-                  </div>
-                  <p class="text-gray-500">(5.0)</p>
-                </div>
-                <p class="text-left">from US$999</p>
-              </div>
-            </div>
-          </a>
-          <a href="" target="_blank">
-            <div class="item transition-transform duration-300 hover:scale-105">
-              <img
-                class="taskeradvertise"
-                src="{% static 'images/webdev2.png' %}"
-              />
-              <div class="pt-1">
-                <div class="flex">
-                  <img class="avatarInpage" src="{% static 'images/pika.jpg' %}" alt="" />
-                  <p class="pt-3.5 pl-1">皮卡丘聯盟</p>
-                </div>
-                <p class="max-w-[250px]">
-                  I will do frontend and backend in django as full stack
-                  developer
-                </p>
-                <div class="flex">
-                  <div class="relative w-5 h-5">
-                    <div
-                      class="absolute w-full h-full bg-black clip-star"
-                    ></div>
-                  </div>
-                  <p class="text-gray-500">(4.7)</p>
-                </div>
-                <p class="text-left">from US$799</p>
-              </div>
-            </div>
-          </a>
-          <a href="" target="_blank">
-            <div class="item transition-transform duration-300 hover:scale-105">
-              <img
-                class="taskeradvertise"
-                src="{% static 'images/webdev3.jpg' %}"
-              />
-              <div class="pt-1">
-                <div class="flex">
-                  <img class="avatarInpage" src="{% static 'images/ufo.jpg' %}" alt="" />
-                  <p class="pt-3.5 pl-1">老高ufo說書</p>
-                </div>
-                <p class="max-w-[250px]">
-                  I will do frontend and backend in django as full stack
-                  developer
-                </p>
-                <div class="flex">
-                  <div class="relative w-5 h-5">
-                    <div
-                      class="absolute w-full h-full bg-black clip-star"
-                    ></div>
-                  </div>
-                  <p class="text-gray-500">(4.8)</p>
-                </div>
-                <p class="text-left">from US$299</p>
-              </div>
-            </div>
-          </a>
-          <a href="" target="_blank">
-            <div class="item transition-transform duration-300 hover:scale-105">
-              <img
-                class="taskeradvertise"
-                src="{% static 'images/webdev4.jpg' %}"
-              />
-              <div class="pt-1">
-                <div class="flex">
-                  <img
-                    class="avatarInpage"
-                    src="{% static 'images/redgirl.webp' %}"
-                    alt=""
-                  />
-                  <p class="pt-3.5 pl-1">聖誕鄰居小姊姊</p>
-                </div>
-                <p class="max-w-[250px]">
-                  I will do frontend and backend in django as full stack
-                  developer
-                </p>
-                <div class="flex">
-                  <div class="relative w-5 h-5">
-                    <div
-                      class="absolute w-full h-full bg-black clip-star"
-                    ></div>
-                  </div>
-                  <p class="text-gray-500">(3.9)</p>
-                </div>
-                <p class="text-left">from US$599</p>
-              </div>
-            </div>
-          </a>
+    <!-- 最近新增 -->
+    <div class="main overflow-hidden flex flex-col justify-between bg-gray-200"> 
+      <div class="visualBox pt-3 pb-3 my-5 w-full sm:max-w-[600px] md:max-w-[800px] lg:max-w-[1200px] mx-auto bg-gray-200 rounded-md shadow-md">
+        <h1 class="text-xl font-bold text-gray-700 mb-4">最近新增</h1>
+        <div class="services grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {% for service in services %}
+          {% include "pages/service_card.html" %}
+          {% empty %}
+          <p class="text-center text-gray-500 col-span-full">目前沒有服務資料。</p>
+          {% endfor %}
         </div>
       </div>
-      <div
-        class="visualBox flex justify-center pt-3 pb-3 my-5 w-full sm:max-w-[600px] md:max-w-[800px] lg:max-w-[1200px] mx-auto bg-gray-200 rounded-md shadow-md"
-      >
-        <div class="flex gap-10">
-          <a href="" target="_blank">
-            <div class="item transition-transform duration-300 hover:scale-105">
-              <img class="taskeradvertise" src="{% static 'images/webdev.png'%}" />
-              <div class="pt-1">
-                <div class="flex">
-                  <img class="avatarInpage" src="{% static 'images/kao.jpg' %}" alt="" />
-                  <p class="pt-3.5 pl-1">龍哥團隊</p>
-                </div>
-                <p class="max-w-[250px]">
-                  I will do frontend and backend in django as full stack
-                  developer
-                </p>
-                <div class="flex">
-                  <div class="relative w-5 h-5">
-                    <div
-                      class="absolute w-full h-full bg-black clip-star"
-                    ></div>
-                  </div>
-                  <p class="text-gray-500">(5.0)</p>
-                </div>
-                <p class="text-left">from US$999</p>
-              </div>
-            </div>
-          </a>
-          <a href="" target="_blank">
-            <div class="item transition-transform duration-300 hover:scale-105">
-              <img
-                class="taskeradvertise"
-                src="{% static 'images/webdev2.png' %}"
-              />
-              <div class="pt-1">
-                <div class="flex">
-                  <img class="avatarInpage" src="{% static 'images/pika.jpg' %}" alt="" />
-                  <p class="pt-3.5 pl-1">皮卡丘聯盟</p>
-                </div>
-                <p class="max-w-[250px]">
-                  I will do frontend and backend in django as full stack
-                  developer
-                </p>
-                <div class="flex">
-                  <div class="relative w-5 h-5">
-                    <div
-                      class="absolute w-full h-full bg-black clip-star"
-                    ></div>
-                  </div>
-                  <p class="text-gray-500">(4.7)</p>
-                </div>
-                <p class="text-left">from US$799</p>
-              </div>
-            </div>
-          </a>
-          <a href="" target="_blank">
-            <div class="item transition-transform duration-300 hover:scale-105">
-              <img
-                class="taskeradvertise"
-                src="{% static 'images/webdev3.jpg' %}"
-              />
-              <div class="pt-1">
-                <div class="flex">
-                  <img class="avatarInpage" src="{% static 'images/ufo.jpg' %}" alt="" />
-                  <p class="pt-3.5 pl-1">老高ufo說書</p>
-                </div>
-                <p class="max-w-[250px]">
-                  I will do frontend and backend in django as full stack
-                  developer
-                </p>
-                <div class="flex">
-                  <div class="relative w-5 h-5">
-                    <div
-                      class="absolute w-full h-full bg-black clip-star"
-                    ></div>
-                  </div>
-                  <p class="text-gray-500">(4.8)</p>
-                </div>
-                <p class="text-left">from US$299</p>
-              </div>
-            </div>
-          </a>
-          <a href="" target="_blank">
-            <div class="item transition-transform duration-300 hover:scale-105">
-              <img
-                class="taskeradvertise"
-                src="{% static 'images/webdev4.jpg' %}"
-              />
-              <div class="pt-1">
-                <div class="flex">
-                  <img
-                    class="avatarInpage"
-                    src="{% static 'images/redgirl.webp' %}"
-                    alt=""
-                  />
-                  <p class="pt-3.5 pl-1">聖誕鄰居小姊姊</p>
-                </div>
-                <p class="max-w-[250px]">
-                  I will do frontend and backend in django as full stack
-                  developer
-                </p>
-                <div class="flex">
-                  <div class="relative w-5 h-5">
-                    <div
-                      class="absolute w-full h-full bg-black clip-star"
-                    ></div>
-                  </div>
-                  <p class="text-gray-500">(3.9)</p>
-                </div>
-                <p class="text-left">from US$599</p>
-              </div>
-            </div>
-          </a>
+    </div>
+    <!-- 您可能會感興趣 -->
+    <div class="main overflow-hidden flex flex-col justify-between bg-gray-200"> 
+      <div class="visualBox pt-3 pb-3 my-5 w-full sm:max-w-[600px] md:max-w-[800px] lg:max-w-[1200px] mx-auto bg-gray-200 rounded-md shadow-md">
+        <h1 class="text-xl font-bold text-gray-700 mb-4">您可能會感興趣</h1>
+        <div class="services grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {% for service in services %}
+          {% include "pages/service_card.html" %}
+          {% empty %}
+          <p class="text-center text-gray-500 col-span-full">目前沒有服務資料。</p>
+          {% endfor %}
         </div>
       </div>
-      <div
-        class="visualBox flex justify-center pt-3 pb-3 my-5 w-full sm:max-w-[600px] md:max-w-[800px] lg:max-w-[1200px] mx-auto bg-gray-200 rounded-md shadow-md"
-      >
-        <div class="flex gap-10">
-          <a href="" target="_blank">
-            <div class="item transition-transform duration-300 hover:scale-105">
-              <img class="taskeradvertise" src="{% static 'images/webdev.png' %}" />
-              <div class="pt-1">
-                <div class="flex">
-                  <img class="avatarInpage" src="{% static 'images/kao.jpg' %}" alt="" />
-                  <p class="pt-3.5 pl-1">龍哥團隊</p>
-                </div>
-                <p class="max-w-[250px]">
-                  I will do frontend and backend in django as full stack
-                  developer
-                </p>
-                <div class="flex">
-                  <div class="relative w-5 h-5">
-                    <div
-                      class="absolute w-full h-full bg-black clip-star"
-                    ></div>
-                  </div>
-                  <p class="text-gray-500">(5.0)</p>
-                </div>
-                <p class="text-left">from US$999</p>
-              </div>
-            </div>
-          </a>
-          <a href="" target="_blank">
-            <div class="item transition-transform duration-300 hover:scale-105">
-              <img
-                class="taskeradvertise"
-                src="{% static 'images/webdev2.png'%}"
-              />
-              <div class="pt-1">
-                <div class="flex">
-                  <img class="avatarInpage" src="{% static 'images/pika.jpg' %}" alt="" />
-                  <p class="pt-3.5 pl-1">皮卡丘聯盟</p>
-                </div>
-                <p class="max-w-[250px]">
-                  I will do frontend and backend in django as full stack
-                  developer
-                </p>
-                <div class="flex">
-                  <div class="relative w-5 h-5">
-                    <div
-                      class="absolute w-full h-full bg-black clip-star"
-                    ></div>
-                  </div>
-                  <p class="text-gray-500">(4.7)</p>
-                </div>
-                <p class="text-left">from US$799</p>
-              </div>
-            </div>
-          </a>
-          <a href="" target="_blank">
-            <div class="item transition-transform duration-300 hover:scale-105">
-              <img
-                class="taskeradvertise"
-                src="{% static 'images/webdev3.jpg'%}"
-              />
-              <div class="pt-1">
-                <div class="flex">
-                  <img class="avatarInpage" src="{% static 'images/ufo.jpg' %}" alt="" />
-                  <p class="pt-3.5 pl-1">老高ufo說書</p>
-                </div>
-                <p class="max-w-[250px]">
-                  I will do frontend and backend in django as full stack
-                  developer
-                </p>
-                <div class="flex">
-                  <div class="relative w-5 h-5">
-                    <div
-                      class="absolute w-full h-full bg-black clip-star"
-                    ></div>
-                  </div>
-                  <p class="text-gray-500">(4.8)</p>
-                </div>
-                <p class="text-left">from US$299</p>
-              </div>
-            </div>
-          </a>
-          <a href="" target="_blank">
-            <div class="item transition-transform duration-300 hover:scale-105">
-              <img
-                class="taskeradvertise"
-                src="{% static 'images/webdev4.jpg' %}"
-              />
-              <div class="pt-1">
-                <div class="flex">
-                  <img
-                    class="avatarInpage"
-                    src="{% static 'images/redgirl.webp' %}"
-                    alt=""
-                  />
-                  <p class="pt-3.5 pl-1">聖誕鄰居小姊姊</p>
-                </div>
-                <p class="max-w-[250px]">
-                  I will do frontend and backend in django as full stack
-                  developer
-                </p>
-                <div class="flex">
-                  <div class="relative w-5 h-5">
-                    <div
-                      class="absolute w-full h-full bg-black clip-star"
-                    ></div>
-                  </div>
-                  <p class="text-gray-500">(3.9)</p>
-                </div>
-                <p class="text-left">from US$599</p>
-              </div>
-            </div>
-          </a>
+    </div>
+    <!-- 評分最高 -->
+    <div class="main overflow-hidden flex flex-col justify-between bg-gray-200"> 
+      <div class="visualBox pt-3 pb-3 my-5 w-full sm:max-w-[600px] md:max-w-[800px] lg:max-w-[1200px] mx-auto bg-gray-200 rounded-md shadow-md">
+        <h1 class="text-xl font-bold text-gray-700 mb-4">評分最高</h1>
+        <div class="services grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {% for service in services %}
+          {% include "pages/service_card.html" %}
+          {% empty %}
+          <p class="text-center text-gray-500 col-span-full">目前沒有服務資料。</p>
+          {% endfor %}
         </div>
       </div>
     </div>
@@ -414,7 +105,7 @@
           <a href="" target="_blank">
             <div class="item">
               <div class="flex justify-between items-center">
-                <img class="logosize" src="{% static 'images/logo-1.jpg' %}" alt=""/>
+                <img class="logosize" src="{% static 'images/logo-1.jpg' %}" alt="" />
                 <p class="text-4xl font-bold pl-1 py-7 text-right">Pizza宵夜聯盟</p>
                 <!-- 愛心組件 -->
                 <div class="flex">
@@ -468,7 +159,7 @@
         <a href="" target="_blank">
           <div class="item">
             <div class="flex justify-between items-center">
-              <img class="logosize" src="{% static 'images/logo-2.png' %}" alt=""/>
+              <img class="logosize" src="{% static 'images/logo-2.png' %}" alt="" />
               <p class="text-4xl font-bold pl-1 py-7 text-right">肯德基炸雞聯盟</p>
               <!-- 愛心組件 -->
               <div class="flex">
@@ -522,79 +213,42 @@
      <!-- 愛心js -->
     <script>
       // 取得按鈕元素
-      const heartButton = document.getElementById("heartButton");
-    
-      // 點擊事件
-      heartButton.addEventListener("click", (event) => {
-        event.preventDefault(); // 防止預設行為（例如表單提交或刷新）
-        const isActive = heartButton.getAttribute("data-active") === "true";
-    
-        // 更新按鈕的狀態屬性
-        heartButton.setAttribute("data-active", !isActive);
-    
-        // 切換樣式
-        if (isActive) {
-          heartButton
-            .querySelector("svg")
-            .classList.remove("text-red-500");
-          heartButton
-            .querySelector("svg")
-            .classList.add("text-gray-400");
-        } else {
-          heartButton
-            .querySelector("svg")
-            .classList.remove("text-gray-400");
-          heartButton
-            .querySelector("svg")
-            .classList.add("text-red-500");
-        }
+      document.querySelectorAll(".heartframe button").forEach((button) => {
+        button.addEventListener("click", (event) => {
+          event.preventDefault(); // 防止預設行為
+          const isActive = button.getAttribute("data-active") === "true";
+
+          // 更新按鈕的狀態屬性
+          button.setAttribute("data-active", !isActive);
+
+          // 切換樣式
+          if (isActive) {
+            button.querySelector("svg").classList.remove("text-red-500");
+            button.querySelector("svg").classList.add("text-gray-400");
+          } else {
+            button.querySelector("svg").classList.remove("text-gray-400");
+            button.querySelector("svg").classList.add("text-red-500");
+          }
+        });
       });
     </script>
   </body>
-  <!-- 換頁按鈕 -->
+
+  <!-- 分頁按鈕 -->
   <div class="pagination justify-center pb-2">
-    <button class="new" id="prev" disabled>←</button>
-    <button class="new page" data-page="1">1</button>
-    <button class="new page" data-page="2">2</button>
-    <button class="new page" data-page="3">3</button>
-    <button class="new page" data-page="4">4</button>
-    <button class="new page" data-page="5">5</button>
-    <button class="new page" data-page="6">6</button>
-    <button class="new" id="next">→</button>
+    {% if page_obj.has_previous %}
+    <a class="new" href="?page={{ page_obj.previous_page_number }}">←</a>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+    <a class="new page {% if num == page_obj.number %}active{% endif %}" href="?page={{ num }}">
+      {{ num }}
+    </a>
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+    <a class="new" href="?page={{ page_obj.next_page_number }}">→</a>
+    {% endif %}
   </div>
-
-  <script>
-    const prevButton = document.getElementById("prev");
-    const nextButton = document.getElementById("next");
-    const pageButtons = document.querySelectorAll(".page");
-
-    let currentPage = 1;
-    const totalPages = 6;
-
-    function updateButtons() {
-      pageButtons.forEach(button => {
-          button.classList.toggle("active", button.dataset.page == currentPage);
-      });
-      prevButton.disabled = currentPage === 1;
-      nextButton.disabled = currentPage === totalPages;
-    }
-    pageButtons.forEach(button => {
-      button.addEventListener("click", () => {
-      currentPage = parseInt(button.dataset.page);
-      updateButtons();
-    });
-  });
-
-  prevButton.addEventListener("click", () => {
-      if (currentPage > 1) currentPage--;
-      updateButtons();
-  });
-
-  nextButton.addEventListener("click", () => {
-      if (currentPage < totalPages) currentPage++;
-      updateButtons();
-  });
-  updateButtons();
-  </script>
 </html>
-{% endblock  %}
+{% endblock %}
