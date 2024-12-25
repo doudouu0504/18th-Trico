@@ -1,11 +1,22 @@
-{% extends "shared/layout.html" %} {% block "content" %}
+{% extends "shared/layout.html" %} 
+{% block "content" %}
 <body class="bg-blue-900 font-sans">
   <div class="container mx-auto py-10 px-[10%]">
+    <!-- 回上一頁按鈕 -->
+    <div class="mb-4">
+      <a
+        class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+        href="javascript:history.back()"
+      >
+        上一頁
+      </a>
+    </div>
+
     <div class="flex bg-white rounded-lg shadow-lg overflow-hidden">
       <!-- 左側為接案者介紹 -->
       <div class="w-2/3 p-10">
         <h1 class="text-2xl font-bold mb-4 text-gray-700">
-          我擅長開發和部署 Django、React 和 AWS 的網站
+          {{ service.title }}
         </h1>
         <div class="flex items-center mb-4">
           <img
@@ -54,7 +65,7 @@
         </div>
       </div>
 
-      <!-- 右側價格我分了一般&專業方案 -->
+      <!-- 右側價格一般&專業方案 -->
       <div class="w-1/3 bg-gray-50 p-6 border-l">
         <div class="mb-4">
           <div class="flex border-b">
