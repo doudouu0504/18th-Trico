@@ -5,7 +5,7 @@ from .forms import ServiceForm
 from .models import Category
 
 
-# 檢查當前用戶是否有權訪問指定資源
+
 def has_permission(request, id):
     print(f"Checking permission for User ID: {request.user.id}, Requested ID: {id}")
     return request.user.id == id
@@ -16,8 +16,8 @@ def freelancer_dashboard(request, id):
     if not has_permission(request, id):
         return redirect("services:error_page")
 
-    freelancer = request.user  # 獲取當前登入的用戶
-    # 使用 prefetch_related 預加載 comments 關聯，避免多次查詢
+    freelancer = request.user  
+    
     services = (
         Service.objects.prefetch_related("comments")
         .filter(freelancer_user=request.user)
