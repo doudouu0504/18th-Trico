@@ -55,6 +55,7 @@ def create_service(request, id):
     )
 
 
+
 @login_required
 def edit_service(request, id, service_id):
     if not has_permission(request, id):
