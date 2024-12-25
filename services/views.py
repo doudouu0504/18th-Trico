@@ -15,12 +15,15 @@ def has_permission(request, id):
 def freelancer_dashboard(request, id):
     if not has_permission(request, id):
         return redirect("services:error_page")
-    # print(f"Current User ID: {request.user.id}, Requested ID: {id}")
 
-    freelancer = request.user  # Get the current logged-in user
-    services = Service.objects.filter(freelancer_user=request.user).order_by(
-        "-created_at"
+    freelancer = request.user  # 獲取當前登入的用戶
+    # 使用 prefetch_related 預加載 comments 關聯，避免多次查詢
+    services = (
+        Service.objects.prefetch_related("comments")
+        .filter(freelancer_user=request.user)
+        .order_by("-created_at")
     )
+
     return render(
         request,
         "services/freelancer_dashboard.html",
