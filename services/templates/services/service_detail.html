@@ -9,12 +9,12 @@
         </h1>
         <div class="flex items-center mb-4">
           <img
-            src="https://via.placeholder.com/100"
-            alt="接案者大頭貼"
+            src="{% if service.photo %}{{ service.photo.url }}{% else %}https://fakeimg.pl/300{% endif %}"
+            alt="User Avatar"
             class="w-25 h-25 rounded-box mr-6"
           />
           <div>
-            <p class="text-2xl font-extrabold text-gray-700">接案者姓名</p>
+            <p class="text-2xl font-extrabold text-gray-700">{{ service.freelancer_user.username }}</p>
             <div class="flex items-center text-yellow-400">
               <span class="text-2xl">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
               <span class="text-blue-900 text-xl ml-4">4.0/5.0</span>
@@ -23,9 +23,7 @@
         </div>
         <!-- 接案者介紹:描述 -->
         <p class="text-gray-700 mb-4 text-lg">
-          內文(我是一名專業的網站開發人員，擅長使用 Django 和 React
-          架構網站，並將其部署到
-          AWS。無論是網站設計還是後端功能開發，我都能提供專業的服務。)
+          {{ service.description }}
         </p>
         <div class="flex flex-wrap gap-2">
           <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-s"
