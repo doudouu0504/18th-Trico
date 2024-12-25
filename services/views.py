@@ -55,7 +55,6 @@ def create_service(request, id):
     )
 
 
-
 @login_required
 def edit_service(request, id, service_id):
     if not has_permission(request, id):
@@ -100,3 +99,9 @@ def error_page(request):
         "services/error_page.html",
         {"message": "You do not have permission to view this page."},
     )
+
+
+
+def service_detail(request, id):
+    service = get_object_or_404(Service, id=id)
+    return render(request, "services/service_detail.html", {"service": service})
