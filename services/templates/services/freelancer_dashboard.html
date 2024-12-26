@@ -37,16 +37,6 @@
   <div class="services grid grid-cols-1 md:grid-cols-4 gap-6">
     {% if services %}
       {% for service in services %}
-<<<<<<< HEAD
-        <div class="service-card bg-white rounded-lg shadow-md overflow-hidden flex flex-col justify-between">
-          <!-- 在圖片上添加超連結 -->
-          <a href="{% url 'services:service_detail' service.freelancer_user.id service.id %}">
-            <img
-              class="w-full h-48 object-cover"
-              src="{% if service.photo %}{{ service.photo.url }}{% else %}https://fakeimg.pl/300{% endif %}"
-              alt="Service Photo"
-            />
-=======
       <div
         class="service-card bg-white rounded-lg shadow-md overflow-hidden flex flex-col justify-between"
       >
@@ -108,7 +98,6 @@
             href="{% url 'comments:add_comment' service.id %}"
           >
             新增評論
->>>>>>> dev
           </a>
           <!-- 卡牌內容 -->
           <div class="p-4 flex-grow">
@@ -138,19 +127,6 @@
             </span>
           </div>
         </div>
-<<<<<<< HEAD
-      {% endfor %}
-    {% else %}
-      <p class="text-center text-gray-700">
-        您尚未新增服務哦~ <br>按下新增服務開始你的接案旅程吧~
-      </p>
-    {% endif %}
-  </div>
-</div>
-
-<script src="{% static 'scripts/toggling_buttons.js' %}"></script>
-
-=======
       </div>
       {% endfor %}
     {% else %}
@@ -163,5 +139,4 @@
   <script src="{% static 'scripts/toggling_buttons.js' %}"></script>
 </div>
 
->>>>>>> dev
 {% endblock %}
