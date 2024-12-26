@@ -5,7 +5,7 @@ from .forms import ServiceForm
 from .models import Category
 
 
-# 檢查當前用戶是否有權訪問指定資源
+
 def has_permission(request, id):
     print(f"Checking permission for User ID: {request.user.id}, Requested ID: {id}")
     return request.user.id == id
@@ -15,12 +15,15 @@ def has_permission(request, id):
 def freelancer_dashboard(request, id):
     if not has_permission(request, id):
         return redirect("services:error_page")
-    # print(f"Current User ID: {request.user.id}, Requested ID: {id}")
 
-    freelancer = request.user  # Get the current logged-in user
-    services = Service.objects.filter(freelancer_user=request.user).order_by(
-        "-created_at"
+    freelancer = request.user  
+    
+    services = (
+        Service.objects.prefetch_related("comments")
+        .filter(freelancer_user=request.user)
+        .order_by("-created_at")
     )
+
     return render(
         request,
         "services/freelancer_dashboard.html",

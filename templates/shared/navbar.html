@@ -93,9 +93,7 @@
         class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
       >
         <li>
-          <a href="{% url 'users:user_dashboard' %}" class="justify-between"
-            >個人資料</a
-          >
+          <a href="{% url 'users:user_dashboard' %}" class="justify-between">個人資料</a>
         </li>
         <li><a>設定</a></li>
         <!-- 新增角色切換按鈕 -->
@@ -110,10 +108,13 @@
         </li>
       </ul>
     </div>
+    
     {% else %}
-    <div class="flex space-x-4">
-      <li><a href="{% url 'users:login' %}">登入</a></li>
-      <li><a href="{% url 'users:register' %}">註冊</a></li>
+    <div class="flex justify-center space-x-8">
+      <ul class="list-none flex space-x-8">
+        <li><a href="{% url 'users:login' %}" class="text-lg">登入</a></li>
+        <li><a href="{% url 'users:register' %}" class="text-lg">註冊</a></li>
+      </ul>
     </div>
     {% endif %}
   </div>
