@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "order",
     "services",
     "categories",
+    "common",
     "comments",
 ]
 INSTALLED_APPS += [
