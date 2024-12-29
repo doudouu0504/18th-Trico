@@ -42,7 +42,12 @@ def create_service(request, id):
     categories = Category.objects.all()
 
     if request.method == "POST":
-        form = ServiceForm(request.POST, request.FILES)
+        # 判斷 premium_enabled 是否啟用
+        premium_enabled = any(
+            field in request.POST
+            for field in ["premium_title", "premium_description", "premium_price", "premium_delivery_time"]
+        )
+        form = ServiceForm(request.POST, request.FILES, premium_enabled=premium_enabled)
         if form.is_valid():
             service = form.save(commit=False)
             service.freelancer_user = request.user
@@ -58,6 +63,7 @@ def create_service(request, id):
     )
 
 
+
 @login_required
 def edit_service(request, id, service_id):
     if not has_permission(request, id):
@@ -68,12 +74,21 @@ def edit_service(request, id, service_id):
     categories = Category.objects.all()
 
     if request.method == "POST":
-        form = ServiceForm(request.POST, request.FILES, instance=service)
+        # 判斷 premium_enabled 是否啟用
+        premium_enabled = any(
+            field in request.POST
+            for field in ["premium_title", "premium_description", "premium_price", "premium_delivery_time"]
+        )
+        form = ServiceForm(request.POST, request.FILES, instance=service, premium_enabled=premium_enabled)
         if form.is_valid():
             form.save()
             return redirect("services:freelancer_dashboard", id=id)
     else:
-        form = ServiceForm(instance=service)
+        # 如果已有 premium 值，將 `premium_enabled` 設為 True
+        premium_enabled = bool(
+            service.premium_title or service.premium_description or service.premium_price or service.premium_delivery_time
+        )
+        form = ServiceForm(instance=service, premium_enabled=premium_enabled)
 
     return render(
         request, "services/edit_service.html", {"form": form, "categories": categories}

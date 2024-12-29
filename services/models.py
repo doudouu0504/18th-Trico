@@ -27,14 +27,24 @@ class Service(WebPImageModelMixin, models.Model):
     # 新增一般方案
     standard_title = models.CharField(max_length=100)
     standard_description = models.TextField()
-    standard_price = models.DecimalField(max_digits=10, decimal_places=2)
+    standard_price = models.PositiveIntegerField() 
     standard_delivery_time = models.PositiveIntegerField(null=True, blank=True)
 
     # 新增專業方案
     premium_title = models.CharField(max_length=100, blank=True, null=True)
     premium_description = models.TextField(blank=True, null=True)
-    premium_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    premium_price = models.PositiveIntegerField(blank=True, null=True)
     premium_delivery_time = models.PositiveIntegerField(blank=True, null=True)
+
+    rating = models.DecimalField(
+            max_digits=2, 
+            decimal_places=1,  
+            null=True,
+            blank=True,
+            default=None,
+            help_text="Client rating for the service (e.g., 4.5 stars)",
+    )
+
 
     def __str__(self):
         return self.title
