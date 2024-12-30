@@ -7,7 +7,6 @@ from .models import Category
 
 
 def has_permission(request, id):
-    print(f"Checking permission for User ID: {request.user.id}, Requested ID: {id}")
     return request.user.id == id
 
 
