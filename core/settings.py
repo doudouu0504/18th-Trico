@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "categories",
     "common",
     "comments",
+    "payments",
 ]
 INSTALLED_APPS += [
     "django.contrib.sites",

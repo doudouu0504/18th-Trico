@@ -21,11 +21,11 @@ class ServiceForm(forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
-        # 获取额外参数
-        self.premium_enabled = kwargs.pop("premium_enabled", False)  # 从 kwargs 提取参数
+        # 接收自定義參數，判斷「專業方案」是否需要啟用必填
+        self.premium_enabled = kwargs.pop("premium_enabled", False)
         super().__init__(*args, **kwargs)
 
-        # 动态设置专业方案字段是否必填
+        # 專業方案字段：根據 premium_enabled 決定是否必填
         if self.premium_enabled:
             self.fields["premium_title"].required = True
             self.fields["premium_description"].required = True

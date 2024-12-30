@@ -113,11 +113,10 @@
             <p class="text-sm text-red-500 mb-4">交付時間：{{service.premium_delivery_time}} 天</p>
           </div>
         </div>
-        <button
-          class="w-full bg-blue-800 text-white py-2 rounded-lg text-lg font-semibold hover:bg-blue-700"
-        >
-          選擇支付方式
-        </button>
+        <a
+        class="w-full bg-blue-800 text-white py-2 rounded-lg text-lg font-semibold hover:bg-blue-700 text-center block"
+        href="{% url 'payments:payment_form' service.id %}">選擇支付方式
+        </a>
       </div>
     </div>
   </div>
