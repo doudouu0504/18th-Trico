@@ -78,3 +78,8 @@ TriCo 是一個專注於服務媒合的網站，讓使用者可以輕鬆購買�
   ```
 
 - **已安裝 HTMX**
+
+- **將打包內容輸出靜態文件**  
+  ```
+  python manage.py collectstatic
+  ```
