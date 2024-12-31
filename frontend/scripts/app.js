@@ -1,4 +1,5 @@
 import "htmx.org";
-import "./scripts_switchtab.js";
+import "./switching_tab.js";
+import "./switching_tab_payment.js";
 import "./toggling_buttons.js";
 import "./toggling_premium_plan.js";
