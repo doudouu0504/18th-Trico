@@ -1,6 +1,7 @@
 import "htmx.org";
-import "./frontend-toggling_buttons.js";
-import "./scripts_switchtab.js";
+import "./switching_tab.js";
+import "./switching_tab_payment.js";
+import "./toggling_buttons.js";
 import "./toggling_premium_plan.js";
 
 import { createApp } from "vue";

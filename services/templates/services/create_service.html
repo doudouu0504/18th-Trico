@@ -48,16 +48,6 @@
             name="category"
             value="{{ category.id }}"
             class="hidden peer"
-            {%
-            if
-            category.id
-            in
-            form.category.value
-            %}
-            checked
-            {%
-            endif
-            %}
           />
           <span
             class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 peer-checked:bg-blue-600 peer-checked:text-white"
@@ -70,6 +60,7 @@
       <p class="text-red-500 text-sm">*請選擇您的服務分類(可複選)</p>
       {% endif %}
     </div>
+
 
     <!-- Photo Upload Field -->
     <div class="flex flex-col space-y-2">
@@ -232,8 +223,6 @@
 </form> 
 </div> 
 
-
-{% load static %}
-<script src="{% static 'scripts/toggling_premium_plan.js' %}"></script>
-
 {% endblock %}
+
+

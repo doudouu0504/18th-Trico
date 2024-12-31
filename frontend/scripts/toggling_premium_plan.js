@@ -1,4 +1,4 @@
-document
+  document
   .getElementById("toggle-premium-plan-btn")
   .addEventListener("click", function () {
     const premiumContainer = document.getElementById("premium-plan-container");
@@ -10,3 +10,4 @@ document
       this.textContent = "新增專業方案";
     }
   });
+

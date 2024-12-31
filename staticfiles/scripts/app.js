@@ -3582,19 +3582,7 @@
   }();
   var htmx_esm_default = htmx2;
 
-  // frontend/scripts/frontend-toggling_buttons.js
-  document.getElementById("toggle-management-btn").addEventListener("click", function() {
-    const managementButtons = document.querySelectorAll(".management-buttons");
-    managementButtons.forEach((buttonGroup) => {
-      if (buttonGroup.classList.contains("hidden")) {
-        buttonGroup.classList.remove("hidden");
-      } else {
-        buttonGroup.classList.add("hidden");
-      }
-    });
-  });
-
-  // frontend/scripts/scripts_switchtab.js
+  // frontend/scripts/switching_tab.js
   document.addEventListener("DOMContentLoaded", () => {
     const standardTab = document.getElementById("standard-tab");
     const premiumTab = document.getElementById("premium-tab");
@@ -3614,15 +3602,51 @@
     });
   });
 
+  // frontend/scripts/switching_tab_payment.js
+  function togglePlanView(selectedPlan) {
+    const standardSection = document.getElementById("standard");
+    const premiumSection = document.getElementById("premium");
+    if (selectedPlan === "standard") {
+      standardSection.classList.remove("hidden");
+      premiumSection.classList.add("hidden");
+    } else if (selectedPlan === "premium") {
+      premiumSection.classList.remove("hidden");
+      standardSection.classList.add("hidden");
+    }
+  }
+  document.addEventListener("DOMContentLoaded", () => {
+    const planSelect = document.getElementById("plan");
+    togglePlanView(planSelect.value);
+  });
+
+  // frontend/scripts/toggling_buttons.js
+  document.getElementById("toggle-management-btn").addEventListener("click", function() {
+    const managementButtons = document.querySelectorAll(".management-buttons");
+    managementButtons.forEach((buttonGroup) => {
+      if (buttonGroup.classList.contains("hidden")) {
+        buttonGroup.classList.remove("hidden");
+      } else {
+        buttonGroup.classList.add("hidden");
+      }
+    });
+  });
+
   // frontend/scripts/toggling_premium_plan.js
-  document.getElementById("toggle-premium-plan-btn").addEventListener("click", function() {
-    const premiumContainer = document.getElementById("premium-plan-container");
-    if (premiumContainer.classList.contains("hidden")) {
-      premiumContainer.classList.remove("hidden");
-      this.textContent = "\u6536\u56DE\u5C08\u696D\u65B9\u6848";
-    } else {
-      premiumContainer.classList.add("hidden");
-      this.textContent = "\u65B0\u589E\u5C08\u696D\u65B9\u6848";
+  document.addEventListener("DOMContentLoaded", function() {
+    const toggleButton = document.getElementById("toggle-premium-plan-btn");
+    if (toggleButton) {
+      toggleButton.addEventListener("click", function() {
+        const premiumContainer = document.getElementById("premium-plan-container");
+        if (premiumContainer) {
+          if (premiumContainer.classList.contains("hidden")) {
+            premiumContainer.classList.remove("hidden");
+            this.textContent = "\u6536\u56DE\u5C08\u696D\u65B9\u6848";
+          } else {
+            premiumContainer.classList.add("hidden");
+            this.textContent = "\u65B0\u589E\u5C08\u696D\u65B9\u6848";
+          }
+        }
+      });
     }
   });
 
