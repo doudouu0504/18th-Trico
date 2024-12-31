@@ -11,11 +11,9 @@ class Service(WebPImageModelMixin, models.Model):
         related_name="services",
         null=True,
     )
-    category = models.ForeignKey(
+    category = models.ManyToManyField(
         Category,
-        on_delete=models.CASCADE,
         related_name="services",
-        null=True,
     )
     title = models.CharField(max_length=100)
     description = models.TextField()
@@ -23,11 +21,10 @@ class Service(WebPImageModelMixin, models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    
     # 新增一般方案
     standard_title = models.CharField(max_length=100)
     standard_description = models.TextField()
-    standard_price = models.PositiveIntegerField() 
+    standard_price = models.PositiveIntegerField()
     standard_delivery_time = models.PositiveIntegerField(null=True, blank=True)
 
     # 新增專業方案
@@ -37,14 +34,13 @@ class Service(WebPImageModelMixin, models.Model):
     premium_delivery_time = models.PositiveIntegerField(blank=True, null=True)
 
     rating = models.DecimalField(
-            max_digits=2, 
-            decimal_places=1,  
-            null=True,
-            blank=True,
-            default=None,
-            help_text="Client rating for the service (e.g., 4.5 stars)",
+        max_digits=2,
+        decimal_places=1,
+        null=True,
+        blank=True,
+        default=None,
+        help_text="Client rating for the service (e.g., 4.5 stars)",
     )
-
 
     def __str__(self):
         return self.title

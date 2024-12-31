@@ -45,7 +45,7 @@
             name="category"
             value="{{ category.id }}"
             class="hidden peer"
-            {% if category.id in form.category.value %} checked {% endif %}
+            {% if category in form.instance.category.all %}checked{% endif %}
           />
           <span
             class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 peer-checked:bg-blue-600 peer-checked:text-white"
@@ -219,9 +219,22 @@
   </div> 
 </form> 
 </div> 
-
-{% load static %}
-<script src="{% static 'scripts/toggling_premium_plan.js' %}"></script>
+<script>
+  document
+  .getElementById("toggle-premium-plan-btn")
+  .addEventListener("click", function () {
+    const premiumContainer = document.getElementById("premium-plan-container");
+    if (premiumContainer.classList.contains("hidden")) {
+      premiumContainer.classList.remove("hidden");
+      this.textContent = "收回專業方案";
+    } else {
+      premiumContainer.classList.add("hidden");
+      this.textContent = "新增專業方案";
+    }
+  });
+</script>
+{% comment %} {% load static %}
+<script src="{% static 'scripts/toggling_premium_plan.js' %}"></script> {% endcomment %}
 
 
 {% endblock %}

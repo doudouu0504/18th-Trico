@@ -1,5 +1,7 @@
+# forms.py
 from django import forms
 from .models import Service
+
 
 class ServiceForm(forms.ModelForm):
     class Meta:
@@ -19,6 +21,9 @@ class ServiceForm(forms.ModelForm):
             "premium_delivery_time",
             "rating",
         ]
+        widgets = {
+            "category": forms.CheckboxSelectMultiple(),
+        }
 
     def __init__(self, *args, **kwargs):
         # 接收自定義參數，判斷「專業方案」是否需要啟用必填

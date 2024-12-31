@@ -1,4 +1,4 @@
-{% extends "shared/layout.html" %} {% block content %} {% load static %}
+{% extends "shared/layout.html" %} {% block content %} 
 
 <div class="w-3/5 mx-auto my-8 bg-blue-100 p-6 rounded-lg shadow-md">
   <h1 class="text-3xl font-bold text-blue-700 text-center mb-6">新增服務</h1>
@@ -48,6 +48,9 @@
             name="category"
             value="{{ category.id }}"
             class="hidden peer"
+            {% if category.id in selected_categories %}
+            checked
+            {% endif %}
           />
           <span
             class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 peer-checked:bg-blue-600 peer-checked:text-white"
@@ -75,7 +78,7 @@
       <p class="text-red-500 text-sm">{{ form.photo.errors }}</p>
       {% endif %}
     </div>
-    <div class="flex">
+    <div class="flex space-x-4">
       <!-- Standard Plan Fields -->
       <div class="m-2 pt-4 p-4 bg-gray-300 rounded-md w-1/2 space-y-2">
         <h2 class="text-lg font-semibold text-gray-700 mb-4">一般方案</h2>
@@ -222,6 +225,20 @@
   </div> 
 </form> 
 </div> 
+ <script>
+document
+.getElementById("toggle-premium-plan-btn")
+.addEventListener("click", function () {
+  const premiumContainer = document.getElementById("premium-plan-container");
+  if (premiumContainer.classList.contains("hidden")) {
+    premiumContainer.classList.remove("hidden");
+    this.textContent = "收回專業方案";
+  } else {
+    premiumContainer.classList.add("hidden");
+    this.textContent = "新增專業方案";
+  }
+});
+</script>
 
 {% endblock %}
 
