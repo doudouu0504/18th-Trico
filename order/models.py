@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from services.models import Service
 import uuid
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Order(models.Model):
     STATUS_CHOICES = [
@@ -14,7 +15,12 @@ class Order(models.Model):
     PAYMENT_METHOD_CHOICES = [
         ("credit_card", "Credit Card"),
         ("atm", "ATM"),
-        ("other", "Other"),
+        ("linepay", "Linepay"),
+    ]
+
+    PLAN_CHOICES = [
+        ("standard", "Standard"),
+        ("premium", "Premium"),
     ]
 
     # 用戶和服務關聯
@@ -36,10 +42,12 @@ class Order(models.Model):
 
     # 訂單基本資訊
     order_date = models.DateTimeField(auto_now_add=True, verbose_name="訂單日期")
-    total_price = models.DecimalField(
-        max_digits=10, 
-        decimal_places=2, 
-        verbose_name="總金額"
+    total_price = models.PositiveIntegerField(
+        verbose_name="總金額",
+        validators=[
+            MinValueValidator(1),  
+            MaxValueValidator(9999999999)  
+        ]
     )
     status = models.CharField(
         max_length=50, 
@@ -52,7 +60,6 @@ class Order(models.Model):
     payment_method = models.CharField(
         max_length=50,
         choices=PAYMENT_METHOD_CHOICES,
-        default="credit_card",
         verbose_name="付款方式"
     )
     merchant_trade_no = models.CharField(
@@ -62,6 +69,14 @@ class Order(models.Model):
         blank=True,
         verbose_name="商店訂單編號"
     )
+
+    selected_plan = models.CharField(
+        max_length=20, 
+        choices=[('standard', 'Standard'), ('premium', 'Premium')], 
+        null=True, 
+        blank=True,
+        verbose_name="選擇方案")
+
 
     class Meta:
         verbose_name = "訂單"
@@ -73,5 +88,4 @@ class Order(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        service_title = self.service.title if self.service else 'No Service'
         return f"Order {self.merchant_trade_no} - {self.client_user.username} - {service_title}"

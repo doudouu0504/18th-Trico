@@ -83,13 +83,13 @@
           <div class="flex border-b">
             <button
               id="standard-tab"
-              class="flex-1 py-2 text-center font-semibold text-gray-700 border-b-2 border-blue-500"
+              class="flex-1 py-2 text-center font-semibold text-gray-700 border-b-2 border-blue-600"
             >
               一般方案
             </button>
             <button
               id="premium-tab"
-              class="flex-1 py-2 text-center font-semibold text-gray-700"
+              class="flex-1 py-2 text-center font-semibold text-gray-700 border-b-2"
             >
               專業方案
             </button>
@@ -113,17 +113,22 @@
             <p class="text-sm text-red-500 mb-4">交付時間：{{service.premium_delivery_time}} 天</p>
           </div>
         </div>
-        <a
-        class="w-full bg-blue-800 text-white py-2 rounded-lg text-lg font-semibold hover:bg-blue-700 text-center block"
-        href="{% if request.user.is_authenticated %}{% url 'payments:payment_form' service.id %}{% else %}{% url 'users:login' %}?next={% url 'payments:payment_form' service.id %}{% endif %}"
-      >
-        選擇支付方式
-        </a>
-      
+        <!-- 支付方式選擇表單 -->
+        <form method="post" action="{% url 'order:payment_form_select' service.id %}">
+          {% csrf_token %}
+          <input type="hidden" name="plan" id="plan" value="standard" />
+          <button
+            type="submit"
+            class="w-full bg-blue-800 text-white py-2 rounded-lg text-lg font-semibold hover:bg-blue-700 text-center block"
+          >
+            選擇支付方式
+          </button>
+        </form>
       </div>
     </div>
   </div>
-  {% load static %}
-  <script src="{% static 'scripts/switching_tab.js' %}"></script>
+
+ {% load static %}
+  <script src="{% static 'scripts/switching_tab.js' %}"></script>  
 </body>
 {% endblock %}

@@ -1,5 +1,6 @@
 from django.urls import path
 from order import views
+from services.models import Service
 
 app_name = "order"
 urlpatterns = [
@@ -8,4 +9,5 @@ urlpatterns = [
     path("create/", views.create_order, name="create_order"),  # 測試訂單建立
     path("return/", views.ecpay_return, name="ecpay_return"),  # 支付通知
     path("result/", views.ecpay_result, name="ecpay_result"),  # 支付結果頁面
+    path("<int:service_id>/", views.payment_form_select, name="payment_form_select"),
 ]
