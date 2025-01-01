@@ -3582,6 +3582,77 @@
   }();
   var htmx_esm_default = htmx2;
 
+  // // frontend/scripts/switching_tab.js
+  // document.addEventListener("DOMContentLoaded", function() {
+  //   const standardTab = document.getElementById("standard-tab");
+  //   const premiumTab = document.getElementById("premium-tab");
+  //   const standardSection = document.getElementById("standard");
+  //   const premiumSection = document.getElementById("premium");
+  //   standardTab.addEventListener("click", function() {
+  //     standardSection.classList.remove("hidden");
+  //     premiumSection.classList.add("hidden");
+  //     standardTab.classList.add("border-blue-500", "text-blue-700");
+  //     premiumTab.classList.remove("border-blue-500", "text-blue-700");
+  //   });
+  //   premiumTab.addEventListener("click", function() {
+  //     premiumSection.classList.remove("hidden");
+  //     standardSection.classList.add("hidden");
+  //     premiumTab.classList.add("border-blue-500", "text-blue-700");
+  //     standardTab.classList.remove("border-blue-500", "text-blue-700");
+  //   });
+  // });
+
+  // // frontend/scripts/switching_tab_payment.js
+  // document.addEventListener("DOMContentLoaded", function() {
+  //   const planSelect = document.getElementById("plan");
+  //   const standardSection = document.getElementById("standard");
+  //   const premiumSection = document.getElementById("premium");
+  //   planSelect.addEventListener("change", function() {
+  //     if (this.value === "standard") {
+  //       standardSection.classList.remove("hidden");
+  //       premiumSection.classList.add("hidden");
+  //     } else if (this.value === "premium") {
+  //       premiumSection.classList.remove("hidden");
+  //       standardSection.classList.add("hidden");
+  //     }
+  //   });
+  //   function initializePlanView() {
+  //     const selectedPlan = planSelect.value;
+  //     if (selectedPlan === "standard") {
+  //       standardSection.classList.remove("hidden");
+  //       premiumSection.classList.add("hidden");
+  //     } else if (selectedPlan === "premium") {
+  //       premiumSection.classList.remove("hidden");
+  //       standardSection.classList.add("hidden");
+  //     }
+  //   }
+  //   initializePlanView();
+  // });
+
+  // // frontend/scripts/toggling_buttons.js
+  // document.getElementById("toggle-management-btn").addEventListener("click", function() {
+  //   const managementButtons = document.querySelectorAll(".management-buttons");
+  //   managementButtons.forEach((buttonGroup) => {
+  //     if (buttonGroup.classList.contains("hidden")) {
+  //       buttonGroup.classList.remove("hidden");
+  //     } else {
+  //       buttonGroup.classList.add("hidden");
+  //     }
+  //   });
+  // });
+
+  // // frontend/scripts/toggling_plan.js
+  // document.getElementById("toggle-premium-plan-btn").addEventListener("click", function() {
+  //   const premiumContainer = document.getElementById("premium-plan-container");
+  //   if (premiumContainer.classList.contains("hidden")) {
+  //     premiumContainer.classList.remove("hidden");
+  //     this.textContent = "\u6536\u56DE\u5C08\u696D\u65B9\u6848";
+  //   } else {
+  //     premiumContainer.classList.add("hidden");
+  //     this.textContent = "\u65B0\u589E\u5C08\u696D\u65B9\u6848";
+  //   }
+  // });
+
   // node_modules/@vue/shared/dist/shared.esm-bundler.js
   // @__NO_SIDE_EFFECTS__
   function makeMap(str2) {
@@ -10393,10 +10464,10 @@ Component that was made reactive: `,
     initDev();
   }
 
-  // sfc-script:C:\Users\NormalUser\Desktop\18th-Trico\frontend\scripts\App.vue?type=script
+  // sfc-script:C:\Users\User\Desktop\18th-Trico\frontend\scripts\App.vue?type=script
   var App_default = {};
 
-  // sfc-template:C:\Users\NormalUser\Desktop\18th-Trico\frontend\scripts\App.vue?type=template
+  // sfc-template:C:\Users\User\Desktop\18th-Trico\frontend\scripts\App.vue?type=template
   var _hoisted_1 = { id: "app" };
   function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_router_view = resolveComponent("router-view");
@@ -14965,7 +15036,7 @@ ${JSON.stringify(newTargetLocation, null, 2)}
     mergeConfig: mergeConfig2
   } = axios_default;
 
-  // sfc-script:C:\Users\NormalUser\Desktop\18th-Trico\frontend\scripts\components\NotFoundPage.vue?type=script
+  // sfc-script:C:\Users\User\Desktop\18th-Trico\frontend\scripts\components\NotFoundPage.vue?type=script
   var NotFoundPage_default = {
     name: "NotFoundPage",
     setup() {
@@ -14993,7 +15064,7 @@ ${JSON.stringify(newTargetLocation, null, 2)}
     }
   };
 
-  // sfc-template:C:\Users\NormalUser\Desktop\18th-Trico\frontend\scripts\components\NotFoundPage.vue?type=template
+  // sfc-template:C:\Users\User\Desktop\18th-Trico\frontend\scripts\components\NotFoundPage.vue?type=template
   var _hoisted_12 = { class: "flex items-center justify-center min-h-screen bg-gray-100" };
   var _hoisted_2 = { class: "text-center" };
   var _hoisted_3 = { class: "text-6xl font-bold mb-4 text-gray-800" };
