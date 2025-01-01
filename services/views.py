@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from .models import Service
 from .forms import ServiceForm
 from .models import Category
-
+from comments.models import Comment
+from comments.forms import CommentForm
 
 
 def has_permission(request, id):
@@ -107,3 +108,33 @@ def error_page(request):
 def service_detail(request, id, service_id):
     service = get_object_or_404(Service, id=service_id)
     return render(request, "services/service_detail.html", {"service": service})
+
+
+@login_required
+def service_detail(request, id, service_id):
+    service = get_object_or_404(Service, id=service_id)
+    comments = Comment.objects.filter(service=service, is_deleted=False).order_by(
+        "-created_at"
+    )
+    form = CommentForm()
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.service = service
+            comment.save()
+            return redirect(
+                "services:service_detail", id=request.user.id, service_id=service_id
+            )
+
+    return render(
+        request,
+        "services/service_detail.html",
+        {
+            "service": service,
+            "comments": comments,
+            "form": form,
+        },
+    )
