@@ -73,7 +73,6 @@ def logout(request):
     response = HttpResponse()
     response["HX-Redirect"] = "/"
     return response
-    # return redirect("pages:home")
 
 
 @login_required
@@ -105,16 +104,6 @@ def profile(request):
 
     return render(request, "users/profile.html", context)
 
-@login_required
-def user_dashboard(request):
-
-    profile = request.user.profile
-
-    if profile.is_freelancer:
-        return render(request, "users/freelancer_dashboard.html")
-    
-    else:
-        return render(request, "users/client_dashboard.html")
 
 @login_required
 def user_dashboard(request):
@@ -123,9 +112,10 @@ def user_dashboard(request):
 
     if profile.is_freelancer:
         return render(request, "users/freelancer_dashboard.html")
-    
+
     else:
         return render(request, "users/client_dashboard.html")
+
 
 @login_required
 def apply_freelancer(request):
@@ -144,15 +134,15 @@ def apply_freelancer(request):
 class CustomPasswordResetView(auth_views.PasswordResetView):
     template_name = "users/password_reset.html"
     email_template_name = "users/password_reset_email.html"
-    subject_template_name = "users/password_reset_subject.txt"  # 自定義郵件標題模板
+    subject_template_name = "users/password_reset_subject.txt"
     success_url = "/users/password_reset_done/"
     extra_context = {
         "protocol": settings.PROTOCOL,
         "domain": settings.DEFAULT_DOMAIN,
     }
 
+    # 覆蓋郵件發送邏輯，避免重複發送郵件
     def form_valid(self, form):
-        """覆蓋郵件發送邏輯，避免重複發送"""
         email = form.cleaned_data["email"]
 
         for user in form.get_users(email):
@@ -173,7 +163,7 @@ class CustomPasswordResetView(auth_views.PasswordResetView):
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 to=[email],
             )
-            email_msg.content_subtype = "html"  # 設置內容類型為 HTML
+            email_msg.content_subtype = "html"
             email_msg.send()
 
         # 不再調用的郵件發送邏輯
@@ -191,6 +181,8 @@ class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
 
 class CustomPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
     template_name = "users/password_reset_complete.html"
+
+
 def switch_role(request):
     profile = request.user.profile
     if profile.is_freelancer:
@@ -206,21 +198,21 @@ def switch_role(request):
 @login_required
 def feedback_view(request):
     profile = request.user.profile
-    if profile.is_freelancer:  # 如果是接案者
+    if profile.is_freelancer: 
         comments_received = Comment.objects.filter(
             service__freelancer_user=request.user, is_deleted=False
         ).select_related("user", "service")
         context = {
             "comments_received": comments_received,
-            "role": "freelancer",  # 標識用戶是接案者
+            "role": "freelancer",  
         }
-    else:  # 如果是業者
+    else:  
         comments_given = Comment.objects.filter(
             user=request.user, is_deleted=False
         ).select_related("service", "service__freelancer_user")
         context = {
             "comments_given": comments_given,
-            "role": "client",  # 標識用戶是業者
+            "role": "client",  
         }
 
     return render(request, "users/feedback.html", context)
