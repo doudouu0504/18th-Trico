@@ -66,13 +66,13 @@
           <div class="flex border-b">
             <button
               id="standard-tab"
-              class="flex-1 py-2 text-center font-semibold text-gray-700 border-b-2 border-blue-500"
+              class="flex-1 py-2 text-center font-semibold text-gray-700 border-b-2 border-blue-600"
             >
               一般方案
             </button>
             <button
               id="premium-tab"
-              class="flex-1 py-2 text-center font-semibold text-gray-700"
+              class="flex-1 py-2 text-center font-semibold text-gray-700 border-b-2"
             >
               專業方案
             </button>
@@ -82,26 +82,33 @@
         <div id="price-section">
           <!-- Standard Plan -->
           <div id="standard" class="block">
-            <p class="text-4xl font-bold text-gray-800 mb-2">$9,900</p>
+            <p class="text-4xl font-bold text-gray-800 mb-2">${{service.standard_price}}</p>
             <p class="text-gray-600 mb-4">
-              一般版：開發您的需求並在 AWS 上部署
+              一般版：{{service.standard_description}} 
             </p>
-            <p class="text-sm text-red-500 mb-4">交付時間：10 天</p>
+            <p class="text-sm text-red-500 mb-4">交付時間：{{service.standard_delivery_time}} 天</p>
           </div>
 
           <!-- Premium Plan -->
           <div id="premium" class="hidden">
-            <p class="text-4xl font-bold text-gray-800 mb-2">$28000</p>
+            <p class="text-4xl font-bold text-gray-800 mb-2">${{service.premium_price}}</p>
             <p class="text-gray-600 mb-4">
-              專業版：使用 React 和 Django 開發並設計網站，並部署到 AWS
+              專業版：{{service.premium_description}} 
             </p>
-            <p class="text-sm text-red-500 mb-4">交付時間：30 天</p>
+            <p class="text-sm text-red-500 mb-4">交付時間：{{service.premium_delivery_time}} 天</p>
           </div>
         </div>
-
-        <button class="w-full bg-blue-800 text-white py-2 rounded-lg text-lg font-semibold hover:bg-blue-700">
-          選擇支付方式
-        </button>
+        <!-- 支付方式選擇表單 -->
+        <form method="post" action="{% url 'order:payment_form_select' service.id %}">
+          {% csrf_token %}
+          <input type="hidden" name="plan" id="plan" value="standard" />
+          <button
+            type="submit"
+            class="w-full bg-blue-800 text-white py-2 rounded-lg text-lg font-semibold hover:bg-blue-700 text-center block"
+          >
+            選擇支付方式
+          </button>
+        </form>
       </div>
     </div>
 
@@ -145,7 +152,28 @@
     </div>
   </div>
 
-  {% load static %}
-  <script src="{% static 'scripts/scripts_switchtab.js' %}"></script>
+ {% load static %}
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+  const standardTab = document.getElementById("standard-tab");
+  const premiumTab = document.getElementById("premium-tab");
+  const standardSection = document.getElementById("standard");
+  const premiumSection = document.getElementById("premium");
+
+  standardTab.addEventListener("click", function () {
+    standardSection.classList.remove("hidden");
+    premiumSection.classList.add("hidden");
+    standardTab.classList.add("border-blue-500", "text-blue-700");
+    premiumTab.classList.remove("border-blue-500", "text-blue-700");
+  });
+
+  premiumTab.addEventListener("click", function () {
+    premiumSection.classList.remove("hidden");
+    standardSection.classList.add("hidden");
+    premiumTab.classList.add("border-blue-500", "text-blue-700");
+    standardTab.classList.remove("border-blue-500", "text-blue-700");
+  });
+});
+  </script>  
 </body>
 {% endblock %}
