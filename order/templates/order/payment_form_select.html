@@ -17,7 +17,8 @@
       <div class="w-1/2">
         <h1 class="text-2xl font-bold text-gray-800 mb-6">選擇支付方式</h1>
 
-        <form method="post" action="">
+        <form method="post" action="{% url 'order:create_order' %}">
+
           {% csrf_token %}
           <!-- 方案選擇 -->
           <div class="mb-6">
@@ -86,7 +87,7 @@
               id="nextButton"
               disabled
             >
-              <a href="{% url 'order:create_order' %}">下一步</a>
+              下一步
             </button>
           </div>
         </form>
