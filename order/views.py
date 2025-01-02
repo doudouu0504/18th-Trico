@@ -1,13 +1,24 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from .models import Order
-from datetime import datetime
-import hashlib
 from django.views.decorators.csrf import csrf_exempt
-import urllib.parse
 from django.contrib.auth.decorators import login_required
+from .models import Order
 from .forms import OrderForm
 from services.models import Service
+
+from datetime import datetime
+from pathlib import Path
+import hashlib
+import hmac
+import base64
+import json
+import uuid
+import urllib.parse
+
+# 第三方庫
+import environ
+import requests
+
 
 # 綠界金流設定
 MERCHANT_ID = "3002607"
@@ -101,12 +112,12 @@ def successful(request):
 
 def payment_form_select(request, service_id):
     service = get_object_or_404(Service, id=service_id)
-    selected_plan = request.GET.get("plan")  # 獲取選擇的方案
+    selected_plan = request.GET.get("plan")  
 
-     # 初始表單數據，包括選擇的方案和預設支付方式
+     # 初始表單數據
     initial_data = {
         "selected_plan": selected_plan,
-        "payment_method": None,  # 默認支付方式為None
+        "payment_method": None,  
     }
 
     if request.method == "POST":
@@ -130,7 +141,6 @@ def payment_form_select(request, service_id):
                 )
 
             order.save()
-            # 成功保存後，重定向到訂單成功頁面
             return redirect("order:successful", order_id=order.id)
     else:
         form = OrderForm(initial=initial_data)
@@ -140,3 +150,85 @@ def payment_form_select(request, service_id):
         "order/payment_form_select.html",
         {"form": form, "service": service, "selected_plan": selected_plan},
     )
+
+
+
+
+
+# Linepay
+BASE_DIR = Path(__file__).resolve().parent.parent
+env = environ.Env()
+environ.Env.read_env()
+
+def create_headers(body, uri):
+    channel_id = env('LINE_CHANNEL_ID')
+    secret_key = env('LINE_CHANNEL_SECRET_KEY')
+
+    nonce = str(uuid.uuid4())
+    
+    body_to_json = json.dumps(body)
+
+    message = secret_key + uri + body_to_json + nonce
+
+    binary_message = message.encode()
+    binary_secret_key = secret_key.encode()
+
+    hash = hmac.new(binary_secret_key, binary_message, hashlib.sha256)
+    signature = base64.b64encode(hash.digest()).decode()
+
+    headers = {
+        "Content-Type": "application/json",
+        "X-LINE-ChannelId":channel_id,
+        "X-LINE-ChannelSecret":secret_key,
+        "X-LINE-Authorization-Nonce": nonce,
+        "X-LINE-Authorization": signature,
+    }
+    return headers
+
+
+
+def request_payment(request):
+    if request.method == "POST":
+
+        # 設定訂單與付款資訊
+        order_id = f"order_{str(uuid.uuid4())}"
+        package_id = f"package_{str(uuid.uuid4())}"
+
+        #商品資訊
+        payload = {
+            'amount': 500,
+            'currency': 'TWD',
+            'orderId': order_id,
+            'packages': [{
+                'id': package_id,
+                'amount': 500,
+                'products': [{
+                    'id': '1',
+                    'name': '為你自己學 Python',
+                    'quantity': 1,
+                    'price': 500,
+                }]
+            }],
+            'redirectUrls': {
+                'confirmUrl': f"https://{env('HOSTNAME')}/order/successful",
+                'cancelUrl': f"https://{env('HOSTNAME')}/order/failed",
+            }
+        }
+
+    # 發送 API 請求
+        uri = env('LINE_REQUEST_URL')
+        headers = create_headers(payload, uri)
+        url = f"{env('LINE_SANDBOX_URL')}{uri}"
+        response = requests.post(url, headers=headers, data=json.dumps(payload))
+
+        # 根據狀態，處理回應
+        if response.status_code == 200:
+            data = response.json()
+            if data['returnCode'] == '0000':
+                return redirect(data['info']['paymentUrl']['web'])
+            else:
+                return render(request, "order/order_failed.html", {"message": data['returnMessage']})
+        else:
+            return render(request, "order/order_failed.html", {"message": f"Error: {response.status_code}"})
+
+    return render(request, "order/linepay_test.html")
