@@ -7,14 +7,14 @@ document.addEventListener("DOMContentLoaded", function () {
   standardTab.addEventListener("click", function () {
     standardSection.classList.remove("hidden");
     premiumSection.classList.add("hidden");
-    standardTab.classList.add("border-blue-500", "text-blue-700");
-    premiumTab.classList.remove("border-blue-500", "text-blue-700");
+    standardTab.classList.add("border-blue-600", "text-blue-700");
+    premiumTab.classList.remove("border-blue-600", "text-blue-700");
   });
 
   premiumTab.addEventListener("click", function () {
     premiumSection.classList.remove("hidden");
     standardSection.classList.add("hidden");
-    premiumTab.classList.add("border-blue-500", "text-blue-700");
-    standardTab.classList.remove("border-blue-500", "text-blue-700");
+    premiumTab.classList.add("border-blue-600", "text-blue-700");
+    standardTab.classList.remove("border-blue-600", "text-blue-700");
   });
 });

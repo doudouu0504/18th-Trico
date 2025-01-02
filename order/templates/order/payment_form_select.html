@@ -17,7 +17,8 @@
       <div class="w-1/2">
         <h1 class="text-2xl font-bold text-gray-800 mb-6">選擇支付方式</h1>
 
-        <form method="post" action="">
+        <form method="post" action="{% url 'order:create_order' %}">
+
           {% csrf_token %}
           <!-- 方案選擇 -->
           <div class="mb-6">
@@ -57,11 +58,18 @@
               type="checkbox"
               id="terms"
               class="appearance-none h-4 w-4 border border-blue-700 rounded bg-white checked:bg-blue-900 checked:border-blue-300 focus:ring-2 focus:ring-blue-200"
-              onclick="toggleSubmitButton()"
+              onclick="toggleSubmitButtonAndDisplayPlan()"
             />
             <label for="terms" class="ml-2 text-gray-700">
               我已閱讀並同意購買須知。
             </label>
+            <button
+              type="button"
+              class="ml-4 text-blue-500 underline focus:outline-none"
+              onclick="showTerms()"
+            >
+              點我閱讀
+            </button>
           </div>
 
           <!-- 按鈕區域 -->
@@ -79,7 +87,7 @@
               id="nextButton"
               disabled
             >
-              <a href="{% url 'order:create_order' %}">下一步</a>
+              下一步
             </button>
           </div>
         </form>
@@ -104,16 +112,89 @@
             </p>
             <p class="text-sm text-red-500 mb-4">交付時間：{{service.premium_delivery_time}} 天</p>
           </div>
+          <!-- Terms and Conditions -->
+          <div id="terms-section" class="hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">購買須知</h2>
+            <p class="text-gray-700">
+              感謝您選擇三合Trico作為您的接案與服務交易平台！在進行交易前，請詳細閱讀並同意以下購買須知：
+              <br><br>
+              1. **平台角色與責任**：三合Trico僅提供接案者與服務購買者之間的交易媒介，平台不參與交易內容，也不對交易過程中的任何糾紛負法律責任。
+              <br>
+              2. **服務交易流程**：請在購買前仔細閱讀服務提供者的描述與條款，並與接案者充分溝通。
+              <br>
+              3. **付款與安全**：所有交易均需通過平台的安全付款系統完成，平台不支持私下交易。
+              <br>
+              4. **退款與爭議處理**：若對服務不滿意，請於服務完成後5日內通過平台提交爭議申請，我們將協助進行仲裁。
+            </p>
+            <p class="text-red-600 font-bold mt-3 text-center">
+              (請先閱讀完畢再勾選左側我已閱讀並同意購買須知。)
+            </p>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  {% load static %}
-  <script src="{% static 'scripts/switching_tab_payment.js' %}"></script>
+ <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const planSelect = document.getElementById("plan");
+    const standardSection = document.getElementById("standard");
+    const premiumSection = document.getElementById("premium");
+    const termsSection = document.getElementById("terms-section");
+    const termsCheckbox = document.getElementById("terms");
+    const nextButton = document.getElementById("nextButton");
+
+    // 切換方案顯示
+    planSelect.addEventListener("change", function () {
+      if (this.value === "standard") {
+        standardSection.classList.remove("hidden");
+        premiumSection.classList.add("hidden");
+        termsSection.classList.add("hidden");
+      } else if (this.value === "premium") {
+        premiumSection.classList.remove("hidden");
+        standardSection.classList.add("hidden");
+        termsSection.classList.add("hidden");
+      }
+    });
+
+    // 初始化顯示對應方案
+    function initializePlanView() {
+      const selectedPlan = planSelect.value;
+      if (selectedPlan === "standard") {
+        standardSection.classList.remove("hidden");
+        premiumSection.classList.add("hidden");
+      } else if (selectedPlan === "premium") {
+        premiumSection.classList.remove("hidden");
+        standardSection.classList.add("hidden");
+      }
+    }
+
+    // 顯示購買須知
+    window.showTerms = function () {
+      termsSection.classList.remove("hidden");
+      standardSection.classList.add("hidden");
+      premiumSection.classList.add("hidden");
+    };
+
+    // 控制按鈕啟用狀態並顯示方案
+    window.toggleSubmitButtonAndDisplayPlan = function () {
+      nextButton.disabled = !termsCheckbox.checked;
+      if (termsCheckbox.checked) {
+        termsSection.classList.add("hidden"); // 隱藏購買須知
+        const selectedPlan = planSelect.value;
+        if (selectedPlan === "standard") {
+          standardSection.classList.remove("hidden");
+          premiumSection.classList.add("hidden");
+        } else if (selectedPlan === "premium") {
+          premiumSection.classList.remove("hidden");
+          standardSection.classList.add("hidden");
+        }
+      }
+    };
+
+    initializePlanView();
+  });
+ </script>
   
 </body>
 {% endblock %}
-
-
-
