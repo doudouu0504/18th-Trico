@@ -1,9 +1,158 @@
 (() => {
   var __defProp = Object.defineProperty;
+  var __getOwnPropNames = Object.getOwnPropertyNames;
+  var __esm = (fn, res) => function __init() {
+    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+  };
   var __export = (target, all3) => {
     for (var name in all3)
       __defProp(target, name, { get: all3[name], enumerable: true });
   };
+
+  // frontend/scripts/switching_tab.js
+  var switching_tab_exports = {};
+  __export(switching_tab_exports, {
+    init: () => init
+  });
+  function init() {
+    document.addEventListener("DOMContentLoaded", function() {
+      const standardTab = document.getElementById("standard-tab");
+      const premiumTab = document.getElementById("premium-tab");
+      const standardSection = document.getElementById("standard");
+      const premiumSection = document.getElementById("premium");
+      standardTab.addEventListener("click", function() {
+        standardSection.classList.remove("hidden");
+        premiumSection.classList.add("hidden");
+        standardTab.classList.add("border-blue-600", "text-blue-700");
+        premiumTab.classList.remove("border-blue-600", "text-blue-700");
+      });
+      premiumTab.addEventListener("click", function() {
+        premiumSection.classList.remove("hidden");
+        standardSection.classList.add("hidden");
+        premiumTab.classList.add("border-blue-600", "text-blue-700");
+        standardTab.classList.remove("border-blue-600", "text-blue-700");
+      });
+    });
+  }
+  var init_switching_tab = __esm({
+    "frontend/scripts/switching_tab.js"() {
+    }
+  });
+
+  // frontend/scripts/toggling_plan.js
+  var toggling_plan_exports = {};
+  __export(toggling_plan_exports, {
+    init: () => init2
+  });
+  function init2() {
+    document.addEventListener("DOMContentLoaded", function() {
+      const toggleBtn = document.getElementById("toggle-premium-plan-btn");
+      const premiumContainer = document.getElementById("premium-plan-container");
+      if (!premiumContainer.classList.contains("hidden")) {
+        toggleBtn.textContent = "\u6536\u56DE\u5C08\u696D\u65B9\u6848";
+      }
+      toggleBtn.addEventListener("click", function() {
+        if (premiumContainer.classList.contains("hidden")) {
+          premiumContainer.classList.remove("hidden");
+          toggleBtn.textContent = "\u6536\u56DE\u5C08\u696D\u65B9\u6848";
+        } else {
+          premiumContainer.classList.add("hidden");
+          toggleBtn.textContent = "\u65B0\u589E\u5C08\u696D\u65B9\u6848";
+          const premiumFields = premiumContainer.querySelectorAll("input, textarea");
+          premiumFields.forEach((field) => {
+            field.value = "";
+          });
+        }
+      });
+    });
+  }
+  var init_toggling_plan = __esm({
+    "frontend/scripts/toggling_plan.js"() {
+    }
+  });
+
+  // frontend/scripts/toggling_buttons.js
+  var toggling_buttons_exports = {};
+  __export(toggling_buttons_exports, {
+    init: () => init3
+  });
+  function init3() {
+    document.getElementById("toggle-management-btn").addEventListener("click", function() {
+      const managementButtons = document.querySelectorAll(".management-buttons");
+      managementButtons.forEach((buttonGroup) => {
+        if (buttonGroup.classList.contains("hidden")) {
+          buttonGroup.classList.remove("hidden");
+        } else {
+          buttonGroup.classList.add("hidden");
+        }
+      });
+    });
+  }
+  var init_toggling_buttons = __esm({
+    "frontend/scripts/toggling_buttons.js"() {
+    }
+  });
+
+  // frontend/scripts/switching_tab_payment.js
+  var switching_tab_payment_exports = {};
+  __export(switching_tab_payment_exports, {
+    init: () => init4
+  });
+  function init4() {
+    document.addEventListener("DOMContentLoaded", function() {
+      const planSelect = document.getElementById("plan");
+      const standardSection = document.getElementById("standard");
+      const premiumSection = document.getElementById("premium");
+      const termsSection = document.getElementById("terms-section");
+      const termsCheckbox = document.getElementById("terms");
+      const nextButton = document.getElementById("nextButton");
+      planSelect.addEventListener("change", function() {
+        if (this.value === "standard") {
+          standardSection.classList.remove("hidden");
+          premiumSection.classList.add("hidden");
+          termsSection.classList.add("hidden");
+        } else if (this.value === "premium") {
+          premiumSection.classList.remove("hidden");
+          standardSection.classList.add("hidden");
+          termsSection.classList.add("hidden");
+        }
+      });
+      function initializePlanView() {
+        const selectedPlan = planSelect.value;
+        if (selectedPlan === "standard") {
+          standardSection.classList.remove("hidden");
+          premiumSection.classList.add("hidden");
+        } else if (selectedPlan === "premium") {
+          premiumSection.classList.remove("hidden");
+          standardSection.classList.add("hidden");
+        }
+      }
+      window.showTerms = function() {
+        termsSection.classList.remove("hidden");
+        standardSection.classList.add("hidden");
+        premiumSection.classList.add("hidden");
+      };
+      window.toggleSubmitButtonAndDisplayPlan = function() {
+        nextButton.disabled = !termsCheckbox.checked;
+        if (termsCheckbox.checked) {
+          termsSection.classList.add("hidden");
+          const selectedPlan = planSelect.value;
+          if (selectedPlan === "standard") {
+            standardSection.classList.remove("hidden");
+            premiumSection.classList.add("hidden");
+          } else if (selectedPlan === "premium") {
+            premiumSection.classList.remove("hidden");
+            standardSection.classList.add("hidden");
+          }
+        }
+      };
+      initializePlanView();
+    });
+  }
+  var init_switching_tab_payment = __esm({
+    "frontend/scripts/switching_tab_payment.js"() {
+    }
+  });
 
   // node_modules/htmx.org/dist/htmx.esm.js
   var htmx2 = function() {
@@ -15054,6 +15203,25 @@ ${JSON.stringify(newTargetLocation, null, 2)}
   // frontend/scripts/app.js
   var app = createApp(App_default2);
   app.use(router_default);
+  var pageElement = document.querySelector("[data-page]");
+  var pageName = pageElement ? pageElement.dataset.page : null;
+  if (pageName === "switching_tab") {
+    Promise.resolve().then(() => (init_switching_tab(), switching_tab_exports)).then((module) => {
+      module.init();
+    });
+  } else if (pageName === "toggling_plan") {
+    Promise.resolve().then(() => (init_toggling_plan(), toggling_plan_exports)).then((module) => {
+      module.init();
+    });
+  } else if (pageName === "toggling_buttons") {
+    Promise.resolve().then(() => (init_toggling_buttons(), toggling_buttons_exports)).then((module) => {
+      module.init();
+    });
+  } else if (pageName === "switching_tab_payment") {
+    Promise.resolve().then(() => (init_switching_tab_payment(), switching_tab_payment_exports)).then((module) => {
+      module.init();
+    });
+  }
   app.mount("#app");
 })();
 /*! Bundled license information:

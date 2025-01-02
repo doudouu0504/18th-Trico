@@ -1,5 +1,5 @@
 {% extends "shared/layout.html" %} {% block content %}
-<div class="w-3/5 mx-auto my-8 bg-blue-100 p-6 rounded-lg shadow-md">
+<div class="w-3/5 mx-auto my-8 bg-blue-100 p-6 rounded-lg shadow-md" data-page="toggling_plan">
   <h1 class="text-3xl font-bold text-blue-700 text-center mb-6">編輯服務</h1>
   <form method="post" enctype="multipart/form-data" class="space-y-10">
     {% csrf_token %}
@@ -220,39 +220,7 @@
 </form> 
 </div> 
 
-
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const toggleBtn = document.getElementById("toggle-premium-plan-btn");
-    const premiumContainer = document.getElementById("premium-plan-container");
-  
-    // Update button text based on the initial state
-    if (!premiumContainer.classList.contains("hidden")) {
-      toggleBtn.textContent = "收回專業方案";
-    }
-  
-    toggleBtn.addEventListener("click", function () {
-      if (premiumContainer.classList.contains("hidden")) {
-        premiumContainer.classList.remove("hidden");
-        toggleBtn.textContent = "收回專業方案";
-      } else {
-        premiumContainer.classList.add("hidden");
-        toggleBtn.textContent = "新增專業方案";
-  
-        // Clear premium plan fields
-        const premiumFields = premiumContainer.querySelectorAll("input, textarea");
-        premiumFields.forEach((field) => {
-          field.value = "";
-        });
-      }
-    });
-  });
-  </script>
-
 {% endblock %}
-{% comment %} {% load static %}
-<script src="{% static 'scripts/toggling_premium_plan.js' %}"></script> {% endcomment %}
 
 
 
