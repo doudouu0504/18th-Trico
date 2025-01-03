@@ -98,15 +98,14 @@ def successful(request):
 
 
 
-
+@login_required
 def payment_form_select(request, service_id):
     service = get_object_or_404(Service, id=service_id)
-    selected_plan = request.GET.get("plan")  # 獲取選擇的方案
+    selected_plan = request.GET.get("plan")  
 
-     # 初始表單數據，包括選擇的方案和預設支付方式
     initial_data = {
         "selected_plan": selected_plan,
-        "payment_method": None,  # 默認支付方式為None
+        "payment_method": None,  
     }
 
     if request.method == "POST":
@@ -115,24 +114,16 @@ def payment_form_select(request, service_id):
             order = form.save(commit=False)
             order.client_user = request.user
             order.service = service
-            # 設置總金額根據選擇的方案
-            if form.cleaned_data["selected_plan"] == "standard":
-                order.total_price = service.standard_price
-            elif form.cleaned_data["selected_plan"] == "premium":
-                order.total_price = service.premium_price
-            else:
-                # 如果方案不正確，返回表單錯誤
-                form.add_error("selected_plan", "Invalid plan selected.")
-                return render(
-                    request,
-                    "order/payment_form_select.html",
-                    {"form": form, "service": service},
-                )
-
             order.save()
-            # 成功保存後，重定向到訂單成功頁面
             return redirect("order:successful", order_id=order.id)
-    else:
+        else:
+            return render(
+                request,
+                "order/payment_form_select.html",
+                {"form": form, "service": service, "selected_plan": selected_plan},
+            )
+    # GET 請求
+    else: 
         form = OrderForm(initial=initial_data)
 
     return render(

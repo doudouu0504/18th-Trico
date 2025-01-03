@@ -12,12 +12,6 @@ urlpatterns = [
     path("error/", views.error_page, name="error_page"),
 ]
 
- #services
-# /ID/freelancer/
-# /ID/freelancer/id/detail
-# /ID/new/
-# /ID/edit/id/
-# /ID/delete/id/
-# /error/
+
 
 

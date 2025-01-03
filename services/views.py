@@ -1,4 +1,3 @@
-# views.py
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Service
@@ -47,7 +46,6 @@ def create_service(request, id):
             service = form.save(commit=False)
             service.freelancer_user = request.user
             service.save()
-            # 修正：使用 request.POST.getlist() 來獲取多對多關係的值
             selected_categories = request.POST.getlist("category")
             service.category.set(selected_categories)
             return redirect("services:freelancer_dashboard", id=id)
@@ -74,7 +72,6 @@ def edit_service(request, id, service_id):
         form = ServiceForm(request.POST, request.FILES, instance=service)
         if form.is_valid():
             form.save()
-            # 修正：使用 request.POST.getlist() 更新多對多關係
             selected_categories = request.POST.getlist("category")
             service.category.set(selected_categories)
             return redirect("services:freelancer_dashboard", id=id)
@@ -113,12 +110,8 @@ def error_page(request):
     )
 
 
-def service_detail(request, id, service_id):
-    service = get_object_or_404(Service, id=service_id, freelancer_user_id=id)
-    return render(request, "services/service_detail.html", {"service": service})
 
 
-@login_required
 def service_detail(request, id, service_id):
     service = get_object_or_404(Service, id=service_id)
     comments = Comment.objects.filter(service=service, is_deleted=False).order_by(

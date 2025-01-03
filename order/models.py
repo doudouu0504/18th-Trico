@@ -40,7 +40,7 @@ class Order(models.Model):
         blank=True,
     )
 
-    # 訂單基本資訊
+    # 訂單相關
     order_date = models.DateTimeField(auto_now_add=True, verbose_name="訂單日期")
     total_price = models.PositiveIntegerField(
         verbose_name="總金額",
@@ -56,7 +56,7 @@ class Order(models.Model):
         verbose_name="訂單狀態"
     )
 
-    # 支付相關欄位
+    # 支付相關
     payment_method = models.CharField(
         max_length=50,
         choices=PAYMENT_METHOD_CHOICES,
