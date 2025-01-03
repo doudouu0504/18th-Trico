@@ -110,12 +110,8 @@ def error_page(request):
     )
 
 
-def service_detail(request, id, service_id):
-    service = get_object_or_404(Service, id=service_id, freelancer_user_id=id)
-    return render(request, "services/service_detail.html", {"service": service})
 
 
-@login_required
 def service_detail(request, id, service_id):
     service = get_object_or_404(Service, id=service_id)
     comments = Comment.objects.filter(service=service, is_deleted=False).order_by(
