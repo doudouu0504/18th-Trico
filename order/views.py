@@ -8,12 +8,13 @@ import urllib.parse
 from django.contrib.auth.decorators import login_required
 from .forms import OrderForm
 from services.models import Service
+from django.conf import settings
 
 # 綠界金流設定
-MERCHANT_ID = "3002607"
-HASH_KEY = "pwFHCqoQZGmho4w6"
-HASH_IV = "EkRm7iFT261dpevs"
-ECPAY_URL = "https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5"
+MERCHANT_ID = settings.MERCHANT_ID
+HASH_KEY = settings.HASH_KEY
+HASH_IV = settings.HASH_IV
+ECPAY_URL = settings.ECPAY_URL
 
 
 # 按照綠界的規範處理參數

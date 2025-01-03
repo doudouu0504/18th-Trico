@@ -80,4 +80,7 @@ class Order(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
+        service_title = (
+            self.service.title if self.service else "N/A"
+        )  # 如果沒有服務，顯示 N/A
         return f"Order {self.merchant_trade_no} - {self.client_user.username} - {service_title}"
