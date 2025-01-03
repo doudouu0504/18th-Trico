@@ -161,8 +161,8 @@ env = environ.Env()
 environ.Env.read_env()
 
 def create_headers(body, uri):
-    channel_id = env('LINE_CHANNEL_ID')
-    secret_key = env('LINE_CHANNEL_SECRET_KEY')
+    channel_id = env('LINE_PAY_CHANNEL_ID')
+    secret_key = env('LINE_PAY_CHANNEL_SECRET_KEY')
 
     nonce = str(uuid.uuid4())
     
