@@ -9,10 +9,7 @@ class OrderForm(forms.ModelForm):
             "selected_plan",
             "payment_method",
         ]
-        widgets = {
-            "selected_plan": forms.RadioSelect(attrs={"class": "plan-select"}),
-            "payment_method": forms.Select(attrs={"class": "payment-method"}),
-        }
+
         labels = {
             "selected_plan": "選擇方案",
             "payment_method": "支付方式",
