@@ -1,6 +1,6 @@
 {% extends "shared/layout.html" %} 
 {% block content %} 
-<body class="bg-blue-900 font-sans">
+<div class="bg-blue-900 font-sans" data-page="switching_tab_payment">
   <div class="container mx-auto py-10 px-[10%]">
     <!-- 回上一頁按鈕 -->
     <div class="mb-4">
@@ -135,7 +135,7 @@
     </div>
   </div>
 
- <script>
+ <!-- <script>
   document.addEventListener("DOMContentLoaded", function () {
     const planSelect = document.getElementById("plan");
     const standardSection = document.getElementById("standard");
@@ -194,7 +194,7 @@
 
     initializePlanView();
   });
- </script>
+ </script> -->
   
-</body>
+</div>
 {% endblock %}

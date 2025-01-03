@@ -1,5 +1,6 @@
 // JavaScript for toggling management buttons
-document
+export function init() {
+  document
   .getElementById("toggle-management-btn")
   .addEventListener("click", function () {
     const managementButtons = document.querySelectorAll(".management-buttons");
@@ -11,3 +12,6 @@ document
       }
     });
   });
+}
+
+
