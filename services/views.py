@@ -111,24 +111,37 @@ def error_page(request):
 
 
 
-
+@login_required
 def service_detail(request, id, service_id):
     service = get_object_or_404(Service, id=service_id)
     comments = Comment.objects.filter(service=service, is_deleted=False).order_by(
         "-created_at"
     )
-    form = CommentForm()
+    
+    try:
+        comment = Comment.objects.get(service=service, user=request.user)
+    except Comment.DoesNotExist:
+        comment = None
+    
+    form = CommentForm(request.POST or None ,instance=comment)
 
     if request.method == "POST":
-        form = CommentForm(request.POST)
+        form = CommentForm(request.POST, instance = comment)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.user = request.user
             comment.service = service
+            comment.rating = request.POST.get("rating")
+            comment.is_deleted = False
+            comment.deleted_at = None
             comment.save()
             return redirect(
                 "services:service_detail", id=request.user.id, service_id=service_id
             )
+        
+    if comment and comment.is_deleted:
+        comment = None
+        form = CommentForm()
 
     return render(
         request,
@@ -136,6 +149,7 @@ def service_detail(request, id, service_id):
         {
             "service": service,
             "comments": comments,
+            "comment": comment,
             "form": form,
         },
     )

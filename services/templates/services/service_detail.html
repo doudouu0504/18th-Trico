@@ -143,38 +143,120 @@
 
       <!-- 顯示留言 -->
       {% for comment in comments %}
-      <div class="border-b pb-4 mb-4">
-        <p class="text-gray-800"><strong>{{ comment.user.username }}</strong></p>
-        <p class="text-gray-600">{{ comment.content }}</p>
-        <p class="text-sm text-gray-400">{{ comment.created_at|date:"Y-m-d H:i" }}</p>
-        {% if comment.user == user %}
-        <!-- 刪除留言按鈕 -->
-        <form method="POST" action="{% url 'comments:delete_comment' comment.id %}">
-          {% csrf_token %}
-          <button type="submit" class="text-red-500 text-sm">刪除</button>
-        </form>
-        {% endif %}
+      <div class="border-b pb-4 mb-4" x-data="{ isEditing: false, rating: {{ comment.rating|default:0 }}, content: '{{ comment.content|default:"" }}' }">
+          <!-- 用戶名稱 -->
+          <p class="text-gray-800"><strong>{{ comment.user.username }}</strong></p>
+          
+          <!-- 顯示留言與星星評分 (當不在編輯狀態下) -->
+          <template x-if="!isEditing">
+              <div>
+                  <!-- 星星評分 -->
+                  <div class="flex space-x-2 items-center mt-2">
+                      <template x-for="n in 5">
+                          <span 
+                              class="text-3xl"
+                              :class="n <= rating ? 'text-yellow-400' : 'text-gray-400'">
+                              ★
+                          </span>
+                      </template>
+                      <span class="text-sm text-gray-500 ml-2" x-text="rating > 0 ? `(${rating}/5)` : '未提供評分'"></span>
+                  </div>
+                  <!-- 留言內容 -->
+                  <p class="text-gray-600 mt-2" x-text="content"></p>
+              </div>
+          </template>
+          
+          <!-- 編輯表單 (僅在點擊編輯時顯示) -->
+          <template x-if="isEditing">
+              <form method="POST" class="mt-4">
+                  {% csrf_token %}
+                  <!-- 星星評分 -->
+                  <div class="flex space-x-2 cursor-pointer">
+                      <template x-for="n in 5">
+                          <button 
+                              type="button"
+                              class="star text-3xl focus:outline-none"
+                              :class="n <= rating ? 'text-yellow-400' : 'text-gray-400'"
+                              @click="rating = n"
+                          >
+                              ★
+                          </button>
+                      </template>
+                  </div>
+                  <input type="hidden" name="rating" x-model="rating">
+
+                  <!-- 留言內容 -->
+                  <div class="mb-4">
+                      <label for="content" class="block text-gray-700 font-medium mb-2">留言內容：</label>
+                      <textarea
+                          name="content"
+                          x-model="content"
+                          class="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                          placeholder="請輸入您的留言內容"
+                      ></textarea>
+                  </div>
+                  <!-- 保存與取消按鈕 -->
+                  <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                      保存
+                  </button>
+                  <button type="button" @click="isEditing = false" class="text-gray-600 px-4 py-2">
+                      取消
+                  </button>
+              </form>
+          </template>
+          
+          <!-- 編輯與刪除按鈕 -->
+          {% if comment.user == user %}
+          <div class="mt-2 flex space-x-4" x-show="!isEditing">
+              <button @click="isEditing = true" class="text-blue-500 text-sm">編輯</button>
+              <form method="POST" action="{% url 'comments:delete_comment' comment.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="text-red-500 text-sm">刪除</button>
+              </form>
+          </div>
+          {% endif %}
       </div>
       {% empty %}
       <p class="text-gray-500">目前沒有留言，成為第一個留言者吧！</p>
       {% endfor %}
 
-      <!-- 新增留言表單 -->
-      <form method="POST" class="mt-6">
-        {% csrf_token %}
-        <div class="mb-4">
-          <label for="content" class="block text-gray-700 font-medium mb-2">留言內容：</label>
-          <textarea
-            id="content"
-            name="content"
-            class="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-            placeholder="請輸入您的留言內容"
-          ></textarea>
-        </div>
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-          新增留言
-        </button>
+      <!-- 新增留言表單 (僅在沒有留言時顯示) -->
+      {% if not comment or comment.is_deleted %}
+      <form method="POST" class="mt-6" x-data="{ rating: 0, content: '' }">
+          {% csrf_token %}
+          <!-- 星星評分 -->
+          <div class="flex space-x-2 cursor-pointer">
+              <template x-for="n in 5">
+                  <button 
+                      type="button"
+                      class="star text-3xl focus:outline-none"
+                      :class="n <= rating ? 'text-yellow-400' : 'text-gray-400'"
+                      @click="rating = n"
+                  >
+                      ★
+                  </button>
+              </template>
+          </div>
+          <input type="hidden" name="rating" x-model="rating">
+
+          <!-- 留言內容 -->
+          <div class="mb-4">
+              <label for="content" class="block text-gray-700 font-medium mb-2">留言內容：</label>
+              <textarea
+                  name="content"
+                  x-model="content"
+                  class="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  placeholder="請輸入您的留言內容"
+              ></textarea>
+          </div>
+
+          <!-- 提交按鈕 -->
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+              提交留言
+          </button>
       </form>
+      {% endif %}
+
     </div>
   </div>
 </div>

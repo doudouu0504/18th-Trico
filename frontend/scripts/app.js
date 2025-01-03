@@ -1,8 +1,10 @@
 import 'htmx.org'
+import Alpine from 'alpinejs'
 
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router' // 引入路由模組
+import { all } from 'axios'
 
 // 創建 Vue 應用
 const app = createApp(App)
@@ -34,3 +36,5 @@ if (pageName === 'switching_tab') {
 
 // 掛載到 DOM
 app.mount('#app')
+window.Alpine = Alpine
+Alpine.start();
