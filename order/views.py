@@ -96,9 +96,6 @@ def ecpay_result(request):
     return render(request, "order/order_successful.html")
 
 
-def order(request):
-    pass
-
 
 def failed(request):
     return render(request, "order/order_failed.html")
@@ -108,16 +105,46 @@ def successful(request):
     return render(request, "order/order_successful.html")
 
 
+import json
+import uuid
+import hmac
+import hashlib
+import base64
+from django.shortcuts import get_object_or_404, render, redirect
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from services.models import Service
+from .models import Order
+import requests
+import environ
 
+# Load environment variables
+BASE_DIR = Path(__file__).resolve().parent.parent
+env = environ.Env()
+environ.Env.read_env()
+
+def create_headers(payload, uri):
+    channel_id = env("LINE_PAY_CHANNEL_ID")
+    secret_key = env("LINE_PAY_CHANNEL_SECRET_KEY")
+
+    nonce = str(uuid.uuid4())
+    message = secret_key + uri + json.dumps(payload) + nonce
+    signature = base64.b64encode(hmac.new(secret_key.encode(), message.encode(), hashlib.sha256).digest()).decode()
+
+    return {
+        "Content-Type": "application/json",
+        "X-LINE-ChannelId": channel_id,
+        "X-LINE-Authorization": signature,
+        "X-LINE-Authorization-Nonce": nonce,
+    }
 
 def payment_form_select(request, service_id):
     service = get_object_or_404(Service, id=service_id)
     selected_plan = request.GET.get("plan")  
 
-     # 初始表單數據
     initial_data = {
         "selected_plan": selected_plan,
-        "payment_method": None,  
+        "payment_method": None,
     }
 
     if request.method == "POST":
@@ -126,20 +153,19 @@ def payment_form_select(request, service_id):
             order = form.save(commit=False)
             order.client_user = request.user
             order.service = service
-            # 設置總金額根據選擇的方案
+
+            # 根據方案選擇設置總金額
             if form.cleaned_data["selected_plan"] == "standard":
                 order.total_price = service.standard_price
             elif form.cleaned_data["selected_plan"] == "premium":
                 order.total_price = service.premium_price
             else:
-                # 如果方案不正確，返回表單錯誤
                 form.add_error("selected_plan", "Invalid plan selected.")
                 return render(
                     request,
                     "order/payment_form_select.html",
                     {"form": form, "service": service},
                 )
-
             order.save()
             return redirect("order:successful", order_id=order.id)
     else:
@@ -153,82 +179,72 @@ def payment_form_select(request, service_id):
 
 
 
-
-
-# Linepay
-BASE_DIR = Path(__file__).resolve().parent.parent
-env = environ.Env()
-environ.Env.read_env()
-
-def create_headers(body, uri):
-    channel_id = env('LINE_PAY_CHANNEL_ID')
-    secret_key = env('LINE_PAY_CHANNEL_SECRET_KEY')
-
-    nonce = str(uuid.uuid4())
-    
-    body_to_json = json.dumps(body)
-
-    message = secret_key + uri + body_to_json + nonce
-
-    binary_message = message.encode()
-    binary_secret_key = secret_key.encode()
-
-    hash = hmac.new(binary_secret_key, binary_message, hashlib.sha256)
-    signature = base64.b64encode(hash.digest()).decode()
-
-    headers = {
-        "Content-Type": "application/json",
-        "X-LINE-ChannelId":channel_id,
-        "X-LINE-ChannelSecret":secret_key,
-        "X-LINE-Authorization-Nonce": nonce,
-        "X-LINE-Authorization": signature,
+# Line Pay
+def get_linepay_data(request, service_id):
+    """
+    提供 LINE Pay 支付所需的數據
+    """
+    service = get_object_or_404(Service, id=service_id)
+    data = {
+        "service_id": service.id,
+        "standard_price": service.standard_price,
+        "premium_price": service.premium_price,
+        "currency": "TWD",
     }
-    return headers
+    return JsonResponse(data)
 
+env = environ.Env()
 
-
-def request_payment(request):
+@csrf_exempt
+def request_payment(request, service_id):
     if request.method == "POST":
+        data = json.loads(request.body)
+        plan = data.get("plan")
 
-        # 設定訂單與付款資訊
-        order_id = f"order_{str(uuid.uuid4())}"
-        package_id = f"package_{str(uuid.uuid4())}"
+        service = get_object_or_404(Service, id=service_id)
+        amount = service.standard_price if plan == "standard" else service.premium_price
 
-        #商品資訊
         payload = {
-            'amount': 500,
-            'currency': 'TWD',
-            'orderId': order_id,
-            'packages': [{
-                'id': package_id,
-                'amount': 500,
-                'products': [{
-                    'id': '1',
-                    'name': '為你自己學 Python',
-                    'quantity': 1,
-                    'price': 500,
-                }]
-            }],
-            'redirectUrls': {
-                'confirmUrl': f"https://{env('HOSTNAME')}/order/successful",
-                'cancelUrl': f"https://{env('HOSTNAME')}/order/failed",
-            }
+            "amount": amount,
+            "currency": "TWD",
+            "orderId": f"order_{uuid.uuid4()}",
+            "packages": [
+                {
+                    "id": f"package_{uuid.uuid4()}",
+                    "amount": amount,
+                    "products": [{"name": f"{plan.capitalize()} Plan", "quantity": 1, "price": amount}],
+                }
+            ],
+            "redirectUrls": {
+                "confirmUrl": f"https://{env('HOSTNAME')}/order/successful",
+                "cancelUrl": f"https://{env('HOSTNAME')}/order/failed",
+            },
         }
 
-    # 發送 API 請求
-        uri = env('LINE_REQUEST_URL')
+        uri = env("LINE_PAY_REQUEST_URL")
         headers = create_headers(payload, uri)
-        url = f"{env('LINE_SANDBOX_URL')}{uri}"
-        response = requests.post(url, headers=headers, data=json.dumps(payload))
+        response = requests.post(f"{env('LINE_PAY_SANDBOX_URL')}{uri}", headers=headers, json=payload)
 
-        # 根據狀態，處理回應
         if response.status_code == 200:
-            data = response.json()
-            if data['returnCode'] == '0000':
-                return redirect(data['info']['paymentUrl']['web'])
-            else:
-                return render(request, "order/order_failed.html", {"message": data['returnMessage']})
-        else:
-            return render(request, "order/order_failed.html", {"message": f"Error: {response.status_code}"})
+            response_data = response.json()
+            if response_data["returnCode"] == "0000":
+                return JsonResponse({"success": True, "payment_url": response_data["info"]["paymentUrl"]["web"]})
+            return JsonResponse({"success": False, "message": response_data["returnMessage"]})
+        return JsonResponse({"success": False, "message": f"Error: {response.status_code}"})
 
-    return render(request, "order/linepay_test.html")
+# 接收 LINE Pay 支付回調並更新訂單狀態
+@csrf_exempt
+def linepay_callback(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        merchant_trade_no = data.get("orderId")
+        status = data.get("transactionStatus")
+
+        order = get_object_or_404(Order, merchant_trade_no=merchant_trade_no)
+        if status == "SUCCESS":
+            order.mark_as_paid()  # 使用狀態機改變狀態
+        else:
+            order.cancel_order()  # 使用狀態機改變狀態
+        order.save()
+
+        return JsonResponse({"message": "Payment processed successfully"})

@@ -1,5 +1,5 @@
-{% extends "shared/layout.html" %} 
-{% block content %} 
+{% extends "shared/layout.html" %}
+{% block content %}
 <body class="bg-blue-900 font-sans">
   <div class="container mx-auto py-10 px-[10%]">
     <!-- 回上一頁按鈕 -->
@@ -17,8 +17,7 @@
       <div class="w-1/2">
         <h1 class="text-2xl font-bold text-gray-800 mb-6">選擇支付方式</h1>
 
-        <form method="post" action="{% url 'order:create_order' %}">
-
+        <form id="payment-form">
           {% csrf_token %}
           <!-- 方案選擇 -->
           <div class="mb-6">
@@ -27,7 +26,7 @@
               id="plan"
               name="plan"
               class="w-full p-3 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onchange="togglePlanView(this.value)"
+              onchange="togglePlanView()"
             >
               <option value="standard" {% if selected_plan == "standard" %}selected{% endif %}>
                 一般方案
@@ -45,6 +44,7 @@
               id="payment-method"
               name="payment_method"
               class="w-full p-3 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onchange="togglePaymentMethod()"
             >
               <option value="" disabled selected>請選擇</option>
               <option value="credit-card">信用卡</option>
@@ -58,7 +58,7 @@
               type="checkbox"
               id="terms"
               class="appearance-none h-4 w-4 border border-blue-700 rounded bg-white checked:bg-blue-900 checked:border-blue-300 focus:ring-2 focus:ring-blue-200"
-              onclick="toggleSubmitButtonAndDisplayPlan()"
+              onchange="toggleTermsAgreement()"
             />
             <label for="terms" class="ml-2 text-gray-700">
               我已閱讀並同意購買須知。
@@ -82,106 +82,72 @@
               上一步
             </button>
             <button
-              type="submit"
+              type="button"
+              id="linepayButton"
               class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline"
-              id="nextButton"
+              onclick="initiateLinePay()" 
               disabled
             >
-              下一步
+              LINE Pay 付款
             </button>
-            
           </div>
         </form>
       </div>
 
-      <!-- 右側價格一般&專業方案 -->
+      <!-- 右側價格與購買須知 -->
       <div class="w-1/2 bg-gray-50 p-6 border-l">
         <div id="price-section">
           <!-- Standard Plan -->
           <div id="standard" class="block">
-            <p class="text-4xl font-bold text-gray-800 mb-2">${{service.standard_price}}</p>
-            <p class="text-gray-600 mb-4">
-              一般版：{{service.standard_description}} 
-            </p>
-            <p class="text-sm text-red-500 mb-4">交付時間：{{service.standard_delivery_time}} 天</p>
+            <p class="text-4xl font-bold text-gray-800 mb-2">${{ service.standard_price }}</p>
+            <p class="text-gray-600 mb-4">一般版：{{ service.standard_description }}</p>
+            <p class="text-sm text-red-500 mb-4">交付時間：{{ service.standard_delivery_time }} 天</p>
           </div>
           <!-- Premium Plan -->
           <div id="premium" class="hidden">
-            <p class="text-4xl font-bold text-gray-800 mb-2">${{service.premium_price}}</p>
-            <p class="text-gray-600 mb-4">
-              專業版：{{service.premium_description}} 
-            </p>
-            <p class="text-sm text-red-500 mb-4">交付時間：{{service.premium_delivery_time}} 天</p>
+            <p class="text-4xl font-bold text-gray-800 mb-2">${{ service.premium_price }}</p>
+            <p class="text-gray-600 mb-4">專業版：{{ service.premium_description }}</p>
+            <p class="text-sm text-red-500 mb-4">交付時間：{{ service.premium_delivery_time }} 天</p>
           </div>
-          <!-- Terms and Conditions -->
-          <div id="terms-section" class="hidden">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">購買須知</h2>
-            <p class="text-gray-700">
-              感謝您選擇三合Trico作為您的接案與服務交易平台！在進行交易前，請詳細閱讀並同意以下購買須知：
-              <br><br>
-              1. **平台角色與責任**：三合Trico僅提供接案者與服務購買者之間的交易媒介，平台不參與交易內容，也不對交易過程中的任何糾紛負法律責任。
-              <br>
-              2. **服務交易流程**：請在購買前仔細閱讀服務提供者的描述與條款，並與接案者充分溝通。
-              <br>
-              3. **付款與安全**：所有交易均需通過平台的安全付款系統完成，平台不支持私下交易。
-              <br>
-              4. **退款與爭議處理**：若對服務不滿意，請於服務完成後5日內通過平台提交爭議申請，我們將協助進行仲裁。
-            </p>
-            <p class="text-red-600 font-bold mt-3 text-center">
-              (請先閱讀完畢再勾選左側我已閱讀並同意購買須知。)
-            </p>
-          </div>
+        </div>
+
+        <!-- 購買須知 -->
+        <div id="terms-section" class="hidden">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4">購買須知</h2>
+          <p class="text-gray-700">
+            感謝您選擇三合Trico作為您的接案與服務交易平台！在進行交易前，請詳細閱讀並同意以下購買須知：
+            <br><br>
+            1. **平台角色與責任**：三合Trico僅提供接案者與服務購買者之間的交易媒介，平台不參與交易內容，也不對交易過程中的任何糾紛負法律責任。
+            <br>
+            2. **服務交易流程**：請在購買前仔細閱讀服務提供者的描述與條款，並與接案者充分溝通。
+            <br>
+            3. **付款與安全**：所有交易均需通過平台的安全付款系統完成，平台不支持私下交易。
+            <br>
+            4. **退款與爭議處理**：若對服務不滿意，請於服務完成後5日內通過平台提交爭議申請，我們將協助進行仲裁。
+          </p>
+          <p class="text-red-600 font-bold mt-3 text-center">
+            (請先閱讀完畢再勾選左側我已閱讀並同意購買須知。)
+          </p>
         </div>
       </div>
     </div>
   </div>
 
- <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const planSelect = document.getElementById("plan");
-    const standardSection = document.getElementById("standard");
-    const premiumSection = document.getElementById("premium");
-    const termsSection = document.getElementById("terms-section");
-    const termsCheckbox = document.getElementById("terms");
-    const nextButton = document.getElementById("nextButton");
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const planSelect = document.getElementById("plan");  // 方案選擇下拉框
+      const standardSection = document.getElementById("standard");
+      const premiumSection = document.getElementById("premium");
+      const termsSection = document.getElementById("terms-section");
+      const linepayButton = document.getElementById("linepayButton");
+      const termsCheckbox = document.getElementById("terms");
+      const paymentMethodSelect = document.getElementById("payment-method"); // 支付方式下拉框
 
-    // 切換方案顯示
-    planSelect.addEventListener("change", function () {
-      if (this.value === "standard") {
-        standardSection.classList.remove("hidden");
-        premiumSection.classList.add("hidden");
-        termsSection.classList.add("hidden");
-      } else if (this.value === "premium") {
-        premiumSection.classList.remove("hidden");
-        standardSection.classList.add("hidden");
-        termsSection.classList.add("hidden");
-      }
-    });
-
-    // 初始化顯示對應方案
-    function initializePlanView() {
-      const selectedPlan = planSelect.value;
-      if (selectedPlan === "standard") {
-        standardSection.classList.remove("hidden");
-        premiumSection.classList.add("hidden");
-      } else if (selectedPlan === "premium") {
-        premiumSection.classList.remove("hidden");
-        standardSection.classList.add("hidden");
-      }
-    }
-
-    // 顯示購買須知
-    window.showTerms = function () {
-      termsSection.classList.remove("hidden");
-      standardSection.classList.add("hidden");
-      premiumSection.classList.add("hidden");
-    };
-
-    // 控制按鈕啟用狀態並顯示方案
-    window.toggleSubmitButtonAndDisplayPlan = function () {
-      nextButton.disabled = !termsCheckbox.checked;
-      if (termsCheckbox.checked) {
-        termsSection.classList.add("hidden"); // 隱藏購買須知
+      planSelect.addEventListener("change", togglePlanView);
+      paymentMethodSelect.addEventListener("change", togglePaymentMethod);
+       
+      // 切換方案顯示
+      function togglePlanView() {
         const selectedPlan = planSelect.value;
         if (selectedPlan === "standard") {
           standardSection.classList.remove("hidden");
@@ -191,11 +157,61 @@
           standardSection.classList.add("hidden");
         }
       }
-    };
 
-    initializePlanView();
-  });
- </script>
-  
+      // 切換支付方式按鈕的啟用狀態
+      function togglePaymentMethod() {
+        const selectedPaymentMethod = paymentMethodSelect.value;
+        const isAgreed = termsCheckbox.checked;
+        linepayButton.disabled = !(selectedPaymentMethod === "linepay" && isAgreed);
+      }
+
+      // 顯示購買須知並隱藏方案描述
+      window.showTerms = function () {
+        termsSection.classList.remove("hidden");
+        standardSection.classList.add("hidden");
+        premiumSection.classList.add("hidden");
+      };
+
+      // 切換條款同意狀態
+      window.toggleTermsAgreement = function () {
+        const isAgreed = termsCheckbox.checked;
+        if (isAgreed) {
+          termsSection.classList.add("hidden");
+          togglePlanView();
+        } else {
+          termsSection.classList.remove("hidden");
+          standardSection.classList.add("hidden");
+          premiumSection.classList.add("hidden");
+        }
+        togglePaymentMethod();
+      };
+
+      linepayButton.addEventListener("click", initiateLinePay);
+
+      // 發送 LINE Pay 支付請求
+      async function initiateLinePay() {
+        const plan = planSelect.value;
+        const serviceId = "{{ service.id }}";
+
+        // 發送支付請求到後端
+        const response = await fetch(`/order/request/${serviceId}/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+          body: JSON.stringify({ plan: plan }),
+        });
+
+        // 解析後端返回的數據
+        const data = await response.json();
+        if (data.success) {
+          window.location.href = data.payment_url;
+        } else {
+          alert("支付初始化失敗：" + data.message);
+        }
+      }
+    });
+  </script>
 </body>
 {% endblock %}
