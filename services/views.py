@@ -15,13 +15,15 @@ def has_permission(request, id):
 
 @login_required
 def freelancer_dashboard(request, id):
+
     if not has_permission(request, id):
         return redirect("services:error_page")
 
     freelancer = request.user
+
     services = (
         Service.objects.prefetch_related("category")
-        .filter(freelancer_user=request.user)
+        .filter(freelancer_user=freelancer)
         .order_by("-created_at")
     )
 
@@ -126,7 +128,6 @@ def service_detail(request, id, service_id):
 
     grouped_ratings = comments.values("rating").annotate(count=models.Count("rating"))
     stars_count = {i: 0 for i in range(1, 6)}
-    percentage_count = {i: 0 for i in range(1, 6)}
 
     for group in grouped_ratings:
         stars_count[group["rating"]] = group["count"]
