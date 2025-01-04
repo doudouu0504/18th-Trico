@@ -51,9 +51,9 @@
           <!-- 限制描述為兩行 -->
           <p
             class="text-gray-600 mt-2 text-sm overflow-hidden"
-            style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;"
-          >
-            {{ service.description }}
+            style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;"
+            >
+            {{ service.description | safe }}
           </p>
           <p class="mt-2 text-sm font-semibold text-blue-600">price from $ {{service.standard_price}}</p>
 

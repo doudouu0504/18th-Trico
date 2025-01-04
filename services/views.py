@@ -139,3 +139,5 @@ def service_detail(request, id, service_id):
             "form": form,
         },
     )
+
+

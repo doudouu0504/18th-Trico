@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-z5h2!)31w&8z!twedc-t#ktq@@z1mll51vu-2e+kehaykdr^f_"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "categories",
     "common",
     "comments",
+    "django_ckeditor_5",
 
 ]
 INSTALLED_APPS += [
@@ -163,6 +164,7 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -234,3 +236,98 @@ DEFAULT_FROM_EMAIL = "三合平台 <selinafs880504@gmail.com>"
 # 替換 `DEFAULT_DOMAIN` 和 `PROTOCOL` 為您的開發環境
 DEFAULT_DOMAIN = os.getenv("DEFAULT_DOMAIN")  # 本地開發使用
 PROTOCOL = os.getenv("PROTOCOL", "http")  # 開發環境使用 http，生產使用 https
+
+
+
+
+
+# CKEditor 5 configs
+customColorPalette = [
+        {
+            'color': 'hsl(4, 90%, 58%)',
+            'label': 'Red'
+        },
+        {
+            'color': 'hsl(340, 82%, 52%)',
+            'label': 'Pink'
+        },
+        {
+            'color': 'hsl(291, 64%, 42%)',
+            'label': 'Purple'
+        },
+        {
+            'color': 'hsl(262, 52%, 47%)',
+            'label': 'Deep Purple'
+        },
+        {
+            'color': 'hsl(231, 48%, 48%)',
+            'label': 'Indigo'
+        },
+        {
+            'color': 'hsl(207, 90%, 54%)',
+            'label': 'Blue'
+        },
+    ]
+
+# CKEDITOR_5_CUSTOM_CSS = 'path_to.css' # optional
+# CKEDITOR_5_FILE_STORAGE = "/media/ckeditor5/" # optional
+# 定義自定義顏色調色盤
+customColorPalette = [
+    {
+        'color': 'hsl(4, 90%, 58%)',
+        'label': 'Red'
+    },
+    {
+        'color': 'hsl(340, 82%, 52%)',
+        'label': 'Pink'
+    },
+    {
+        'color': 'hsl(291, 64%, 42%)',
+        'label': 'Purple'
+    },
+    {
+        'color': 'hsl(262, 52%, 47%)',
+        'label': 'Deep Purple'
+    },
+    {
+        'color': 'hsl(231, 48%, 48%)',
+        'label': 'Indigo'
+    },
+    {
+        'color': 'hsl(207, 90%, 54%)',
+        'label': 'Blue'
+    },
+]
+
+# 確保 CKEDITOR_5_CONFIGS 中正確引用 customColorPalette
+CKEDITOR_5_CONFIGS = {
+    'default': {
+        'language': 'zh-tw',
+        'toolbar': {
+            'items': [
+                'undo', 'redo', '|',
+                'heading', '|',
+                'bold', 'italic', 'underline', 'strikethrough', '|',
+                'alignment', '|',
+                'link', 'blockQuote', 'horizontalLine', 'pageBreak', 'insertTable', '|',
+                'bulletedList', 'numberedList', 'todoList', '|',
+                'outdent', 'indent', '|',
+                'specialCharacters', 'codeBlock', 'mediaEmbed', '|',
+                'fontColor', 'fontBackgroundColor', '|',
+                'styles', 'caseChanges',
+            ],
+            'shouldNotGroupWhenFull': True
+        },
+        'fontColor': {
+            'colors': customColorPalette
+        },
+        'fontBackgroundColor': {
+            'colors': customColorPalette
+        },
+    }
+}
+
+
+
+# Define a constant in settings.py to specify file upload permissions
+CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"  # Possible values: "staff", "authenticated", "any"
