@@ -6,13 +6,13 @@ TriCo 是一個專注於服務媒合的網站，讓使用者可以輕鬆購買�
 
 ## 小組成員
 
-| 成員名稱        | GitHub 帳號     | Email 信箱                    |
-| --------------- | --------------- | ----------------------------- |
-| Hsu-Pei-Chun    | hsu-pei-chun    | philosophysis@gmail.com       |
-| doudouu0504     | doudouu0504     | selinafs880504@gmail.com      |
-| tingchen1992    | tingchen1992    | happy810502@gmail.com         |
-| MichellellehciM | MichellellehciM | ktlaiktlai@gmail.com          |
-| jingjie1997     | jingjie1997     | artfulrachel6302524@gmail.com |
+| 成員名稱 | GitHub 帳號     | Email 信箱                    | 負責內容                                                               |
+| -------- | --------------- | ----------------------------- | ---------------------------------------------------------------------- |
+| 徐培均   | hsu-pei-chun    | philosophysis@gmail.com       | AWS 圖片上傳雲端並轉 webp、分類功能、404 頁面                          |
+| 邱佳瑜   | doudouu0504     | selinafs880504@gmail.com      | 用戶登入註冊及串接第三方 LINE 登入、 忘記密碼功能、串接綠界 ECPAY 金流 |
+| 陳庭婕   | tingchen1992    | happy810502@gmail.com         | 用戶新增及刪除留言功能、評價與回饋頁面、串接 google 登入               |
+| 賴冠廷   | MichellellehciM | ktlaiktlai@gmail.com          | 用戶新增修改上傳服務功能、接案者 service 模型建立、串接 LINE PAY 金流  |
+| 廖璟傑   | jingjie1997     | artfulrachel6302524@gmail.com | 首圖製作與美化 、製作收尋欄功能                                        |
 
 ---
 
