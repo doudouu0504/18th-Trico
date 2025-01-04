@@ -2,6 +2,10 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 
+import environ
+env = environ.Env()
+environ.Env.read_env()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -19,6 +23,8 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     "*",
+    "<your-ngrok-subdomain>.ngrok-free.app",
+
 ]
 
 
@@ -238,9 +244,7 @@ PROTOCOL = os.getenv("PROTOCOL", "http")  # 開發環境使用 http，生產使�
 
 
 
-import environ
-env = environ.Env()
-environ.Env.read_env()
+
 
 line_pay_hostname = env('HOSTNAME')
 CSRF_TRUSTED_ORIGINS = [f"https://{env('HOSTNAME')}"]
