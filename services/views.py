@@ -5,6 +5,8 @@ from .forms import ServiceForm
 from .models import Category
 from comments.models import Comment
 from comments.forms import CommentForm
+from django.db import models
+import json
 
 
 def has_permission(request, id):
@@ -117,6 +119,17 @@ def service_detail(request, id, service_id):
     comments = Comment.objects.filter(service=service, is_deleted=False).order_by(
         "-created_at"
     )
+
+    total_reviews = comments.count()
+
+    average_rating = comments.aggregate(models.Avg("rating"))["rating__avg"]
+
+    grouped_ratings = comments.values("rating").annotate(count=models.Count("rating"))
+    stars_count = {i: 0 for i in range(1, 6)}
+    percentage_count = {i: 0 for i in range(1, 6)}
+
+    for group in grouped_ratings:
+        stars_count[group["rating"]] = group["count"]
     
     try:
         comment = Comment.objects.get(service=service, user=request.user)
@@ -151,5 +164,8 @@ def service_detail(request, id, service_id):
             "comments": comments,
             "comment": comment,
             "form": form,
+            "stars_count": stars_count,
+            "total_reviews": total_reviews,
+            "average_rating": average_rating,
         },
     )

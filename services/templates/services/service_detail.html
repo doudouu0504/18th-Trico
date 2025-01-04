@@ -12,7 +12,7 @@
       </a>
     </div>
 
-    <div class="flex bg-white rounded-lg shadow-lg overflow-hidden p-6">
+    <div class="flex bg-white rounded-lg shadow-lg overflow-hidden p-6 gap-x-8">
       <!-- 左側為接案者介紹 -->
       <div class="w-2/3">
         <div class="flex items-center mb-6">
@@ -84,6 +84,69 @@
             </a>
           </div>
         </div>
+        
+        <!-- ✅ 使用 Alpine.js 正確渲染星級分佈 -->
+        <div class="bg-white rounded-lg shadow-xl p-6 mt-8 border border-gray-200" 
+        x-data="{ 
+          averageRating: {{ average_rating|default:'null' }}, 
+          totalReviews: {{ total_reviews|default:0 }},
+          starsCount: {{ stars_count|default:'{}' }},
+          calculatePercentage(count, total) {
+              if (!total || !count) return 0;
+              const percentage = (count / total) * 100;
+              return percentage.toFixed(1);
+          },
+          formatRating(rating) {
+              return rating ? parseFloat(rating).toFixed(1) : '0.0';
+          }
+        }">
+
+            <!-- ⭐ 標題 -->
+            <h2 class="text-2xl font-bold mb-4">評分摘要</h2>
+
+            <!-- ⭐ 平均分數 -->
+            <div class="flex items-center mb-4">
+              <span 
+              class="font-bold" 
+              x-text="averageRating.toFixed(1)"
+              style="font-size: 64px;"
+              >0.0</span>
+              <div class="ml-4">
+                  <!-- 渲染星星 -->
+                  <div class="flex text-yellow-400 text-3xl">
+                      <template x-for="n in 5">
+                          <span x-text="n <= Math.round(averageRating) ? '★' : '☆'"></span>
+                      </template>
+                  </div>
+                  <p class="text-gray-600" x-text="`${totalReviews} 則評論`"></p>
+              </div>
+            </div>
+
+            <!-- ⭐ 評分分佈 (調整進度條寬度和對齊) -->
+            <template x-for="i in 5" :key="i">
+              <div class="flex items-center mb-2">
+                  <!-- 星級文字 -->
+                  <span class="text-lg font-semibold w-6 text-right" x-text="6-i"></span>
+                  <span class="text-yellow-400 text-2xl ml-2">★</span>
+
+                  <!-- 進度條 -->
+                  <div class="flex-grow mx-4">
+                    <div class="w-full bg-gray-200 h-4 rounded-lg overflow-hidden">
+                        <div 
+                            class="transition-all duration-300" 
+                            :style="`
+                                width: ${calculatePercentage(starsCount[6-i] || 0, totalReviews)}%; 
+                                height: 16px; 
+                                background-color: #FBBF24;
+                            `"
+                        ></div>
+                    </div>
+                </div>
+              </div>
+            </template>
+        </div>
+
+
       </div>
 
       <!-- 右側價格一般&專業方案 -->
