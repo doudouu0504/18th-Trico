@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-z5h2!)31w&8z!twedc-t#ktq@@z1mll51vu-2e+kehaykdr^f_"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     "categories",
     "common",
     "comments",
-
 ]
 INSTALLED_APPS += [
     "django.contrib.sites",
@@ -234,3 +233,10 @@ DEFAULT_FROM_EMAIL = "三合平台 <selinafs880504@gmail.com>"
 # 替換 `DEFAULT_DOMAIN` 和 `PROTOCOL` 為您的開發環境
 DEFAULT_DOMAIN = os.getenv("DEFAULT_DOMAIN")  # 本地開發使用
 PROTOCOL = os.getenv("PROTOCOL", "http")  # 開發環境使用 http，生產使用 https
+
+
+# 綠界金流相關配置
+MERCHANT_ID = os.getenv("MERCHANT_ID")
+HASH_KEY = os.getenv("HASH_KEY")
+HASH_IV = os.getenv("HASH_IV")
+ECPAY_URL = os.getenv("ECPAY_URL")
