@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as login_user, logout as logout_user
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -14,7 +14,6 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
 from comments.models import Comment
-from .models import Profile
 
 
 def register(request):
@@ -113,7 +112,11 @@ def user_dashboard(request):
     user = request.user
 
     if profile.is_freelancer:
-        return render(request, "users/freelancer_dashboard.html")
+        return render(
+            request,
+            "users/freelancer_dashboard.html",
+            {"profile": profile, "user": user},
+        )
 
     else:
 
