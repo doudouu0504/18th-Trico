@@ -45,11 +45,10 @@ def create_order(request):
         return JsonResponse({"error": "Invalid plan selected."}, status=400)
 
     # 建立訂單
-    order = Order.objects.create(
+    order = request.user.order_set.create(
         client_user_id=client_user_id,
         service_id=service_id,
         total_price=total_price,
-        status="Pending",
         payment_method="CreditCard",
     )
 
