@@ -65,9 +65,10 @@ class Order(models.Model):
     selected_plan = models.CharField(
         max_length=20,
         choices=[("standard", "Standard"), ("premium", "Premium")],
-        null=False,
+        null=True,
         blank=False,
         verbose_name="選擇方案",
+        default="standard",
     )
 
     class Meta:
