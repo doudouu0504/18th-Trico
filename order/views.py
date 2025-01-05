@@ -112,7 +112,6 @@ def payment_form_select(request, service_id):
     service = get_object_or_404(Service, id=service_id)
     selected_plan = request.GET.get("plan")
 
-    # 初始表單數據，包括選擇的方案和預設支付方式
     initial_data = {
         "selected_plan": selected_plan,
         "payment_method": None,
