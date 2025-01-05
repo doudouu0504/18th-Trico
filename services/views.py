@@ -1,12 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Service
+from .models import Service, Like
 from .forms import ServiceForm
 from .models import Category
 from comments.models import Comment
 from comments.forms import CommentForm
 from django.db import models
 import json
+from django.http import JsonResponse
 
 
 def has_permission(request, id):
@@ -63,7 +64,6 @@ def create_service(request, id):
     )
 
 
-
 @login_required
 def edit_service(request, id, service_id):
     if not has_permission(request, id):
@@ -87,7 +87,6 @@ def edit_service(request, id, service_id):
         "services/edit_service.html",
         {"form": form, "categories": categories},
     )
-
 
 
 @login_required
@@ -114,8 +113,6 @@ def error_page(request):
     )
 
 
-
-@login_required
 def service_detail(request, id, service_id):
     service = get_object_or_404(Service, id=service_id)
     comments = Comment.objects.filter(service=service, is_deleted=False).order_by(
@@ -138,6 +135,7 @@ def service_detail(request, id, service_id):
         comment = None
     
     form = CommentForm(request.POST or None ,instance=comment)
+    is_liked = Like.objects.filter(user=request.user, service=service).exists()
 
     if request.method == "POST":
         form = CommentForm(request.POST, instance = comment)
@@ -168,5 +166,19 @@ def service_detail(request, id, service_id):
             "stars_count": stars_count,
             "total_reviews": total_reviews,
             "average_rating": average_rating,
+            "is_liked": is_liked,
         },
     )
+
+@login_required
+def toggle_like(request, service_id):
+    service = get_object_or_404(Service, id=service_id)
+    like, created = Like.objects.get_or_create(user=request.user, service=service)
+
+    if not created:
+        like.delete()
+        is_liked = False
+    else:
+        is_liked = True
+
+    return JsonResponse({"is_liked": is_liked})
