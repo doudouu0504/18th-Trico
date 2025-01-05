@@ -67,8 +67,8 @@ class Order(models.Model):
         choices=[("standard", "Standard"), ("premium", "Premium")],
         null=True,
         blank=False,
-        verbose_name="選擇方案",
         default="standard",
+        verbose_name="選擇方案",
     )
 
     class Meta:

@@ -45,11 +45,10 @@ def create_order(request):
         return JsonResponse({"error": "Invalid plan selected."}, status=400)
 
     # 建立訂單
-    order = Order.objects.create(
+    order = request.user.order_set.create(
         client_user_id=client_user_id,
         service_id=service_id,
         total_price=total_price,
-        status="Pending",
         payment_method="CreditCard",
     )
 
@@ -108,15 +107,14 @@ def successful(request):
     return render(request, "order/order_successful.html")
 
 
-
 @login_required
 def payment_form_select(request, service_id):
     service = get_object_or_404(Service, id=service_id)
-    selected_plan = request.GET.get("plan")  
+    selected_plan = request.GET.get("plan")
 
     initial_data = {
         "selected_plan": selected_plan,
-        "payment_method": None,  
+        "payment_method": None,
     }
 
     if request.method == "POST":
@@ -134,7 +132,7 @@ def payment_form_select(request, service_id):
                 {"form": form, "service": service, "selected_plan": selected_plan},
             )
     # GET 請求
-    else: 
+    else:
         form = OrderForm(initial=initial_data)
 
     return render(

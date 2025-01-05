@@ -57,9 +57,9 @@ def login(request):
         if user:
             login_user(request, user)
             # next是用來在登入後跳轉到指定URL的參數
-            next_url = request.GET.get("next")  
-            if next_url: 
-                return redirect(next_url) 
+            next_url = request.GET.get("next")
+            if next_url:
+                return redirect(next_url)
             return redirect("pages:home")
         else:
             messages.error(request, "登入失敗，請重新登入一次。")
@@ -110,12 +110,20 @@ def profile(request):
 def user_dashboard(request):
 
     profile = request.user.profile
+    user = request.user
 
     if profile.is_freelancer:
-        return render(request, "users/freelancer_dashboard.html")
+        return render(
+            request,
+            "users/freelancer_dashboard.html",
+            {"profile": profile, "user": user},
+        )
 
     else:
-        return render(request, "users/client_dashboard.html")
+
+        return render(
+            request, "users/client_dashboard.html", {"profile": profile, "user": user}
+        )
 
 
 @login_required
@@ -199,21 +207,21 @@ def switch_role(request):
 @login_required
 def feedback_view(request):
     profile = request.user.profile
-    if profile.is_freelancer: 
+    if profile.is_freelancer:
         comments_received = Comment.objects.filter(
             service__freelancer_user=request.user, is_deleted=False
         ).select_related("user", "service")
         context = {
             "comments_received": comments_received,
-            "role": "freelancer",  
+            "role": "freelancer",
         }
-    else:  
+    else:
         comments_given = Comment.objects.filter(
             user=request.user, is_deleted=False
         ).select_related("service", "service__freelancer_user")
         context = {
             "comments_given": comments_given,
-            "role": "client",  
+            "role": "client",
         }
 
     return render(request, "users/feedback.html", context)

@@ -2,12 +2,12 @@
 {% block content %}
 {% load static %}
 
-<div class="bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200 font-sans">
+<div class="font-sans bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200">
 
-    <div class="max-w-6xl mx-auto mt-10 p-6 bg-white rounded-3xl shadow-lg border-2 border-blue-300">
-        <div class="text-center mb-10">
-            <h1 class="text-4xl font-bold text-blue-600 mb-4">💬 評價與回饋 💙</h1>
-            <p class="text-gray-600 font-medium">
+    <div class="max-w-4xl p-6 mx-auto mt-10 bg-white border-2 border-blue-300 shadow-lg rounded-3xl">
+        <div class="mb-10 text-center">
+            <h1 class="mb-4 text-4xl font-bold text-blue-600">💬 評價與回饋 💙</h1>
+            <p class="font-medium text-gray-600">
                 {% if role == "freelancer" %}
                     這是收到的評論
                 {% elif role == "client" %}
@@ -92,10 +92,10 @@
         </div>
     </div>
 
-    <div class="text-center mt-10">
-        <a href="/" 
-           class="btn btn-primary bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded-full shadow-lg">
-            返回首頁 🚀
+    <div class="mt-10 text-center">
+        <a href="{% url 'users:user_dashboard' %}" 
+           class="px-6 py-2 text-white bg-blue-500 rounded-full shadow-lg btn btn-primary hover:bg-blue-600">
+            返回主控台
         </a>
     </div>
 
