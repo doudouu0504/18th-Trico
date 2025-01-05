@@ -1,11 +1,11 @@
-# views.py
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Service
+from .models import Service, Like
 from .forms import ServiceForm
 from .models import Category
 from comments.models import Comment
 from comments.forms import CommentForm
+from django.http import JsonResponse
 
 
 def has_permission(request, id):
@@ -47,7 +47,6 @@ def create_service(request, id):
             service = form.save(commit=False)
             service.freelancer_user = request.user
             service.save()
-            # 修正：使用 request.POST.getlist() 來獲取多對多關係的值
             selected_categories = request.POST.getlist("category")
             service.category.set(selected_categories)
             return redirect("services:freelancer_dashboard", id=id)
@@ -59,7 +58,6 @@ def create_service(request, id):
         "services/create_service.html",
         {"form": form, "categories": categories},
     )
-
 
 
 @login_required
@@ -74,7 +72,6 @@ def edit_service(request, id, service_id):
         form = ServiceForm(request.POST, request.FILES, instance=service)
         if form.is_valid():
             form.save()
-            # 修正：使用 request.POST.getlist() 更新多對多關係
             selected_categories = request.POST.getlist("category")
             service.category.set(selected_categories)
             return redirect("services:freelancer_dashboard", id=id)
@@ -86,7 +83,6 @@ def edit_service(request, id, service_id):
         "services/edit_service.html",
         {"form": form, "categories": categories},
     )
-
 
 
 @login_required
@@ -114,12 +110,6 @@ def error_page(request):
 
 
 def service_detail(request, id, service_id):
-    service = get_object_or_404(Service, id=service_id, freelancer_user_id=id)
-    return render(request, "services/service_detail.html", {"service": service})
-
-
-@login_required
-def service_detail(request, id, service_id):
     service = get_object_or_404(Service, id=service_id)
     comments = Comment.objects.filter(service=service, is_deleted=False).order_by(
         "-created_at"
@@ -144,5 +134,34 @@ def service_detail(request, id, service_id):
             "service": service,
             "comments": comments,
             "form": form,
+        },
+    )
+
+
+@login_required
+def toggle_like(request, service_id):
+    service = get_object_or_404(Service, id=service_id)
+    like, created = Like.objects.get_or_create(user=request.user, service=service)
+
+    if not created:
+        like.delete()
+        is_liked = False
+    else:
+        is_liked = True
+
+    return JsonResponse({"is_liked": is_liked})
+
+
+@login_required
+def service_detail(request, id, service_id):
+    service = get_object_or_404(Service, id=service_id)
+    is_liked = Like.objects.filter(user=request.user, service=service).exists()
+
+    return render(
+        request,
+        "services/service_detail.html",
+        {
+            "service": service,
+            "is_liked": is_liked,
         },
     )
