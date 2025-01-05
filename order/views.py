@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import Order
 from datetime import datetime
 import hashlib
@@ -8,12 +8,13 @@ import urllib.parse
 from django.contrib.auth.decorators import login_required
 from .forms import OrderForm
 from services.models import Service
+from django.conf import settings
 
 # 綠界金流設定
-MERCHANT_ID = "3002607"
-HASH_KEY = "pwFHCqoQZGmho4w6"
-HASH_IV = "EkRm7iFT261dpevs"
-ECPAY_URL = "https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5"
+MERCHANT_ID = settings.MERCHANT_ID
+HASH_KEY = settings.HASH_KEY
+HASH_IV = settings.HASH_IV
+ECPAY_URL = settings.ECPAY_URL
 
 
 # 按照綠界的規範處理參數
@@ -31,9 +32,19 @@ def generate_check_mac_value(params, hash_key, hash_iv):
 @login_required
 def create_order(request):
     client_user_id = request.user.id
-    service_id = request.GET.get("service_id", 1)  # 預設為 1
-    total_price = 1000.0  # TODO:測試金額
+    service_id = request.GET.get("service_id")  # 確保從前端獲取 service_id
+    selected_plan = request.GET.get("plan")  # 獲取前端傳入的方案
+    service = get_object_or_404(Service, id=service_id)
 
+    # 動態設置金額
+    if selected_plan == "standard":
+        total_price = service.standard_price
+    elif selected_plan == "premium":
+        total_price = service.premium_price
+    else:
+        return JsonResponse({"error": "Invalid plan selected."}, status=400)
+
+    # 建立訂單
     order = Order.objects.create(
         client_user_id=client_user_id,
         service_id=service_id,
@@ -51,13 +62,13 @@ def create_order(request):
         "TotalAmount": int(order.total_price),
         "TradeDesc": "Payment for Order",
         "ItemName": f"Order {order.id}",
-        "ReturnURL": "http://127.0.0.1:8000/order/return/",  # TODO:部署要換
-        "OrderResultURL": "http://127.0.0.1:8000/order/result/",  # TODO:部署要換
+        "ReturnURL": "http://127.0.0.1:8000/order/return/",
+        "OrderResultURL": "http://127.0.0.1:8000/order/result/",
         "ChoosePayment": "Credit",
     }
     params["CheckMacValue"] = generate_check_mac_value(params, HASH_KEY, HASH_IV)
 
-    # 將參數發送到前端表單，讓用戶跳轉至綠界支付頁面
+    # 傳遞至前端表單
     return render(
         request, "order/payment_form.html", {"ecpay_url": ECPAY_URL, "params": params}
     )
