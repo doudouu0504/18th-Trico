@@ -1,0 +1,16 @@
+<form method="get">
+  {{ form.as_p }}
+  <button type="submit">搜尋</button>
+</form>
+
+{% if query %}
+<h2>搜尋結果：{{ query }}</h2>
+{% if results %}
+<ul>
+  {% for blog in results %}
+  <li>{{ blog.title }} - {{ blog.created_at }}</li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>沒有找到相關結果。</p>
+{% endif %} {% endif %}
