@@ -14,6 +14,7 @@
   {% if request.resolver_match.view_name != 'users:login' and request.resolver_match.view_name != 'users:register' %}
   <div class="flex items-center justify-center basis-2/4">
     <div class="relative flex items-center w-full max-w-xl">
+      
       <form
         action="{% url 'search' %}"
         method="get"
@@ -21,7 +22,7 @@
       >
         <input
           type="text"
-          name="query"
+          name="keyword"
           placeholder="請輸入關鍵字..."
           class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-gray-100"
         />
