@@ -1,10 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Service
+from .models import Service, Like
 from .forms import ServiceForm
 from .models import Category
 from comments.models import Comment
 from comments.forms import CommentForm
+from django.db import models
+import json
+from django.http import JsonResponse
 
 
 def has_permission(request, id):
@@ -13,13 +16,15 @@ def has_permission(request, id):
 
 @login_required
 def freelancer_dashboard(request, id):
+
     if not has_permission(request, id):
         return redirect("services:error_page")
 
     freelancer = request.user
+
     services = (
         Service.objects.prefetch_related("category")
-        .filter(freelancer_user=request.user)
+        .filter(freelancer_user=freelancer)
         .order_by("-created_at")
     )
 
@@ -59,7 +64,6 @@ def create_service(request, id):
     )
 
 
-
 @login_required
 def edit_service(request, id, service_id):
     if not has_permission(request, id):
@@ -83,7 +87,6 @@ def edit_service(request, id, service_id):
         "services/edit_service.html",
         {"form": form, "categories": categories},
     )
-
 
 
 @login_required
@@ -110,25 +113,47 @@ def error_page(request):
     )
 
 
-
-
 def service_detail(request, id, service_id):
     service = get_object_or_404(Service, id=service_id)
     comments = Comment.objects.filter(service=service, is_deleted=False).order_by(
         "-created_at"
     )
-    form = CommentForm()
+
+    total_reviews = comments.count()
+
+    average_rating = comments.aggregate(models.Avg("rating"))["rating__avg"]
+
+    grouped_ratings = comments.values("rating").annotate(count=models.Count("rating"))
+    stars_count = {i: 0 for i in range(1, 6)}
+
+    for group in grouped_ratings:
+        stars_count[group["rating"]] = group["count"]
+    
+    try:
+        comment = Comment.objects.get(service=service, user=request.user)
+    except Comment.DoesNotExist:
+        comment = None
+    
+    form = CommentForm(request.POST or None ,instance=comment)
+    is_liked = Like.objects.filter(user=request.user, service=service).exists()
 
     if request.method == "POST":
-        form = CommentForm(request.POST)
+        form = CommentForm(request.POST, instance = comment)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.user = request.user
             comment.service = service
+            comment.rating = request.POST.get("rating")
+            comment.is_deleted = False
+            comment.deleted_at = None
             comment.save()
             return redirect(
                 "services:service_detail", id=request.user.id, service_id=service_id
             )
+        
+    if comment and comment.is_deleted:
+        comment = None
+        form = CommentForm()
 
     return render(
         request,
@@ -136,6 +161,24 @@ def service_detail(request, id, service_id):
         {
             "service": service,
             "comments": comments,
+            "comment": comment,
             "form": form,
+            "stars_count": stars_count,
+            "total_reviews": total_reviews,
+            "average_rating": average_rating,
+            "is_liked": is_liked,
         },
     )
+
+@login_required
+def toggle_like(request, service_id):
+    service = get_object_or_404(Service, id=service_id)
+    like, created = Like.objects.get_or_create(user=request.user, service=service)
+
+    if not created:
+        like.delete()
+        is_liked = False
+    else:
+        is_liked = True
+
+    return JsonResponse({"is_liked": is_liked})
