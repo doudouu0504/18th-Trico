@@ -23,7 +23,7 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     "*",
-    "<your-ngrok-subdomain>.ngrok-free.app",
+    # "271f-61-220-182-115.ngrok-free.app",
 
 ]
 
@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     "categories",
     "common",
     "comments",
-
 ]
 INSTALLED_APPS += [
     "django.contrib.sites",
@@ -248,3 +247,8 @@ PROTOCOL = os.getenv("PROTOCOL", "http")  # 開發環境使用 http，生產使�
 
 line_pay_hostname = env('HOSTNAME')
 CSRF_TRUSTED_ORIGINS = [f"https://{env('HOSTNAME')}"]
+# 綠界金流相關配置
+MERCHANT_ID = os.getenv("MERCHANT_ID")
+HASH_KEY = os.getenv("HASH_KEY")
+HASH_IV = os.getenv("HASH_IV")
+ECPAY_URL = os.getenv("ECPAY_URL")

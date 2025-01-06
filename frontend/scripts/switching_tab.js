@@ -1,20 +1,23 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const standardTab = document.getElementById("standard-tab");
-  const premiumTab = document.getElementById("premium-tab");
-  const standardSection = document.getElementById("standard");
-  const premiumSection = document.getElementById("premium");
+export function init() {
+  document.addEventListener('DOMContentLoaded', function () {
 
-  standardTab.addEventListener("click", function () {
-    standardSection.classList.remove("hidden");
-    premiumSection.classList.add("hidden");
-    standardTab.classList.add("border-blue-600", "text-blue-700");
-    premiumTab.classList.remove("border-blue-600", "text-blue-700");
-  });
+    const standardTab = document.getElementById('standard-tab')
+    const premiumTab = document.getElementById('premium-tab')
+    const standardSection = document.getElementById('standard')
+    const premiumSection = document.getElementById('premium')
 
-  premiumTab.addEventListener("click", function () {
-    premiumSection.classList.remove("hidden");
-    standardSection.classList.add("hidden");
-    premiumTab.classList.add("border-blue-600", "text-blue-700");
-    standardTab.classList.remove("border-blue-600", "text-blue-700");
-  });
-});
+    standardTab.addEventListener('click', function () {
+      standardSection.classList.remove('hidden')
+      premiumSection.classList.add('hidden')
+      standardTab.classList.add('border-blue-600', 'text-blue-700')
+      premiumTab.classList.remove('border-blue-600', 'text-blue-700')
+    })
+
+    premiumTab.addEventListener('click', function () {
+      premiumSection.classList.remove('hidden')
+      standardSection.classList.add('hidden')
+      premiumTab.classList.add('border-blue-600', 'text-blue-700')
+      standardTab.classList.remove('border-blue-600', 'text-blue-700')
+    })
+  })
+}
