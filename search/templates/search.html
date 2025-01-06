@@ -1,16 +1,34 @@
-<form method="get">
-  {{ form.as_p }}
-  <button type="submit">搜尋</button>
-</form>
-
-{% if query %}
-<h2>搜尋結果：{{ query }}</h2>
-{% if results %}
-<ul>
-  {% for blog in results %}
-  <li>{{ blog.title }} - {{ blog.created_at }}</li>
-  {% endfor %}
-</ul>
-{% else %}
-<p>沒有找到相關結果。</p>
-{% endif %} {% endif %}
+<div class="search-results">
+  {% if query %}
+  <h2>搜尋結果：<span class="query-highlight">{{ query }}</span></h2>
+  {% if results %}
+  <p>找到 {{ results|length }} 筆相關結果：</p>
+  <ul class="results-list">
+    {% for blog in results %}
+    <li class="result-item">
+      <a href="{{ blog.get_absolute_url }}" class="result-title"
+        >{{ blog.title }}</a
+      >
+      <span class="result-date"
+        >發布日期：{{ blog.created_at|date:"Y-m-d" }}</span
+      >
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="no-results">
+    <p>
+      很抱歉，沒有找到與「<span class="query-highlight">{{ query }}</span
+      >」相關的結果。
+    </p>
+    <p>您可以嘗試以下方法：</p>
+    <ul>
+      <li>檢查關鍵字拼寫是否正確</li>
+      <li>嘗試使用其他關鍵字</li>
+      <li>縮短或簡化您的搜尋條件</li>
+    </ul>
+  </div>
+  {% endif %} {% else %}
+  <p>請輸入搜尋關鍵字以查看結果。</p>
+  {% endif %}
+</div>
