@@ -17,7 +17,7 @@ urlpatterns = [
     path("categories/", include("categories.urls")),
     path("comments/", include("comments.urls")),
     path("api/", include("common.urls")),
-    path("search/", include("search.urls")),
+    path("", include("search.urls")),
 ]
 
 handler404 = custom_404

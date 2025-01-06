@@ -4,13 +4,13 @@
   {% if results %}
   <p>找到 {{ results|length }} 筆相關結果：</p>
   <ul class="results-list">
-    {% for blog in results %}
+    {% for search in results %}
     <li class="result-item">
-      <a href="{{ blog.get_absolute_url }}" class="result-title"
-        >{{ blog.title }}</a
+      <a href="{{ search.get_absolute_url }}" class="result-title"
+        >{{ search.title }}</a
       >
       <span class="result-date"
-        >發布日期：{{ blog.created_at|date:"Y-m-d" }}</span
+        >發布日期：{{ search.created_at|date:"Y-m-d" }}</span
       >
     </li>
     {% endfor %}
