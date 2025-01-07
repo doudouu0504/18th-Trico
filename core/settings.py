@@ -269,40 +269,17 @@ customColorPalette = [
         },
     ]
 
-# CKEDITOR_5_CUSTOM_CSS = 'path_to.css' # optional
-# CKEDITOR_5_FILE_STORAGE = "/media/ckeditor5/" # optional
-# 定義自定義顏色調色盤
-customColorPalette = [
-    {
-        'color': 'hsl(4, 90%, 58%)',
-        'label': 'Red'
-    },
-    {
-        'color': 'hsl(340, 82%, 52%)',
-        'label': 'Pink'
-    },
-    {
-        'color': 'hsl(291, 64%, 42%)',
-        'label': 'Purple'
-    },
-    {
-        'color': 'hsl(262, 52%, 47%)',
-        'label': 'Deep Purple'
-    },
-    {
-        'color': 'hsl(231, 48%, 48%)',
-        'label': 'Indigo'
-    },
-    {
-        'color': 'hsl(207, 90%, 54%)',
-        'label': 'Blue'
-    },
-]
+
 
 # 確保 CKEDITOR_5_CONFIGS 中正確引用 customColorPalette
 CKEDITOR_5_CONFIGS = {
     'default': {
         'language': 'zh-tw',
+        "allowedContent": True,
+        "extraPlugins": "mediaembed",
+        "mediaEmbed": {"previewsInData": True},
+        "extraAllowedContent": "iframe[*]; oembed[*]; figure[*]",
+        "width": "auto",
         'toolbar': {
             'items': [
                 'undo', 'redo', '|',
@@ -325,6 +302,7 @@ CKEDITOR_5_CONFIGS = {
             'colors': customColorPalette
         },
     }
+    
 }
 
 
