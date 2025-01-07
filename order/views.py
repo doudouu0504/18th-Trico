@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import Order
 from datetime import datetime
 import hashlib
@@ -8,12 +8,14 @@ import urllib.parse
 from django.contrib.auth.decorators import login_required
 from .forms import OrderForm
 from services.models import Service
+from django.conf import settings
+from django.urls import reverse
 
-# 綠界金流設定
-MERCHANT_ID = "3002607"
-HASH_KEY = "pwFHCqoQZGmho4w6"
-HASH_IV = "EkRm7iFT261dpevs"
-ECPAY_URL = "https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5"
+
+MERCHANT_ID = settings.MERCHANT_ID
+HASH_KEY = settings.HASH_KEY
+HASH_IV = settings.HASH_IV
+ECPAY_URL = settings.ECPAY_URL
 
 
 # 按照綠界的規範處理參數
@@ -30,37 +32,59 @@ def generate_check_mac_value(params, hash_key, hash_iv):
 # 建立訂單
 @login_required
 def create_order(request):
-    client_user_id = request.user.id
-    service_id = request.GET.get("service_id", 1)  # 預設為 1
-    total_price = 1000.0  # TODO:測試金額
+    if request.method == "POST":
+        service_id = request.POST.get("service_id")
+        selected_plan = request.POST.get("plan")
+        payment_method = request.POST.get("payment_method")
+        service = get_object_or_404(Service, id=service_id)
 
-    order = Order.objects.create(
-        client_user_id=client_user_id,
-        service_id=service_id,
-        total_price=total_price,
-        status="Pending",
-        payment_method="CreditCard",
-    )
+        # 動態設置金額
+        if selected_plan == "standard":
+            total_price = service.standard_price
+        elif selected_plan == "premium":
+            total_price = service.premium_price
+        else:
+            return JsonResponse({"error": "Invalid plan selected."}, status=400)
+        valid_payment_methods = {
+            "credit_card": "Credit",
+            "atm": "ATM",
+            # "googlepay": "GooglePay",等上線開通後才可啟用，測試環境不行
+            "barcode": "BARCODE",
+        }
 
-    # 綠界金流參數
-    params = {
-        "MerchantID": MERCHANT_ID,
-        "MerchantTradeNo": order.merchant_trade_no,
-        "MerchantTradeDate": datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
-        "PaymentType": "aio",
-        "TotalAmount": int(order.total_price),
-        "TradeDesc": "Payment for Order",
-        "ItemName": f"Order {order.id}",
-        "ReturnURL": "http://127.0.0.1:8000/order/return/",  # TODO:部署要換
-        "OrderResultURL": "http://127.0.0.1:8000/order/result/",  # TODO:部署要換
-        "ChoosePayment": "Credit",
-    }
-    params["CheckMacValue"] = generate_check_mac_value(params, HASH_KEY, HASH_IV)
+        if payment_method not in valid_payment_methods:
+            return JsonResponse(
+                {"error": "Invalid payment method selected."}, status=400
+            )
 
-    # 將參數發送到前端表單，讓用戶跳轉至綠界支付頁面
-    return render(
-        request, "order/payment_form.html", {"ecpay_url": ECPAY_URL, "params": params}
-    )
+        # 建立訂單
+        order = request.user.orders_as_client.create(
+            service=service,
+            total_price=total_price,
+            payment_method=payment_method,
+        )
+        # 綠界金流參數
+        params = {
+            "MerchantID": MERCHANT_ID,
+            "MerchantTradeNo": order.merchant_trade_no,
+            "MerchantTradeDate": datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
+            "PaymentType": "aio",
+            "TotalAmount": int(order.total_price),
+            "TradeDesc": "Payment for Order",
+            "ItemName": f"Order {order.id}",
+            "ReturnURL": request.build_absolute_uri(reverse("order:ecpay_return")),
+            "OrderResultURL": request.build_absolute_uri(reverse("order:ecpay_result")),
+            "ChoosePayment": valid_payment_methods[payment_method],
+        }
+        params["CheckMacValue"] = generate_check_mac_value(params, HASH_KEY, HASH_IV)
+
+        # 傳遞至前端表單
+        return render(
+            request,
+            "order/payment_form.html",
+            {"ecpay_url": ECPAY_URL, "params": params},
+        )
+    return JsonResponse({"error": "Invalid request method."}, status=405)
 
 
 @csrf_exempt
@@ -97,15 +121,14 @@ def successful(request):
     return render(request, "order/order_successful.html")
 
 
-
 @login_required
 def payment_form_select(request, service_id):
     service = get_object_or_404(Service, id=service_id)
-    selected_plan = request.GET.get("plan")  
+    selected_plan = request.GET.get("plan")
 
     initial_data = {
         "selected_plan": selected_plan,
-        "payment_method": None,  
+        "payment_method": None,
     }
 
     if request.method == "POST":
@@ -123,7 +146,7 @@ def payment_form_select(request, service_id):
                 {"form": form, "service": service, "selected_plan": selected_plan},
             )
     # GET 請求
-    else: 
+    else:
         form = OrderForm(initial=initial_data)
 
     return render(
