@@ -11,4 +11,5 @@ class Search(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse("article_detail", kwargs={"pk": self.id})
+        return reverse("search") + f"?keyword={self.title}"
+
