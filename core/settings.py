@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "categories",
     "common",
     "comments",
+    "contact",
     "search",
 ]
 INSTALLED_APPS += [
