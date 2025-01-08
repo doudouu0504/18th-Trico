@@ -16,7 +16,7 @@ class Service(WebPImageModelMixin, models.Model):
         related_name="services",
     )
     title = models.CharField(max_length=100)
-    description = CKEditor5Field("Text", config_name="default")
+    description = CKEditor5Field(config_name="extends")
     photo = models.ImageField(upload_to="service_photos/", blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

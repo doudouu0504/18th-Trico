@@ -25,16 +25,17 @@
     <!-- Description Field -->
     <div class="flex flex-col space-y-2">
       <label for="description" class="text-gray-700 font-medium">描述：</label>
-      <div
-  id="id_description"
-  name="description"
-  class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 w-5/5 h-32"
-  placeholder="請以文字描述您擅長的技能"
->{{ form.description.value|default_if_none:'' }}</div>
+      <textarea
+          id="id_description"
+          name="description"
+          class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 w-full h-32"
+          placeholder="請以文字描述您擅長的技能"
+      >{{ form.description.value|default_if_none:'' }}</textarea>
       {% if form.description.errors %}
-      <p class="text-red-500 text-sm">*請描述您的服務內容</p>
+          <p class="text-red-500 text-sm">*請描述您的服務內容</p>
       {% endif %}
     </div>
+    
 
     <!-- Category Field -->
     <div class="flex flex-col space-y-2">
@@ -184,6 +185,7 @@
           <p class="text-red-500 text-sm">*金額需大於0</p>
           {% endif %}
         </div>
+        
     
         <div class="flex flex-col space-y-2">
           <label for="premium_delivery_time" class="text-gray-700 font-medium">交付時間 (天)：</label>
@@ -228,52 +230,87 @@
 <script src="{% static 'django_ckeditor_5/dist/bundle.js' %}"></script>
 <script src="{% static 'django_ckeditor_5/dist/translations/zh.js' %}"></script>
 <script src="{% static 'django_ckeditor_5/src/ckeditor.js' %}"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const targetElement = document.querySelector('#id_description'); // 替换为您的字段 ID
+    const targetElement = document.querySelector('#id_description');
     if (targetElement) {
-      console.log('Initializing CKEditor for:', targetElement);
-      ClassicEditor
-        .create(targetElement, {
-          toolbar: [
-            'undo', 'redo', '|',
-            'heading', '|',
-            'bold', 'italic', 'underline', 'strikethrough', '|',
-            'alignment', '|',
-            'link', 'blockQuote', 'horizontalLine', 'pageBreak', 'insertTable', '|',
-            'bulletedList', 'numberedList', 'todoList', '|',
-            'outdent', 'indent', '|',
-            'specialCharacters', 'codeBlock', 'mediaEmbed', '|',
-            'styles', 'caseChanges'
-          ],
-          language: 'zh',
-          heading: {
-            options: [
-              { model: 'paragraph', title: '段落', class: 'ck-heading_paragraph' },
-              { model: 'heading1', view: 'h1', title: '標題 1', class: 'ck-heading_heading1' },
-              { model: 'heading2', view: 'h2', title: '標題 2', class: 'ck-heading_heading2' },
-              { model: 'heading3', view: 'h3', title: '標題 3', class: 'ck-heading_heading3' }
-            ]
-          },
-        })
-        .then(editor => {
-          console.log('CKEditor initialized:', editor);
-        })
-        .catch(error => {
-          console.error('CKEditor initialization error:', error);
-        });
-    } else {
-      console.error('Target element not found!');
-    }
-  });
-</script>
+        ClassicEditor
+            .create(targetElement, {
+                ckfinder: {
+                    uploadUrl: '/ckeditor5/upload/', // 上傳 URL
+                },
+                toolbar: [
+                    'undo', 'redo', '|',
+                    'fontfamily', 'fontsize', 'fontColor', 'fontBackgroundColor',
+                    'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'code', '|',
+                    'alignment', '|',
+                    'link', 'blockQuote', 'horizontalLine', 'pageBreak', 'insertTable', '|',
+                    'bulletedList', 'numberedList', 'todoList', '|',
+                    'outdent', 'indent', '|',
+                    'specialCharacters', 'codeBlock', 'uploadImage', '|',
+                    'styles', 'caseChanges'
+                ],
+                language: 'zh',
+                extraPlugins: [function (editor) {
+                    editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+                        return {
+                            upload() {
+                                return loader.file
+                                    .then(file => new Promise((resolve, reject) => {
+                                        const data = new FormData();
+                                        const csrfToken = getCookie('csrftoken'); // 獲取 CSRF token
+                                        data.append('upload', file);
 
-<link rel="stylesheet" href="{% static 'django_ckeditor_5/dist/styles.css' %}">
+                                        fetch('/ckeditor5/upload/', {
+                                            method: 'POST',
+                                            body: data,
+                                            headers: {
+                                                'X-CSRFToken': csrfToken,
+                                            },
+                                        })
+                                            .then(response => response.json())
+                                            .then(data => resolve({
+                                                default: data.url // 返回的 URL
+                                            }))
+                                            .catch(err => reject(err));
+                                    }));
+                            }
+                        };
+                    };
+                }]
+            })
+            .then(editor => {
+                console.log('CKEditor initialized:', editor);
+            })
+            .catch(error => {
+                console.error('CKEditor initialization error:', error);
+            });
+    } else {
+        console.error('Target element not found!');
+    }
+});
+
+// 獲取 CSRF token 的函數
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+</script>
 
 
 <link rel="stylesheet" href="{% static 'django_ckeditor_5/dist/styles.css' %}">
 
 {% endblock %}
-
-

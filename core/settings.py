@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from pathlib import Path
-
+from ckeditor import *
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -203,6 +203,9 @@ AWS_QUERYSTRING_AUTH = False
 AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
 
 MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+# CKEDITOR_5_CUSTOM_CSS = 'path_to.css' # optional
+
 
 STORAGES = {
     "default": {
@@ -239,73 +242,3 @@ PROTOCOL = os.getenv("PROTOCOL", "http")  # 開發環境使用 http，生產使�
 
 
 
-
-
-# CKEditor 5 configs
-customColorPalette = [
-        {
-            'color': 'hsl(4, 90%, 58%)',
-            'label': 'Red'
-        },
-        {
-            'color': 'hsl(340, 82%, 52%)',
-            'label': 'Pink'
-        },
-        {
-            'color': 'hsl(291, 64%, 42%)',
-            'label': 'Purple'
-        },
-        {
-            'color': 'hsl(262, 52%, 47%)',
-            'label': 'Deep Purple'
-        },
-        {
-            'color': 'hsl(231, 48%, 48%)',
-            'label': 'Indigo'
-        },
-        {
-            'color': 'hsl(207, 90%, 54%)',
-            'label': 'Blue'
-        },
-    ]
-
-
-
-# 確保 CKEDITOR_5_CONFIGS 中正確引用 customColorPalette
-CKEDITOR_5_CONFIGS = {
-    'default': {
-        'language': 'zh-tw',
-        "allowedContent": True,
-        "extraPlugins": "mediaembed",
-        "mediaEmbed": {"previewsInData": True},
-        "extraAllowedContent": "iframe[*]; oembed[*]; figure[*]",
-        "width": "auto",
-        'toolbar': {
-            'items': [
-                'undo', 'redo', '|',
-                'heading', '|',
-                'bold', 'italic', 'underline', 'strikethrough', '|',
-                'alignment', '|',
-                'link', 'blockQuote', 'horizontalLine', 'pageBreak', 'insertTable', '|',
-                'bulletedList', 'numberedList', 'todoList', '|',
-                'outdent', 'indent', '|',
-                'specialCharacters', 'codeBlock', 'mediaEmbed', '|',
-                'fontColor', 'fontBackgroundColor', '|',
-                'styles', 'caseChanges',
-            ],
-            'shouldNotGroupWhenFull': True
-        },
-        'fontColor': {
-            'colors': customColorPalette
-        },
-        'fontBackgroundColor': {
-            'colors': customColorPalette
-        },
-    }
-    
-}
-
-
-
-# Define a constant in settings.py to specify file upload permissions
-CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"  # Possible values: "staff", "authenticated", "any"
