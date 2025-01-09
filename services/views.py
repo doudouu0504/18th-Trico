@@ -8,6 +8,8 @@ from comments.forms import CommentForm
 from django.db import models
 import json
 from django.http import JsonResponse
+from notification.utils import send_notification
+from notification.models import Notification
 
 
 def has_permission(request, id):
@@ -113,6 +115,7 @@ def error_page(request):
     )
 
 
+@login_required
 def service_detail(request, id, service_id):
 
     if not request.user.is_authenticated:
@@ -132,17 +135,22 @@ def service_detail(request, id, service_id):
 
     for group in grouped_ratings:
         stars_count[group["rating"]] = group["count"]
-    
+
     try:
         comment = Comment.objects.get(service=service, user=request.user)
     except Comment.DoesNotExist:
         comment = None
-    
-    form = CommentForm(request.POST or None ,instance=comment)
+
+    form = CommentForm(request.POST or None, instance=comment)
     is_liked = Like.objects.filter(user=request.user, service=service).exists()
 
+    # 獲取未讀通知
+    unread_notifications = Notification.objects.filter(
+        recipient=request.user, unread=True
+    )
+
     if request.method == "POST":
-        form = CommentForm(request.POST, instance = comment)
+        form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.user = request.user
@@ -151,10 +159,20 @@ def service_detail(request, id, service_id):
             comment.is_deleted = False
             comment.deleted_at = None
             comment.save()
+
+            # 發送通知
+            if service.freelancer_user != request.user:  # 不通知自己
+                send_notification(
+                    actor=request.user,
+                    recipient=service.freelancer_user,
+                    verb="評論了您的服務",
+                    description=f"{request.user.username} 評論了您的服務 {service.title}",
+                    target_service=service,
+                )
             return redirect(
                 "services:service_detail", id=request.user.id, service_id=service_id
             )
-        
+
     if comment and comment.is_deleted:
         comment = None
         form = CommentForm()
@@ -171,18 +189,35 @@ def service_detail(request, id, service_id):
             "total_reviews": total_reviews,
             "average_rating": average_rating,
             "is_liked": is_liked,
+            "unread_notifications": unread_notifications,  # 傳遞未讀通知到模板
         },
     )
 
+
 @login_required
 def toggle_like(request, service_id):
+    # 確保服務存在
     service = get_object_or_404(Service, id=service_id)
-    like, created = Like.objects.get_or_create(user=request.user, service=service)
 
-    if not created:
-        like.delete()
+    # 檢查用戶是否已經點過愛心
+    existing_like = Like.objects.filter(user=request.user, service=service).first()
+
+    if existing_like:
+        # 如果已經點過愛心，則取消
+        existing_like.delete()
         is_liked = False
     else:
+        # 未點過愛心，則新增
+        Like.objects.create(user=request.user, service=service)
         is_liked = True
+        # 發送通知
+        if service.freelancer_user != request.user:  # 不通知自己
+            send_notification(
+                actor=request.user,
+                recipient=service.freelancer_user,
+                verb="點讚了您的服務",
+                description=f"{request.user.username} 點讚了您的服務 {service.title}",
+                target_service=service,
+            )
 
     return JsonResponse({"is_liked": is_liked})

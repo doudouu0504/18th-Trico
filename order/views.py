@@ -20,9 +20,9 @@ import requests
 
 # 第三方庫
 import environ
+from django.urls import reverse
 
 
-# 綠界金流設定
 MERCHANT_ID = settings.MERCHANT_ID
 HASH_KEY = settings.HASH_KEY
 HASH_IV = settings.HASH_IV
