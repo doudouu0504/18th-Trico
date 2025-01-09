@@ -250,7 +250,7 @@ HASH_KEY = os.getenv("HASH_KEY")
 HASH_IV = os.getenv("HASH_IV")
 ECPAY_URL = os.getenv("ECPAY_URL")
 
-# 強制啟用 HTTPS
-SECURE_SSL_REDIRECT = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+
+LINE_CALLBACK_URL = os.getenv(
+    "LINE_CALLBACK_URL", "http://localhost:8000/accounts/line/login/callback/"
+)
