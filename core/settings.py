@@ -2,6 +2,10 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 
+import environ
+env = environ.Env()
+environ.Env.read_env()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -19,11 +23,13 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     "*",
+
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://trico.zeabur.app",
-    "http://127.0.0.1:8000",
+    'https://trico.zeabur.app',  
+    'http://127.0.0.1:8000',
+    f"https://{env('HOSTNAME')}"
 ]
 
 
@@ -36,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_fsm",
     "users",
     "pages",
     "order",
@@ -243,6 +250,11 @@ DEFAULT_FROM_EMAIL = "三合平台 <selinafs880504@gmail.com>"
 DEFAULT_DOMAIN = os.getenv("DEFAULT_DOMAIN")  # 本地開發使用
 PROTOCOL = os.getenv("PROTOCOL", "http")  # 開發環境使用 http，生產使用 https
 
+
+
+
+
+line_pay_hostname = env('HOSTNAME')
 
 # 綠界金流相關配置
 MERCHANT_ID = os.getenv("MERCHANT_ID")
