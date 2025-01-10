@@ -257,3 +257,12 @@ LINE_CALLBACK_URL = os.getenv(
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get("GOOGLE_CLIENT_ID")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get("GOOGLE_SECRET")
+
+# Google OAuth 回呼網址 (自動適應本地與 Zeabur)
+DOMAIN = os.environ.get("DEFAULT_DOMAIN", "127.0.0.1:8000")
+PROTOCOL = os.environ.get("PROTOCOL", "http")
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = (
+    f"{PROTOCOL}://{DOMAIN}/accounts/google/login/callback/"
+)
