@@ -22,8 +22,8 @@ ALLOWED_HOSTS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://trico.zeabur.app',  
-    'http://127.0.0.1:8000',
+    "https://trico.zeabur.app",
+    "http://127.0.0.1:8000",
 ]
 
 
@@ -249,6 +249,11 @@ MERCHANT_ID = os.getenv("MERCHANT_ID")
 HASH_KEY = os.getenv("HASH_KEY")
 HASH_IV = os.getenv("HASH_IV")
 ECPAY_URL = os.getenv("ECPAY_URL")
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+LINE_CALLBACK_URL = os.getenv(
+    "LINE_CALLBACK_URL", "http://localhost:8000/accounts/line/login/callback/"
+)
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get("GOOGLE_CLIENT_ID")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get("GOOGLE_SECRET")
