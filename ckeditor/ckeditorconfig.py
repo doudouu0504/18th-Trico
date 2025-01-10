@@ -32,48 +32,47 @@ customColorPalette = [
 
 
 CKEDITOR_UPLOAD_PATH = "uploads/"  # 圖片上傳後存儲的目錄
-# CKEDITOR_5_IMAGE_BACKEND = "pillow"  # 圖片處理使用 pillow
 CKEDITOR_5_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 CKEDITOR_5_ALLOW_ALL_FILE_TYPES = True
 CKEDITOR_5_UPLOAD_FILE_TYPES = ["jpeg", "pdf", "png"] 
 
 CKEDITOR_5_CONFIGS = {
     "default": {
-        "toolbar": ["heading", "|", "bold", "italic", "link",
-                    "bulletedList", "numberedList", "blockQuote", "imageUpload", ],
-        "filebrowserUploadUrl": "/ckeditor5/upload/",  # 圖片上傳 URL
-        "filebrowserBrowseUrl": "/ckeditor5/browse/",  # 圖片瀏覽 URL
-        "extraPlugins": ["ImageUpload"],
-
+        "toolbar": [
+            "heading", "|", "bold", "italic", "link", "bulletedList", 
+            "numberedList", "blockQuote", "imageUpload"
+        ],
+        "filebrowserUploadUrl": "/ckeditor5/upload/",
+        "filebrowserBrowseUrl": "/ckeditor5/browse/",
     },
     "extends": {
         "blockToolbar": [
-            "paragraph", "heading1", "heading2", "heading3",
-            "|",
-            "bulletedList", "numberedList",
-            "|",
-            "blockQuote",
+            "paragraph", "heading1", "heading2", "heading3", "|",
+            "bulletedList", "numberedList", "|", "blockQuote"
         ],
-        "toolbar": ["heading", "|", "outdent", "indent", "|", "bold", "italic", "link", "underline", "strikethrough",
-        "code","subscript", "superscript", "highlight", "|", "codeBlock", "sourceEditing", "insertImage",
-                    "bulletedList", "numberedList", "todoList", "|",  "blockQuote", "imageUpload", "|",
-                    "fontSize", "fontFamily", "fontColor", "fontBackgroundColor", "mediaEmbed", "removeFormat",
-                    "insertTable",],
+        "toolbar": [
+            "heading", "|", "outdent", "indent", "|", "bold", "italic", 
+            "link", "underline", "strikethrough", "code", "subscript", 
+            "superscript", "highlight", "|", "codeBlock", "sourceEditing", 
+            "imageUpload", "bulletedList", "numberedList", "todoList", "|", 
+            "blockQuote", "fontSize", "fontFamily", "fontColor", 
+            "fontBackgroundColor", "mediaEmbed", "removeFormat", "insertTable"
+        ],
         "image": {
-            "toolbar": ["imageTextAlternative", "|", "imageStyle:alignLeft",
-                        "imageStyle:alignRight", "imageStyle:alignCenter", "imageStyle:side",  "|"],
+            "toolbar": [
+                "imageTextAlternative", "|", "imageStyle:alignLeft", 
+                "imageStyle:alignRight", "imageStyle:alignCenter", 
+                "imageStyle:side", "|"
+            ],
             "styles": [
-                "full",
-                "side",
-                "alignLeft",
-                "alignRight",
-                "alignCenter",
+                "full", "side", "alignLeft", "alignRight", "alignCenter"
             ]
-
         },
         "table": {
-            "contentToolbar": [ "tableColumn", "tableRow", "mergeTableCells",
-            "tableProperties", "tableCellProperties" ],
+            "contentToolbar": [
+                "tableColumn", "tableRow", "mergeTableCells", 
+                "tableProperties", "tableCellProperties"
+            ],
             "tableProperties": {
                 "borderColors": customColorPalette,
                 "backgroundColors": customColorPalette
@@ -82,17 +81,10 @@ CKEDITOR_5_CONFIGS = {
                 "borderColors": customColorPalette,
                 "backgroundColors": customColorPalette
             }
-        },
-
-    },
-    "list": {
-        "properties": {
-            "styles": "true",
-            "startIndex": "true",
-            "reversed": "true",
         }
     }
 }
 
+
 # Define a constant in settings.py to specify file upload permissions
-CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"  # Possible values: "staff", "authenticated", "any"
+CKEDITOR_5_FILE_UPLOAD_PERMISSION = "authenticated"  # Possible values: "staff", "authenticated", "any"

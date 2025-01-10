@@ -14,7 +14,7 @@
         id="title"
         name="title"
         class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 w-5/5"
-        placeholder="範例: 我會透過我的專業幫你剪輯影片並配上字幕..."
+        placeholder="<範例> 我會透過我的專業幫你剪輯影片並配上字幕..."
         value="{{ form.title.value|default_if_none:'' }}"
       />
       {% if form.title.errors %}
@@ -29,7 +29,12 @@
           id="id_description"
           name="description"
           class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 w-full h-32"
-          placeholder="請以文字描述您擅長的技能"
+          placeholder="<範例> 我是 Alex Chen，畢業於XX大學，擁有 5 年的影片後製與字幕設計經驗。
+我曾在知名數位行銷公司 XXXX擔任影片製作專員，專注於廣告影片剪輯與社群媒體內容製作，並為品牌如 XYZ Electronics 和ABC Life 提供高效的影片後製服務。
+
+我擅長剪輯節奏掌控、字幕翻譯與本地化設計，以及創意視覺特效，可以幫您的影片吸引更多流量，
+
+無論是商業廣告、YouTube 內容、教育課程，或是活動紀錄影片，我都能根據您的需求量身打造專屬作品，歡迎與我聊聊~"
       >{{ form.description.value|default_if_none:'' }}</textarea>
       {% if form.description.errors %}
           <p class="text-red-500 text-sm">*請描述您的服務內容</p>
@@ -90,7 +95,7 @@
             id="standard_title"
             name="standard_title"
             class="bg-white text-gray-800 border border-gray-300 rounded-md p-2"
-            placeholder="一般方案名稱"
+            placeholder="<範例> 基本影片剪輯與字幕配對服務"
             value="{{ form.standard_title.value|default_if_none:'' }}"
           />
           {% if form.standard_title.errors %}
@@ -104,7 +109,7 @@
             id="standard_description"
             name="standard_description"
             class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 h-20"
-            placeholder="一般方案描述"
+            placeholder="<範例> 提供簡單高效的影片剪輯與字幕添加服務，適合個人紀錄、簡單影片或社群媒體短片，確保畫面流暢並準確傳遞您的訊息..."
           >{{ form.standard_description.value|default_if_none:'' }}</textarea>
           {% if form.standard_description.errors %}
           <p class="text-red-500 text-sm">*請填寫一般方案描述</p>
@@ -118,7 +123,7 @@
             id="standard_price"
             name="standard_price"
             class="bg-white text-gray-800 border border-gray-300 rounded-md p-2"
-            placeholder="一般方案價格"
+            placeholder="一般方案價格(金額需大於0)"
             value="{{ form.standard_price.value|default_if_none:'' }}"
           />
           {% if form.standard_price.errors %}
@@ -152,7 +157,7 @@
             type="text"
             name="premium_title"
             class="bg-white text-gray-800 border border-gray-300 rounded-md p-2"
-            placeholder="專業方案名稱"
+            placeholder="<範例> 專業影片製作與高級字幕設計"
             value="{{ form.premium_title.value|default_if_none:'' }}"
           />
           {% if form.premium_title.errors %}
@@ -165,7 +170,7 @@
           <textarea
             name="premium_description"
             class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 h-20"
-            placeholder="專業方案描述"
+            placeholder="<範例> 提供全面的影片剪輯、特效處理以及精緻字幕設計服務，專為商業廣告、品牌推廣與高要求影片打造，提升內容的專業感與視覺吸引力..."
           >{{ form.premium_description.value|default_if_none:'' }}</textarea>
           {% if form.premium_description.errors %}
           <p class="text-red-500 text-sm">*請填寫專業方案描述</p>
@@ -231,7 +236,9 @@
 <script src="{% static 'django_ckeditor_5/dist/translations/zh.js' %}"></script>
 <script src="{% static 'django_ckeditor_5/src/ckeditor.js' %}"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+<script src="https://cdn.ckbox.io/ckbox/2.4.0/ckbox.js"></script>
 
+<!-- 初始化CKEditor -->
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const targetElement = document.querySelector('#id_description');

@@ -5,8 +5,7 @@ from common.views import custom_404
 from django.conf.urls.static import static
 from .views import vue404_page
 from django.urls import re_path
-from django.conf import settings
-from django.conf.urls.static import static
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -18,6 +17,7 @@ urlpatterns = [
     path("categories/", include("categories.urls")),
     path("comments/", include("comments.urls")),
     path("api/", include("common.urls")),
+    path("", include("ckeditor.urls")), 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
@@ -28,3 +28,7 @@ urlpatterns += [
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+
+
+

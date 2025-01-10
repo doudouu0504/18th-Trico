@@ -14,7 +14,7 @@
       {% if user.is_authenticated and service.freelancer_user == user %}
       <a
         class="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded"
-        href="{% url 'services:edit_service' id=request.user.id service_id=service.id %}"
+        href="{% url "services:edit_service" id=request.user.id service_id=service.id %}"
       >
         編輯
       </a>
@@ -135,7 +135,7 @@
           </div>
         </div>
         <!-- 支付方式選擇表單 -->
-        <form method="post" action="{% url 'order:payment_form_select' service.id %}">
+        <form method="post" action="{% url "order:payment_form_select" service.id %}">
           {% csrf_token %}
           <input type="hidden" name="plan" id="plan" value="standard" />
           <button
@@ -159,7 +159,7 @@
         <p class="text-sm text-gray-400">{{ comment.created_at|date:"Y-m-d H:i" }}</p>
         {% if comment.user == user %}
         <!-- 刪除留言按鈕 -->
-        <form method="POST" action="{% url 'comments:delete_comment' comment.id %}">
+        <form method="POST" action="{% url "comments:delete_comment" comment.id %}">
           {% csrf_token %}
           <button type="submit" class="text-red-500 text-sm">刪除</button>
         </form>
@@ -199,11 +199,11 @@
 					 name: "all"
 					 url: /^youtube\.com\/media\/(\w+)/,
 					 html: match =>
-		'<div style="position:relative; padding-bottom:100%; height:0">' +
-			'<iframe src="..." frameborder="0" ' +
-				'style="position:absolute; width:100%; height:100%; top:0; left:0">' +
-			'</iframe>' +
-		'</div>'
+            "<div style="position:relative; padding-bottom:100%; height:0">" +
+            "<iframe src="..." frameborder="0" " +
+            "style="position:absolute; width:100%; height:100%; top:0; left:0">" +
+            "</iframe>" +
+            "</div>"
 				},
 				...
 			]
@@ -214,22 +214,44 @@
 
 </script>
 <script>
-  document.querySelectorAll('oembed').forEach(oembed => {
-    const url = oembed.getAttribute('url');
-    const iframe = document.createElement('iframe');
-    iframe.setAttribute('src', url.replace('watch?v=', 'embed/'));
-    iframe.setAttribute('width', '100%');
-    iframe.setAttribute('height', '315');
-    iframe.setAttribute('frameborder', '0');
-    iframe.setAttribute('allowfullscreen', true);
+  document.querySelectorAll("oembed").forEach(oembed => {
+    const url = oembed.getAttribute("url");
+    const iframe = document.createElement("iframe");
+    iframe.setAttribute("src", url.replace("watch?v=", "embed/"));
+    iframe.setAttribute("width", "100%");
+    iframe.setAttribute("height", "315");
+    iframe.setAttribute("frameborder", "0");
+    iframe.setAttribute("allowfullscreen", true);
     oembed.parentElement.replaceChild(iframe, oembed);
   });
   
 </script>
 
-  
+<script>
+  // 切換方案顯示
+  planSelect.addEventListener("change", function () {
+    const isPremiumEmpty =
+      premiumSection === null || premiumSection.querySelectorAll("*").length === 0;
 
+    if (this.value === "standard") {
+      standardSection.classList.remove("hidden");
+      premiumSection.classList.add("hidden");
+      termsSection.classList.add("hidden");
+    } else if (this.value === "premium") {
+      if (!isPremiumEmpty) {
+        // 如果 premiumSection 不是空的，顯示它
+        premiumSection.classList.remove("hidden");
+        standardSection.classList.add("hidden");
+        termsSection.classList.add("hidden");
+      } else {
+        // 如果 premiumSection 是空的，提示用戶或默認顯示 standard
+        alert("Premium section 尚未填寫內容");
+        standardSection.classList.remove("hidden");
+        premiumSection.classList.add("hidden");
+        termsSection.classList.add("hidden");
+      }
+    }
+  });
 
-
-
+</script>
 {% endblock %}

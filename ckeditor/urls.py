@@ -1,19 +1,13 @@
-from django.urls import path, include
-from django.conf import settings
-from common.views import custom_404
-from django.conf.urls.static import static
-from django.urls import re_path
+from django.urls import path
+from ckeditor.views import *
+from ckeditor.views import file_upload_view, file_browse_view
 
-
+app_name="ckeditor"
 urlpatterns = [
-    path("ckeditor5/", include("django_ckeditor_5.urls")),
-
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-handler404 = custom_404
-
-urlpatterns += [
-    re_path(r"^(?!admin|users|accounts|order|services|categories|comments|api|/).*", vue404_page),
+    path("ckeditor5/upload/", file_upload_view, name="ckeditor5_upload"),
+    path("ckeditor5/browse/", file_browse_view, name="ckeditor5_browse"),  # 文件瀏覽
 ]
 
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+
+
