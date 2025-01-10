@@ -254,3 +254,6 @@ ECPAY_URL = os.getenv("ECPAY_URL")
 LINE_CALLBACK_URL = os.getenv(
     "LINE_CALLBACK_URL", "http://localhost:8000/accounts/line/login/callback/"
 )
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
