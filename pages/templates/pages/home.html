@@ -1,26 +1,23 @@
 {% extends "shared/layout.html" %}
 {% load static %}
 {% block content %}
- <div class="bg-white">
 
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-6 mt-8">
-      {% for category in categories %}
-      <a 
-        href="{% url 'categories:service_by_category' category.id %}" 
-        class="block bg-white shadow-md hover:shadow-lg rounded-lg p-4 text-center transition duration-300 border border-gray-200 hover:border-blue-500"
-      >
-        <h3 class="text-lg font-semibold text-gray-800 hover:text-blue-600">{{ category.name }}</h3>
-      </a>
-      {% endfor %}
-    </div>
+ <div class="bg-white">
+  <div class="flex flex-wrap justify-center gap-2 p-6">
+    {% for category in categories %}
+    <a href="{% url 'categories:service_by_category' category.id %}" class="block bg-white shadow-md hover:shadow-lg rounded-lg p-4 text-center transition duration-300 border border-gray-300 hover:bg-gray-100">
+      <h3 class="w-32 text-sm font-light text-gray-800">{{ category.name }}</h3>
+    </a>
+    {% endfor %}
+  </div>
 
     <!-- 最近新增 -->
     <div class="main overflow-hidden flex flex-col justify-between bg-white"> 
-      <div class="visualBox py-6 px-4 my-5 w-full sm:max-w-[600px] md:max-w-[800px] lg:max-w-[1200px] mx-auto bg-gray-100 rounded-lg shadow-lg">
+      <div class="visualBox py-6 px-4 my-5 w-full sm:max-w-[600px] md:max-w-[800px] lg:max-w-[1200px] mx-auto bg-gray-100 rounded-lg hover:shadow-lg">
         <div class="flex flex-col items-center mb-6">
           <h2 class="text-2xl font-bold text-gray-800 text-center">最近新增</h1>
         </div>
-        <div class="services grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="services grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {% if services %}
             {% for service in services %}
                 {% include "pages/service_card.html" %}
@@ -30,7 +27,7 @@
           {% endif %}
           <!-- 顯示填充卡牌 -->
           {% for _ in placeholders %}
-          <div class="bg-white shadow-md rounded-lg p-6 border border-gray-200 hover:shadow-xl transition duration-300">
+          <div class="bg-white p-6 border border-gray-200 transition duration-300">
             <div class="animate-pulse">
               <div class="h-40 bg-gray-300 rounded-lg mb-4"></div>
               <div class="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
@@ -44,7 +41,7 @@
 
     <!-- 您可能會感興趣 -->
     <div class="main overflow-hidden flex flex-col justify-between bg-white"> 
-      <div class="visualBox py-6 px-4 my-5 w-full sm:max-w-[600px] md:max-w-[800px] lg:max-w-[1200px] mx-auto bg-gray-100 rounded-lg shadow-lg">
+      <div class="visualBox py-6 px-4 my-5 w-full sm:max-w-[600px] md:max-w-[800px] lg:max-w-[1200px] mx-auto bg-gray-100 rounded-lg hover:shadow-lg">
         <div class="flex flex-col items-center mb-6">
           <h2 class="text-2xl font-bold text-gray-800 text-center">你可能感興趣</h1>
         </div>
@@ -59,7 +56,7 @@
     
           <!-- 顯示填充卡牌 -->
           {% for _ in placeholders %}
-          <div class="bg-white shadow-md rounded-lg p-6 border border-gray-200 hover:shadow-xl transition duration-300">
+          <div class="bg-white p-6 border border-gray-200 transition duration-300">
             <div class="animate-pulse">
               <div class="h-40 bg-gray-300 rounded-lg mb-4"></div>
               <div class="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
@@ -73,7 +70,7 @@
 
     <!-- 評分最高 -->
     <div class="main overflow-hidden flex flex-col justify-between bg-white"> 
-      <div class="visualBox py-6 px-4 my-5 w-full sm:max-w-[600px] md:max-w-[800px] lg:max-w-[1200px] mx-auto bg-gray-100 rounded-lg shadow-lg">
+      <div class="visualBox py-6 px-4 my-5 w-full sm:max-w-[600px] md:max-w-[800px] lg:max-w-[1200px] mx-auto bg-gray-100 rounded-lg hover:shadow-lg">
         <div class="flex flex-col items-center mb-6">
           <h2 class="text-2xl font-bold text-gray-800 text-center">評分最高</h1>
         </div>
@@ -88,7 +85,7 @@
     
           <!-- 顯示填充卡牌 -->
           {% for _ in placeholders %}
-          <div class="bg-white shadow-md rounded-lg p-6 border border-gray-200 hover:shadow-xl transition duration-300">
+          <div class="bg-white p-6 border border-gray-200 transition duration-300">
             <div class="animate-pulse">
               <div class="h-40 bg-gray-300 rounded-lg mb-4"></div>
               <div class="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
@@ -198,7 +195,7 @@
   </div>
 
   <!-- 分頁按鈕 -->
-  <div class="pagination justify-center pb-2">
+  {% comment %} <div class="pagination justify-center pb-2">
     {% if page_obj.has_previous %}
     <a class="new" href="?page={{ page_obj.previous_page_number }}">←</a>
     {% endif %}
@@ -212,7 +209,7 @@
     {% if page_obj.has_next %}
     <a class="new" href="?page={{ page_obj.next_page_number }}">→</a>
     {% endif %}
-  </div>
+  </div> {% endcomment %}
 
   <script>
     document.querySelectorAll("[id^='toggle-like-btn-']").forEach((button) => {
