@@ -42,16 +42,10 @@
         </div>
 
         <h1 class="text-xl font-bold mb-4 text-gray-800">
-          {{ service.title }}
+          我會{{ service.title }}
         </h1>
 
-        <div class="flex items-center">
-          <img
-            src="{% if service.photo %}{{ service.photo.url }}{% else %}https://fakeimg.pl/300{% endif %}"
-            alt="Service Image"
-            class="w-[80%] h-auto rounded-lg border shadow-sm"
-          />
-        </div>
+
 
         <!-- 接案者介紹:描述 -->
         <div class="text-gray-700 mb-4 text-lg">

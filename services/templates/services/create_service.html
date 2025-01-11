@@ -22,24 +22,63 @@
       {% endif %}
     </div>
 
+
     <!-- Description Field -->
-    <div class="flex flex-col space-y-2">
-      <label for="description" class="text-gray-700 font-medium">描述：</label>
-      <textarea
-          id="id_description"
-          name="description"
-          class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 w-full h-32"
-          placeholder="<範例> 我是 Alex Chen，畢業於XX大學，擁有 5 年的影片後製與字幕設計經驗。
-我曾在知名數位行銷公司 XXXX擔任影片製作專員，專注於廣告影片剪輯與社群媒體內容製作，並為品牌如 XYZ Electronics 和ABC Life 提供高效的影片後製服務。
+    <div class="flex flex-col space-y-2 relative">
+      <label for="description" class="text-gray-700 font-medium">
+        描述：    
+        <button
+        id="view-example-btn"
+        type="button"
+        class="text-blue-600 hover:text-blue-800 underline">
+        看範例
+       </button>
+      </label>
+      <!-- View Example Button -->
 
-我擅長剪輯節奏掌控、字幕翻譯與本地化設計，以及創意視覺特效，可以幫您的影片吸引更多流量，
+      <div class="flex items-center">
+        <!-- Textarea -->
+        <textarea
+            id="id_description"
+            name="description"
+            class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 w-full h-32"
+            placeholder=""
+        >{{ form.description.value|default_if_none:'' }}</textarea>
 
-無論是商業廣告、YouTube 內容、教育課程，或是活動紀錄影片，我都能根據您的需求量身打造專屬作品，歡迎與我聊聊~"
-      >{{ form.description.value|default_if_none:'' }}</textarea>
-      {% if form.description.errors %}
-          <p class="text-red-500 text-sm">*請描述您的服務內容</p>
-      {% endif %}
-    </div>
+
+      </div>
+
+      <!-- Example Modal -->
+      <div
+          id="example-modal"
+          class="hidden absolute top-12 left-0 bg-gray-100 border border-gray-300 rounded-md p-4 w-full z-10 shadow-md"
+      >
+        <div class="flex justify-between items-center">
+          <button
+          id="close-example-btn"
+          type="button"
+          class="text-gray-500 text-4xl hover:text-gray-800 p-2" >  &times; </button>
+          <div class="text-gray-700 font-medium"> 
+            <p><範例></p> 
+              <p>我是 Alex Chen，畢業於XX大學，擁有 5 年的影片後製與字幕設計經驗。</p><br>
+            <p>我曾在知名數位行銷公司 XXXX擔任影片製作專員，專注於廣告影片剪輯與社群媒體內容製作，並為品牌如 XYZ Electronics 和ABC Life 提供高效的影片後製服務。</p><br>
+            我擅長剪輯節奏掌控、字幕翻譯與本地化設計，以及創意視覺特效，可以幫您的影片吸引更多流量~
+          </p>
+              <p>無論是商業廣告、YouTube 內容、教育課程，或是活動紀錄影片，我都能根據您的需求量身打造專屬作品。</p>
+              <p>以下是我過去與客戶合作的作品，歡迎與我聊聊~  </p>
+            </div>
+
+        </div>
+        <div class="text-sm text-gray-600 mt-2 whitespace-pre-line">
+          
+        </div>
+      </div>
+
+  {% if form.description.errors %}
+    <p class="text-red-500 text-sm">*請描述您的服務內容</p>
+  {% endif %}
+</div>
+
     
 
     <!-- Category Field -->
@@ -72,7 +111,7 @@
 
     <!-- Photo Upload Field -->
     <div class="flex flex-col space-y-2">
-      <label for="photo" class="text-gray-700 font-medium">作品圖片</label>
+      <label for="photo" class="text-gray-700 font-medium">封面圖片 (上傳一張吸引人的封面圖片，讓訪客對您更感興趣)  </label>
       <input
         type="file"
         id="photo"
@@ -317,7 +356,24 @@ function getCookie(name) {
 
 </script>
 
-
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const exampleModal = document.getElementById("example-modal");
+    const viewExampleBtn = document.getElementById("view-example-btn");
+    const closeExampleBtn = document.getElementById("close-example-btn");
+  
+    // 點擊「看範例」按鈕顯示範例內容
+    viewExampleBtn.addEventListener("click", () => {
+      exampleModal.classList.remove("hidden");
+    });
+  
+    // 點擊「關閉」按鈕隱藏範例內容
+    closeExampleBtn.addEventListener("click", () => {
+      exampleModal.classList.add("hidden");
+    });
+  });
+  
+</script>
 <link rel="stylesheet" href="{% static 'django_ckeditor_5/dist/styles.css' %}">
 
 {% endblock %}

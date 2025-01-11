@@ -1,7 +1,7 @@
 {% extends "shared/layout.html" %} 
 {% block content %} 
 
-<div class="w-4/5 mx-auto my-8 bg-blue-100 p-6 rounded-lg shadow-md" data-page="toggling_buttons">
+<div class="w-4/5  mx-auto my-8 bg-blue-100 p-6 rounded-lg shadow-md" data-page="toggling_buttons">
   <!-- 按鈕區域 -->
   <div class="flex justify-between items-center mb-6">
     <!-- 上一頁 -->
@@ -25,7 +25,7 @@
       <!-- 管理個人服務按鈕 -->
       <button
         id="toggle-management-btn"
-        class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       >
         管理個人服務
       </button>
@@ -33,7 +33,9 @@
   </div>
 
   <!-- 卡牌區域 -->
+  
   <div class="services grid grid-cols-1 md:grid-cols-4 gap-6">
+    
     {% if services %}
       {% for service in services %}
       <div
@@ -46,14 +48,10 @@
           alt="Service Photo"
         />
         </a>
-        <div class="p-4 flex-grow">
-          <h2 class="text-m font-bold text-blue-800 truncate">{{ service.title }}</h2>
-          <span class="text-gray-300 text-xs text-right">
-            {{ service.created_at|date:"Y/m/d  H:i"}} 新增完成√
-          </span>
-          
+        <div class="p-4 flex">
+          <h2 class="text-xl font-bold text-blue-800 truncate">{{ service.title }}</h2><br>
         </div>
-        <div class="p-5 text-right">
+        <div class="p-3 text-right">
           <div class="mt-2 flex-auto space-x-4 justify-end management-buttons hidden">
             <!-- 編輯按鈕 -->
             <a
@@ -70,8 +68,26 @@
               刪除
             </a>
           </div>
+          
   
         </div>
+        <div class="relative flex items-center text-gray-400 text-xs font-medium overflow-hidden w-full bg-gray-200  shadow-inner">
+          <!-- 左側標籤 -->
+          <span class="flex-1 px-4 py-2 text-center bg-blue-100 z-10">
+            建立日期<br>{{ service.created_at|date:"Y/m/d H:i" }}
+          </span>
+        
+          <!-- 斜線分隔 -->
+          <div class="absolute inset-y-0 left-1/2 w-2 bg-white transform -skew-x-12 z-20"></div>
+        
+          <!-- 右側標籤 -->
+          <span class="flex-1 px-4 py-2 text-center bg-blue-100 z-10">
+            最近一次修改日期<br>{{ service.updated_at|date:"Y/m/d H:i" }}
+          </span>
+        </div>
+        
+        
+        
 
         <!-- Comments Section -->
         <div class="p-4 border-t border-gray-300">

@@ -17,7 +17,8 @@ def file_upload_view(request):
         default_storage.save(file_path, file)
 
         default_storage.save(file_path, file)
-
+        file_url = default_storage.url(file_path)  # 確保返回正確的圖片 URL
+        
         return JsonResponse({
             "url": file_url,
             "uploaded": True,
