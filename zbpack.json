@@ -1,3 +1,4 @@
 {
     "build_command": "npm run build && npm run css",
+    "start_command": "npm start"
 }
