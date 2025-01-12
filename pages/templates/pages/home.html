@@ -2,7 +2,72 @@
 {% load static %}
 {% block content %}
 
- <div class="bg-white">
+ <div class="bg-white"> 
+<!-- 輪播組件 -->
+<!-- prettier-ignore -->
+<div class="flex justify-center">
+  <div x-data="carousel()" class="relative w-full overflow-hidden">
+    <div class="slides flex transition-transform duration-500" :style="`transform: translateX(-${currentSlide * 100}%)`">
+      <div class="slide flex-none w-full h-full">
+        <img src="{% static 'images/banner-01.jpg' %}" alt="Slide 1" class="w-full object-cover hidden sm:block"/>
+        <img src="{% static 'images/banner-01-600.jpg' %}" alt="Slide 1" class="w-full object-cover block sm:hidden"/>
+      </div>
+      <div class="slide flex-none w-full h-full">
+        <img src="{% static 'images/banner-02.jpg' %}" alt="Slide 2" class="w-full object-cover hidden sm:block"/>
+        <img src="{% static 'images/banner-02-600.jpg' %}" alt="Slide 1" class="w-full object-cover block sm:hidden"/>
+      </div>
+      <div class="slide flex-none w-full h-full">
+        <img src="{% static 'images/banner-03.jpg' %}" alt="Slide 2" class="w-full object-cover hidden sm:block"/>
+        <img src="{% static 'images/banner-03-600.jpg' %}" alt="Slide 1" class="w-full object-cover block sm:hidden"/>
+      </div>
+    </div>
+
+    <!-- 控制紐 -->
+    <div class="flex">
+      <button 
+        class="control-btn absolute left-4 inset-y-1/2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-gray-300 hover:bg-white opacity-75 pointer-events-auto" 
+        @click="prev">
+        <span class="text-lg text-gray-800">&lt;</span>
+      </button>
+      <button 
+        class="control-btn absolute right-4 inset-y-1/2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-gray-300 hover:bg-white opacity-75 pointer-events-auto" 
+        @click="next">
+        <span class="text-lg text-gray-800">&gt;</span>
+      </button>
+    </div>    
+  </div>
+</div>
+
+<!-- 輪播alpinejs組件 -->
+<script>
+  function carousel() {
+    return {
+      currentSlide: 0,
+      totalSlides: 3,
+
+      next() {
+        this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
+      },
+
+      prev() {
+        this.currentSlide =
+          (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+      },
+
+      startAutoSlide() {
+        setInterval(() => {
+          this.next();
+        }, 5000);
+      },
+
+      init() {
+        this.startAutoSlide();
+      },
+    };
+  }
+</script>
+
+  <!--分類標籤-->
   <div class="flex flex-wrap justify-center gap-2 p-6">
     {% for category in categories %}
     <a href="{% url 'categories:service_by_category' category.id %}" class="block bg-white shadow-md hover:shadow-lg rounded-lg p-4 text-center transition duration-300 border border-gray-300 hover:bg-gray-100">
@@ -96,61 +161,6 @@
         </div>
       </div>
     </div>
-
-    <!-- 輪播組件 -->
-    <div class="flex justify-center py-3">
-      <div x-data="carousel()" class="banner">
-        <!-- Slides -->
-        <div
-          class="slides"
-          :style="`transform: translateX(-${currentSlide * 1200}px)`"
-        >
-          <div class="slide">
-            <img src="{% static 'images/banner-1.jpg' %}" alt="Slide 1" />
-          </div>
-          <div class="slide">
-            <img src="{% static 'images/banner-2.jpg' %}" alt="Slide 2" />
-          </div>
-          <div class="slide">
-            <img src="{% static 'images/banner-3.jpg' %}" alt="Slide 3" />
-          </div>
-        </div>
-
-        <!-- Controls -->
-        <div class="controls">
-          <button class="control-btn" @click="prev">Prev</button>
-          <button class="control-btn" @click="next">Next</button>
-        </div>
-      </div>
-    </div>
-    <!-- 輪播alpinejs組件 -->
-    <script>
-      function carousel() {
-        return {
-          currentSlide: 0,
-          totalSlides: 3,
-
-          next() {
-            this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
-          },
-
-          prev() {
-            this.currentSlide =
-              (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
-          },
-
-          startAutoSlide() {
-            setInterval(() => {
-              this.next();
-            }, 2000);
-          },
-
-          init() {
-            this.startAutoSlide();
-          },
-        };
-      }
-    </script>
 
     <!-- 接案者廣告區 -->
     <!-- prettier-ignore -->
