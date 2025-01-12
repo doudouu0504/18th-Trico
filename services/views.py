@@ -53,8 +53,15 @@ def create_service(request, id):
             service = form.save(commit=False)
             service.freelancer_user = request.user
             service.save()
+
             selected_categories = request.POST.getlist("category")
             service.category.set(selected_categories)
+
+            tags = request.POST.getlist("tags")
+            if tags:
+                service.tags.add(*tags)
+            
+            form.save_m2m()
             return redirect("services:freelancer_dashboard", id=id)
     else:
         form = ServiceForm()
@@ -73,6 +80,7 @@ def edit_service(request, id, service_id):
 
     service = get_object_or_404(Service, id=service_id, freelancer_user=request.user)
     categories = Category.objects.all()
+    tags = list(service.tags.names())
 
     if request.method == "POST":
         form = ServiceForm(request.POST, request.FILES, instance=service)
@@ -87,7 +95,7 @@ def edit_service(request, id, service_id):
     return render(
         request,
         "services/edit_service.html",
-        {"form": form, "categories": categories},
+        {"form": form, "categories": categories, "tags": tags},
     )
 
 
@@ -122,14 +130,15 @@ def service_detail(request, id, service_id):
         return redirect('users:login')  # 重導向到登入頁面
     
     service = get_object_or_404(Service, id=service_id)
+
+    tags = service.tags.all()
+    
     comments = Comment.objects.filter(service=service, is_deleted=False).order_by(
         "-created_at"
     )
 
     total_reviews = comments.count()
-
     average_rating = comments.aggregate(models.Avg("rating"))["rating__avg"]
-
     grouped_ratings = comments.values("rating").annotate(count=models.Count("rating"))
     stars_count = {i: 0 for i in range(1, 6)}
 
@@ -190,6 +199,7 @@ def service_detail(request, id, service_id):
             "average_rating": average_rating,
             "is_liked": is_liked,
             "unread_notifications": unread_notifications,  # 傳遞未讀通知到模板
+            "tags": tags,
         },
     )
 

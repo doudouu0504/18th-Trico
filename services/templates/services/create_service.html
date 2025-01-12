@@ -1,6 +1,9 @@
-{% extends "shared/layout.html" %} {% block content %} 
+{% extends "shared/layout.html" %} {% block content %}
 
-<div class="w-3/5 mx-auto my-8 bg-blue-100 p-6 rounded-lg shadow-md" data-page="toggling_plan">
+<div
+  class="w-3/5 mx-auto my-8 bg-blue-100 p-6 rounded-lg shadow-md"
+  data-page="toggling_plan"
+>
   <h1 class="text-3xl font-bold text-blue-700 text-center mb-6">新增服務</h1>
   <form method="post" enctype="multipart/form-data" class="space-y-10">
     {% csrf_token %}
@@ -58,12 +61,52 @@
           >
         </label>
         {% endfor %}
-      </div>
+      </div> 
       {% if form.category.errors %}
       <p class="text-red-500 text-sm">*請選擇您的服務分類(可複選)</p>
       {% endif %}
     </div>
 
+    <!-- Tags Field -->
+    <div x-data="{ tags: [], newTag: '' }" class="flex flex-col space-y-2 mt-4">
+      <label for="tags" class="text-gray-700 font-medium">標籤：</label>
+
+      <!-- 輸入標籤的欄位 -->
+      <input
+        type="text"
+        x-model="newTag"
+        @keydown.enter.prevent="
+          if (newTag.trim() !== '' && !tags.includes(newTag.trim())) {
+              tags.push(newTag.trim());
+              newTag = '';
+          }
+      "
+        placeholder="輸入標籤並按 Enter"
+        class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 w-full"
+      />
+
+      <!-- 已輸入的標籤顯示 -->
+      <div class="flex flex-wrap gap-2 mt-2">
+        <template x-for="(tag, index) in tags" :key="index">
+          <div
+            class="flex items-center bg-blue-500 text-white text-sm px-3 py-1 rounded-full"
+          >
+            <span x-text="tag"></span>
+            <button
+              type="button"
+              @click="tags.splice(index, 1)"
+              class="ml-2 text-white hover:text-red-300 focus:outline-none"
+            >
+              ✖
+            </button>
+          </div>
+        </template>
+      </div>
+
+      <template x-for="tag in tags" :key="tag">
+        <input type="hidden" name="tags" :value="tag" />
+      </template>
+    </div>
 
     <!-- Photo Upload Field -->
     <div class="flex flex-col space-y-2">
@@ -82,9 +125,11 @@
       <!-- Standard Plan Fields -->
       <div class="m-2 pt-4 p-4 bg-gray-300 rounded-md w-1/2 space-y-2">
         <h2 class="text-lg font-semibold text-gray-700 mb-4">一般方案</h2>
-    
+
         <div class="flex flex-col space-y-2">
-          <label for="standard_title" class="text-gray-700 font-medium">名稱：</label>
+          <label for="standard_title" class="text-gray-700 font-medium"
+            >名稱：</label
+          >
           <input
             type="text"
             id="standard_title"
@@ -97,22 +142,28 @@
           <p class="text-red-500 text-sm">*請填寫一般方案名稱</p>
           {% endif %}
         </div>
-    
+
         <div class="flex flex-col space-y-2">
-          <label for="standard_description" class="text-gray-700 font-medium">描述：</label>
+          <label for="standard_description" class="text-gray-700 font-medium"
+            >描述：</label
+          >
           <textarea
             id="standard_description"
             name="standard_description"
             class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 h-20"
             placeholder="一般方案描述"
-          >{{ form.standard_description.value|default_if_none:'' }}</textarea>
+          >
+{{ form.standard_description.value|default_if_none:'' }}</textarea
+          >
           {% if form.standard_description.errors %}
           <p class="text-red-500 text-sm">*請填寫一般方案描述</p>
           {% endif %}
         </div>
-    
+
         <div class="flex flex-col space-y-2">
-          <label for="standard_price" class="text-gray-700 font-medium">價格：</label>
+          <label for="standard_price" class="text-gray-700 font-medium"
+            >價格：</label
+          >
           <input
             type="number"
             id="standard_price"
@@ -125,9 +176,11 @@
           <p class="text-red-500 text-sm">*請填寫一般方案價格</p>
           {% endif %}
         </div>
-    
+
         <div class="flex flex-col space-y-2">
-          <label for="standard_delivery_time" class="text-gray-700 font-medium">交付時間 (天)：</label>
+          <label for="standard_delivery_time" class="text-gray-700 font-medium"
+            >交付時間 (天)：</label
+          >
           <input
             type="number"
             id="standard_delivery_time"
@@ -141,13 +194,18 @@
           {% endif %}
         </div>
       </div>
-    
+
       <!-- Premium Plan Fields -->
-      <div class="m-2 pt-4 bg-gray-300 p-4 rounded-md w-1/2 {% if form.premium_title.value %}block{% else %}hidden{% endif %} space-y-2" id="premium-plan-container">
+      <div
+        class="m-2 pt-4 bg-gray-300 p-4 rounded-md w-1/2 {% if form.premium_title.value %}block{% else %}hidden{% endif %} space-y-2"
+        id="premium-plan-container"
+      >
         <h2 class="text-lg font-semibold text-gray-700 mb-4">專業方案</h2>
-    
+
         <div class="flex flex-col space-y-2">
-          <label for="premium_title" class="text-gray-700 font-medium">名稱：</label>
+          <label for="premium_title" class="text-gray-700 font-medium"
+            >名稱：</label
+          >
           <input
             type="text"
             name="premium_title"
@@ -159,21 +217,27 @@
           <p class="text-red-500 text-sm">*請填寫專業方案名稱</p>
           {% endif %}
         </div>
-    
+
         <div class="flex flex-col space-y-2">
-          <label for="premium_description" class="text-gray-700 font-medium">描述：</label>
+          <label for="premium_description" class="text-gray-700 font-medium"
+            >描述：</label
+          >
           <textarea
             name="premium_description"
             class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 h-20"
             placeholder="專業方案描述"
-          >{{ form.premium_description.value|default_if_none:'' }}</textarea>
+          >
+{{ form.premium_description.value|default_if_none:'' }}</textarea
+          >
           {% if form.premium_description.errors %}
           <p class="text-red-500 text-sm">*請填寫專業方案描述</p>
           {% endif %}
         </div>
-    
+
         <div class="flex flex-col space-y-2">
-          <label for="premium_price" class="text-gray-700 font-medium">價格：</label>
+          <label for="premium_price" class="text-gray-700 font-medium"
+            >價格：</label
+          >
           <input
             type="number"
             name="premium_price"
@@ -185,9 +249,11 @@
           <p class="text-red-500 text-sm">*請填寫專業方案價格</p>
           {% endif %}
         </div>
-    
+
         <div class="flex flex-col space-y-2">
-          <label for="premium_delivery_time" class="text-gray-700 font-medium">交付時間 (天)：</label>
+          <label for="premium_delivery_time" class="text-gray-700 font-medium"
+            >交付時間 (天)：</label
+          >
           <input
             type="number"
             name="premium_delivery_time"
@@ -202,28 +268,31 @@
       </div>
     </div>
 
-  <!-- Button to Add/Remove Premium Plan --> 
-  <div class="flex justify-start mt-6 space-x-4"> 
-    <button 
-      type="button" 
-      id="toggle-premium-plan-btn" 
-      class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300">新增專業方案</button> 
-  </div> 
-  <div class="flex justify-end mt-6 space-x-4"> 
-    <a 
-      href="{% url 'services:freelancer_dashboard' id=request.user.id %}" 
-      class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded transition"> 
-      取消新增 
-    </a> 
-    <button 
-      type="submit" 
-      class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition"> 
-      存檔 
-    </button> 
-  </div> 
-</form> 
-</div> 
+    <!-- Button to Add/Remove Premium Plan -->
+    <div class="flex justify-start mt-6 space-x-4">
+      <button
+        type="button"
+        id="toggle-premium-plan-btn"
+        class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300"
+      >
+        新增專業方案
+      </button>
+    </div>
+    <div class="flex justify-end mt-6 space-x-4">
+      <a
+        href="{% url 'services:freelancer_dashboard' id=request.user.id %}"
+        class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded transition"
+      >
+        取消新增
+      </a>
+      <button
+        type="submit"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition"
+      >
+        存檔
+      </button>
+    </div>
+  </form>
+</div>
 
 {% endblock %}
-
-

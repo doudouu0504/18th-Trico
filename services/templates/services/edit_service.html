@@ -59,6 +59,45 @@
       {% endif %}
     </div>
 
+    <!-- Tags Field -->
+    <div x-data="{ tags: {{ tags|safe|default:'[]' }}, newTag: '' }" class="flex flex-col space-y-2 mt-4">
+      <label for="tags" class="text-gray-700 font-medium">標籤：</label>
+
+      <!-- ✅ 標籤輸入欄位 -->
+      <input
+          type="text"
+          x-model="newTag"
+          @keydown.enter.prevent="
+              if (newTag.trim() !== '' && !tags.includes(newTag.trim())) {
+                  tags.push(newTag.trim());
+                  newTag = '';
+              }
+          "
+          placeholder="輸入標籤並按 Enter"
+          class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 w-full"
+      />
+
+      <!-- ✅ 已輸入的標籤顯示 -->
+      <div class="flex flex-wrap gap-2 mt-2">
+          <template x-for="(tag, index) in tags" :key="index">
+              <div class="flex items-center bg-blue-500 text-white text-sm px-3 py-1 rounded-full">
+                  <span x-text="tag"></span>
+                  <button
+                      type="button"
+                      @click="tags.splice(index, 1)"
+                      class="ml-2 text-white hover:text-red-300 focus:outline-none">
+                      ✖
+                  </button>
+              </div>
+          </template>
+      </div>
+
+      <!-- ✅ 隱藏的 input 用於 Django 表單提交 -->
+      <template x-for="tag in tags" :key="tag">
+          <input type="hidden" name="tags" :value="tag">
+      </template>
+    </div>
+
     <!-- Photo Upload Field -->
     <div class="flex flex-col space-y-2">
       <label for="photo" class="text-gray-700 font-medium">作品圖片</label>
