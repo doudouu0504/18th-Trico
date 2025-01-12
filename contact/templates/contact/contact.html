@@ -12,9 +12,12 @@
                 <input id="name" name="name" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-black focus:border-black" required>
             </div>
             <div>
-                <label for="email" class="block text-sm font-medium text-black">電子郵件</label>
-                <input id="email" name="email" type="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-black focus:border-black" required>
-            </div>
+    <label for="email" class="block text-sm font-medium">電子郵件</label>
+    <input id="email" name="email" type="email" 
+        value="{{ form.initial.email|default_if_none:'' }}"
+        class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-black dark:text-white shadow-sm focus:ring-blue-500 focus:border-blue-500" 
+        required>
+</div>
             <div>
                 <label for="message" class="block text-sm font-medium text-black">訊息內容</label>
                 <textarea id="message" name="message" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-black focus:border-black" required></textarea>
