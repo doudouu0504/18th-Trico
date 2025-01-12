@@ -18,6 +18,8 @@ from services.models import Like
 from order.models import Order
 from django.http import JsonResponse
 from notification.models import Notification
+from django.core.paginator import Paginator
+from django.db.models import Sum
 
 
 def register(request):
@@ -276,4 +278,19 @@ def freelancer_financial(request):
     orders = Order.objects.filter(service__freelancer_user=request.user).order_by(
         "-order_date"
     )
-    return render(request, "users/freelancer_financial.html", {"orders": orders})
+
+    status = request.GET.get("status")
+    if status:
+        orders = orders.filter(status=status)
+
+    total_income = orders.aggregate(total=Sum("total_price"))["total"] or 0
+
+    paginator = Paginator(orders, 10)
+    page_number = request.GET.get("page")
+    orders = paginator.get_page(page_number)
+
+    return render(
+        request,
+        "users/freelancer_financial.html",
+        {"orders": orders, "total_income": total_income},
+    )

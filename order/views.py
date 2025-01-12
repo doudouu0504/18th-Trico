@@ -112,17 +112,30 @@ def create_order(request):
 def ecpay_return(request):
     if request.method == "POST":
         data = request.POST.dict()
-        check_mac = data.pop("CheckMacValue", None)
 
-        if check_mac == generate_check_mac_value(data, HASH_KEY, HASH_IV):
+        # 模擬測試環境返回成功的 RtnCode
+        if settings.DEBUG:  # 僅在測試環境下生效
+            data["RtnCode"] = "1"
+
+        print("Received Data with Mocked RtnCode:", data)
+
+        # 以下保留你的邏輯
+        received_mac = data.get("CheckMacValue")
+        if "CheckMacValue" in data:
+            del data["CheckMacValue"]
+
+        generated_mac = generate_check_mac_value(data, HASH_KEY, HASH_IV)
+        if received_mac == generated_mac:
             merchant_trade_no = data.get("MerchantTradeNo")
-            order_id = int(merchant_trade_no.replace("ORDER", ""))
-            order = get_object_or_404(Order, id=order_id)
-            if data.get("RtnCode") == "1":
-                order.status = "Paid"
-                order.save()
+            order = get_object_or_404(Order, merchant_trade_no=merchant_trade_no)
+            if data["RtnCode"] == "1":
+                order.mark_as_paid()
                 return HttpResponse("OK")
-        return HttpResponse("CheckMacValue Failed")
+            else:
+                return HttpResponse("Payment Failed")
+        else:
+            return HttpResponse("CheckMacValue Failed")
+    return HttpResponse("Invalid request method.")
 
 
 @csrf_exempt
