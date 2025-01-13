@@ -1,5 +1,5 @@
 {% load static %}
-<div class="flex bg-white navbar border-b border-gray-300">
+<div class="flex bg-white border-b border-gray-300 navbar">
   <div class="flex-1 h-16 item-center sm:px-5">
     <a class="btn btn-ghost" href="{% url 'pages:home' %}">
       <img src="{% static 'images/logo.png' %}" alt="三合" class="h-10 w-25" />
@@ -10,7 +10,7 @@
   </div>
   
   {% if request.resolver_match.view_name != 'users:login' and request.resolver_match.view_name != 'users:register' %}
-  <div class="shrink-0 h-16 w-32 justify-center items-center basis-2/4">
+  <div class="items-center justify-center w-32 h-16 shrink-0 basis-2/4">
     <div class="relative flex items-center w-full max-w-xl">
       <form action="{% url 'search' %}" method="get" class="relative flex items-center w-full max-w-xl">
   <input 
@@ -58,7 +58,7 @@
       </label>
       <div tabindex="0" class="dropdown-content card card-compact bg-white dark:bg-gray-800 shadow-lg w-96 py-4 px-6 z-50">
         <div class="card-body">
-          <span class="font-bold text-lg text-gray-800 dark:text-gray-200">未讀通知：</span>
+          <span class="text-lg font-bold text-gray-800 dark:text-gray-200">未讀通知：</span>
           <ul class="divide-y divide-gray-300 dark:divide-gray-700">
             {% if unread_notifications %}
               {% for notification in unread_notifications %}
@@ -91,7 +91,6 @@
       </div>
       <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
         <li><a href="{% url 'users:user_dashboard' %}" class="justify-between">個人資料</a></li>
-        <li><a>設定</a></li>
         <li><a href="{% url 'contact:contact' %}">聯繫客服</a></li>
         <li><a href="{% url 'pages:about' %}">關於我們</a></li>
         <li><a hx-post="{% url 'users:logout' %}" hx-trigger="click" hx-swap="none">登出</a></li>
