@@ -1,5 +1,8 @@
 {% extends "shared/layout.html" %}
 {% block content %}
+<style>
+  [x-cloak] { display: none !important; }
+</style>
 <div class="bg-blue-900 font-sans" data-page="switching_tab">
   <div class="container mx-auto py-10 px-[10%]">
     <!-- 回上一頁按鈕 -->
@@ -336,7 +339,5 @@
       .catch((error) => console.error("Error:", error));
   });
 </script>
-<style>
-  [x-cloak] { display: none; }
-</style>
+
 {% endblock %}
