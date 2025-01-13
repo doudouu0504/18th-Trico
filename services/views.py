@@ -10,6 +10,7 @@ import json
 from django.http import JsonResponse
 from notification.utils import send_notification
 from notification.models import Notification
+from .permissions import has_permission
 
 
 def has_permission(request, id):
@@ -62,7 +63,11 @@ def create_service(request, id):
     return render(
         request,
         "services/create_service.html",
-        {"form": form, "categories": categories},
+        {
+            "form": form,
+            "categories": categories,
+            "show_loading": True,  # 傳遞顯示 loading 的標記到模板
+        },
     )
 
 
@@ -87,7 +92,11 @@ def edit_service(request, id, service_id):
     return render(
         request,
         "services/edit_service.html",
-        {"form": form, "categories": categories},
+        {
+            "form": form,
+            "categories": categories,
+            "show_loading": True,  # 傳遞顯示 loading 的標記到模板
+        },
     )
 
 
