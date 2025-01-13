@@ -58,7 +58,7 @@
     
         <!-- 接案者介紹:描述 -->
         <p class="text-gray-700 mb-4 text-lg">
-            {{ service.description }}
+          {{ service.description |safe }}
         </p>
         
         <!-- 標籤 -->
@@ -318,11 +318,79 @@
   </div>
 </div>
 <script>
-  document.getElementById("toggle-like-btn").addEventListener("click", function () {
-    const serviceId = this.getAttribute("data-service-id");
-    const url = `/services/like/${serviceId}/`;
-    const likeButton = this;
-    const likeIcon = document.getElementById("like-icon");
+  ClassicEditor
+    .create(editorElement, {
+      plugins: [ MediaEmbed, ... ],
+      mediaEmbed: {
+        providers: [
+          {
+            name: "all",
+            url: /^youtube\.com\/media\/(\w+)/,
+            html: match => `
+              <div style="position:relative; padding-bottom:100%; height:0;">
+                <iframe src="..." frameborder="0" 
+                    style="position:absolute; width:100%; height:100%; top:0; left:0;">
+                </iframe>
+              </div>
+            `
+          }
+        ]
+      }
+    })
+    .then(editor => {
+        console.log("Editor was initialized successfully:", editor);
+    })
+    .catch(error => {
+        console.error("An error occurred during editor initialization:", error);
+    });
+</script>
+<script>
+  document.querySelectorAll("oembed").forEach(oembed => {
+    const url = oembed.getAttribute("url");
+    const iframe = document.createElement("iframe");
+    iframe.setAttribute("src", url.replace("watch?v=", "embed/"));
+    iframe.setAttribute("width", "100%");
+    iframe.setAttribute("height", "315");
+    iframe.setAttribute("frameborder", "0");
+    iframe.setAttribute("allowfullscreen", true);
+    oembed.parentElement.replaceChild(iframe, oembed);
+  });
+
+</script>
+
+<script>
+  // 切換方案顯示
+  planSelect.addEventListener("change", function () {
+    const isPremiumEmpty =
+      premiumSection === null || premiumSection.querySelectorAll("*").length === 0;
+
+    if (this.value === "standard") {
+      standardSection.classList.remove("hidden");
+      premiumSection.classList.add("hidden");
+      termsSection.classList.add("hidden");
+    } else if (this.value === "premium") {
+      if (!isPremiumEmpty) {
+        // 如果 premiumSection 不是空的，顯示它
+        premiumSection.classList.remove("hidden");
+        standardSection.classList.add("hidden");
+        termsSection.classList.add("hidden");
+      } else {
+        // 如果 premiumSection 是空的，提示用戶或默認顯示 standard
+        alert("Premium section 尚未填寫內容");
+        standardSection.classList.remove("hidden");
+        premiumSection.classList.add("hidden");
+        termsSection.classList.add("hidden");
+      }
+    }
+  });
+
+</script>
+<script>
+    document.getElementById("toggle-like-btn").addEventListener("click", function () {
+        const serviceId = this.getAttribute("data-service-id");
+        const url = `/services/like/${serviceId}/`;
+        const likeButton = this;
+        const likeIcon = document.getElementById("like-icon");
 
     fetch(url, {
       method: "POST",
