@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from categories.models import Category
 from utils.mixins import WebPImageModelMixin
+from taggit.managers import TaggableManager
 
 
 class Service(WebPImageModelMixin, models.Model):
@@ -41,6 +42,8 @@ class Service(WebPImageModelMixin, models.Model):
         default=None,
         help_text="Client rating for the service (e.g., 4.5 stars)",
     )
+
+    tags = TaggableManager()    
 
     def __str__(self):
         return self.title
