@@ -17,17 +17,23 @@ urlpatterns = [
     path("categories/", include("categories.urls")),
     path("comments/", include("comments.urls")),
     path("api/", include("common.urls")),
-    path("", include("ckeditor.urls")), 
-
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path("ckeditor/", include("ckeditor.urls")), 
+    path("contact/", include("contact.urls")),
+    path("search/", include("search.urls")),
+    path("notification/", include("notification.urls")),
+]
 
 handler404 = custom_404
 
 urlpatterns += [
-    re_path(r"^(?!admin|users|accounts|order|services|categories|comments|api|/).*", vue404_page),
+    re_path(
+        r"^(?!admin|users|accounts|order|services|categories|comments|api|/).*",
+        vue404_page,
+    ),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 
