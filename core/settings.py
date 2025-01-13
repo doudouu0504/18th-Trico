@@ -2,6 +2,11 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 from ckeditor import *
+
+import environ
+env = environ.Env()
+environ.Env.read_env()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -10,7 +15,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-z5h2!)31w&8z!twedc-t#ktq@@z1mll51vu-2e+kehaykdr^f_"
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -19,6 +24,13 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     "*",
+
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://trico.zeabur.app',  
+    'http://127.0.0.1:8000',
+    f"https://{env('HOSTNAME')}"
 ]
 
 
@@ -31,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_fsm",
     "users",
     "pages",
     "order",
@@ -39,7 +52,9 @@ INSTALLED_APPS = [
     "common",
     "comments",
     "django_ckeditor_5",
-
+    "contact",
+    "search",
+    "notification",
 ]
 INSTALLED_APPS += [
     "django.contrib.sites",
@@ -99,7 +114,7 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "TEMPLATES"],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -107,6 +122,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "notification.context_processors.unread_notifications",
             ],
         },
     },
@@ -120,12 +136,12 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "db_trico",
-        "USER": "postgres",
-        "PASSWORD": "postgres",
-        "HOST": "localhost",
-        "PORT": "5432",
+        "ENGINE": os.getenv("DB_ENGINE"),
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST"),
+        "PORT": os.getenv("DB_PORT"),
     }
 }
 
@@ -242,3 +258,27 @@ PROTOCOL = os.getenv("PROTOCOL", "http")  # 開發環境使用 http，生產使�
 
 
 
+
+
+line_pay_hostname = env('HOSTNAME')
+
+# 綠界金流相關配置
+MERCHANT_ID = os.getenv("MERCHANT_ID")
+HASH_KEY = os.getenv("HASH_KEY")
+HASH_IV = os.getenv("HASH_IV")
+ECPAY_URL = os.getenv("ECPAY_URL")
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+LINE_CALLBACK_URL = os.getenv(
+    "LINE_CALLBACK_URL", "http://localhost:8000/accounts/line/login/callback/"
+)
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get("GOOGLE_CLIENT_ID")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get("GOOGLE_SECRET")
+
+# Google OAuth 回呼網址 (自動適應本地與 Zeabur)
+DOMAIN = os.environ.get("DEFAULT_DOMAIN", "127.0.0.1:8000")
+PROTOCOL = os.environ.get("PROTOCOL", "http")
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = (
+    f"{PROTOCOL}://{DOMAIN}/accounts/google/login/callback/"
+)
