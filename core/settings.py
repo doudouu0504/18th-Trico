@@ -4,7 +4,7 @@ from pathlib import Path
 
 import environ
 env = environ.Env()
-environ.Env.read_env()
+environ.Env.read_env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,8 +27,8 @@ ALLOWED_HOSTS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://trico.zeabur.app",
-    "http://127.0.0.1:8000",
+    'https://trico.zeabur.app',  
+    'http://127.0.0.1:8000',
     f"https://{env('HOSTNAME', default='localhost')}",
 ]
 
