@@ -10,7 +10,7 @@
   </div>
   
   {% if request.resolver_match.view_name != 'users:login' and request.resolver_match.view_name != 'users:register' %}
-  <div class="items-center justify-center w-32 h-16 shrink-0 basis-2/4">
+  <div class="shrink-0 h-16 w-52 justify-center items-center md:basis-2/4">
     <div class="relative flex items-center w-full max-w-xl">
       <form action="{% url 'search' %}" method="get" class="relative flex items-center w-full max-w-xl">
   <input 
@@ -33,9 +33,9 @@
 
   <div class="flex flex-1 h-16 justify-end items-center sm:px-5">
     {% if user.is_authenticated %}
-    <h1 class="pr-8 hidden md:block">{{ user.username }} 歡迎回來!!!~~</h1>
+    <h1 class="pr-8 hidden lg:block">{{ user.username }} 歡迎回來!!!~~</h1>
     {% else %}
-    <h1 class="pr-8 hidden md:block">歡迎來到我們的網站!</h1>
+    <h1 class="flex flex-wrap hidden lg:block break-words w-20">歡迎來到我們的網站!</h1>
     {% endif %}
 
     {% if user.is_authenticated %}
@@ -97,8 +97,8 @@
       </ul>
     </div>
     {% else %}
-    <div class="flex justify-center space-x-8">
-      <ul class="flex space-x-8 list-none">
+    <div class="flex">
+      <ul class="flex list-none gap-3 sm:pl-6 pl-3">
         <li><a href="{% url 'users:login' %}" class="text-lg">登入</a></li>
         <li><a href="{% url 'users:register' %}" class="text-lg">註冊</a></li>
       </ul>
