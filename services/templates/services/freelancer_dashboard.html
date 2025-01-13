@@ -71,19 +71,21 @@
           
   
         </div>
-        <div class="relative flex items-center text-gray-400 text-xs font-medium overflow-hidden w-full bg-gray-200  shadow-inner">
-          <!-- 左側標籤 -->
-          <span class="flex-1 px-4 py-2 text-center bg-blue-100 z-10">
-            建立日期<br>{{ service.created_at|date:"Y/m/d H:i" }}
-          </span>
+        <div class="relative flex flex-col text-gray-400 text-xs font-medium overflow-hidden w-full bg-gray-200 shadow-inner">
+          <!-- 上方標籤 -->
+          <div class="w-full flex px-6 py-2 bg-blue-200 z-10">
+            <span class="flex-none">建立日期</span>
+            <span class="ml-auto">{{ service.created_at|date:"Y/m/d H:i" }}</span>
+          </div>
         
-          <!-- 斜線分隔 -->
-          <div class="absolute inset-y-0 left-1/2 w-2 bg-white transform -skew-x-12 z-20"></div>
+          <!-- 分隔線 -->
+          <div class="w-full h-px bg-gray-300"></div>
         
-          <!-- 右側標籤 -->
-          <span class="flex-1 px-4 py-2 text-center bg-blue-100 z-10">
-            最近一次修改日期<br>{{ service.updated_at|date:"Y/m/d H:i" }}
-          </span>
+          <!-- 下方標籤 -->
+          <div class="w-full flex px-6 py-2 bg-blue-200 z-10">
+            <span class="flex-none">最近一次修改日期</span>
+            <span class="ml-auto">{{ service.updated_at|date:"Y/m/d H:i" }}</span>
+          </div>
         </div>
         
         
