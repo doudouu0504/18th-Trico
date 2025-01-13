@@ -13,6 +13,7 @@ from .views import (
     switch_role,
     feedback_view,
     mark_as_read_and_redirect,
+    freelancer_financial,
 )
 
 app_name = "users"
@@ -47,4 +48,5 @@ urlpatterns = [
         mark_as_read_and_redirect,
         name="mark_as_read_and_redirect",
     ),
+    path("freelancer_financial/", freelancer_financial, name="freelancer_financial"),
 ]

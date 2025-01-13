@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login as login_user, logout as logout_user
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -15,8 +15,11 @@ from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
 from comments.models import Comment
 from services.models import Like
-from django.http import JsonResponse, HttpResponse
+from order.models import Order
+from django.http import JsonResponse
 from notification.models import Notification
+from django.core.paginator import Paginator
+from django.db.models import Sum
 
 
 def register(request):
@@ -237,9 +240,13 @@ def feedback_view(request):
             service__freelancer_user=request.user, is_deleted=False
         ).select_related("user", "service")
         likes_received = Like.objects.filter(service__freelancer_user=request.user)
+        likes_given = Like.objects.filter(
+            user=request.user
+        )  
         context = {
             "comments_received": comments_received,
             "likes_received": likes_received,
+            "likes_given": likes_given,
             "role": "freelancer",
         }
     else:
@@ -268,3 +275,26 @@ def mark_as_read_and_redirect(request, notification_id):
         return HttpResponse("", headers={"HX-Redirect": notification.get_target_url()})
 
     return JsonResponse({"status": "unauthorized"}, status=401)
+
+
+@login_required
+def freelancer_financial(request):
+    orders = Order.objects.filter(service__freelancer_user=request.user).order_by(
+        "-order_date"
+    )
+
+    status = request.GET.get("status")
+    if status:
+        orders = orders.filter(status=status)
+
+    total_income = orders.aggregate(total=Sum("total_price"))["total"] or 0
+
+    paginator = Paginator(orders, 10)
+    page_number = request.GET.get("page")
+    orders = paginator.get_page(page_number)
+
+    return render(
+        request,
+        "users/freelancer_financial.html",
+        {"orders": orders, "total_income": total_income},
+    )
