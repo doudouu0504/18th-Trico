@@ -58,10 +58,12 @@ def create_service(request, id):
             selected_categories = request.POST.getlist("category")
             service.category.set(selected_categories)
 
-            tags = request.POST.getlist("tags")
-            if tags:
-                service.tags.add(*tags)
-            
+            tags_input = request.POST.get("tags", "")
+            if tags_input:
+                service.tags.set([tag.strip() for tag in tags_input.split(',') if tag.strip()])
+            else:
+                service.tags.clear()
+                        
             form.save_m2m()
             return redirect("services:freelancer_dashboard", id=id)
     else:
@@ -93,6 +95,13 @@ def edit_service(request, id, service_id):
             form.save()
             selected_categories = request.POST.getlist("category")
             service.category.set(selected_categories)
+
+            tags_input = request.POST.get("tags", "")
+            if tags_input:
+                service.tags.set([tag.strip() for tag in tags_input.split(',') if tag.strip()])
+            else:
+                service.tags.clear()
+
             return redirect("services:freelancer_dashboard", id=id)
     else:
         form = ServiceForm(instance=service)
@@ -142,6 +151,9 @@ def service_detail(request, id, service_id):
     service = get_object_or_404(Service, id=service_id)
 
     tags = service.tags.all()
+
+    print("服務ID:", service_id)
+    print("標籤列表:", list(tags)) 
     
     comments = Comment.objects.filter(service=service, is_deleted=False).order_by(
         "-created_at"
