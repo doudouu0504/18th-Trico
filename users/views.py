@@ -237,9 +237,13 @@ def feedback_view(request):
             service__freelancer_user=request.user, is_deleted=False
         ).select_related("user", "service")
         likes_received = Like.objects.filter(service__freelancer_user=request.user)
+        likes_given = Like.objects.filter(
+            user=request.user
+        )  
         context = {
             "comments_received": comments_received,
             "likes_received": likes_received,
+            "likes_given": likes_given,
             "role": "freelancer",
         }
     else:

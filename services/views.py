@@ -10,6 +10,7 @@ import json
 from django.http import JsonResponse
 from notification.utils import send_notification
 from notification.models import Notification
+from .permissions import has_permission
 
 
 def has_permission(request, id):
@@ -69,7 +70,11 @@ def create_service(request, id):
     return render(
         request,
         "services/create_service.html",
-        {"form": form, "categories": categories},
+        {
+            "form": form,
+            "categories": categories,
+            "show_loading": True,  # 傳遞顯示 loading 的標記到模板
+        },
     )
 
 
@@ -95,7 +100,12 @@ def edit_service(request, id, service_id):
     return render(
         request,
         "services/edit_service.html",
-        {"form": form, "categories": categories, "tags": tags},
+        {
+            "form": form,
+            "categories": categories,
+            "show_loading": True, # 傳遞顯示 loading 的標記到模板
+            "tags": tags  
+        },
     )
 
 
@@ -204,8 +214,11 @@ def service_detail(request, id, service_id):
     )
 
 
-@login_required
 def toggle_like(request, service_id):
+    # 檢查用戶是否已登入
+    if not request.user.is_authenticated:
+        return JsonResponse({"login_required": True})
+
     # 確保服務存在
     service = get_object_or_404(Service, id=service_id)
 
@@ -220,6 +233,7 @@ def toggle_like(request, service_id):
         # 未點過愛心，則新增
         Like.objects.create(user=request.user, service=service)
         is_liked = True
+
         # 發送通知
         if service.freelancer_user != request.user:  # 不通知自己
             send_notification(

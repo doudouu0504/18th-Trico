@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from services.models import Service, Category
 from taggit.models import Tag
 
+from django.db.models import Avg
 
 # Create your views here.
 
@@ -13,7 +14,7 @@ def all(request):
 
 def category(request, id):
     category = get_object_or_404(Category, id=id)
-    services = Service.objects.filter(category__id=id)
+    services = Service.objects.filter(category__id=id).annotate(average_rating=Avg("comments__rating"))
     return render(
         request,
         "categories/category.html",
