@@ -33,9 +33,7 @@
   </div>
 
   <!-- 卡牌區域 -->
-  
-  <div class="services grid grid-cols-1 md:grid-cols-4 gap-6">
-    
+  <div class="services grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 container mx-auto">
     {% if services %}
       {% for service in services %}
       <div
@@ -43,13 +41,13 @@
       >
         <a href="{% url 'services:service_detail' service.freelancer_user.id service.id %}">
           <img
-          class="w-full h-48 object-cover"
-          src="{% if service.photo %}{{ service.photo.url }}{% else %}https://fakeimg.pl/300{% endif %}"
-          alt="Service Photo"
-        />
+            class="w-full h-48 object-cover"
+            src="{% if service.photo %}{{ service.photo.url }}{% else %}https://fakeimg.pl/300{% endif %}"
+            alt="Service Photo"
+          />
         </a>
         <div class="p-4 flex">
-          <h2 class="text-xl font-bold text-blue-800 truncate">{{ service.title }}</h2><br>
+          <h2 class="text-xl font-bold text-blue-800 truncate">{{ service.title }}</h2>
         </div>
         <div class="p-3 text-right">
           <div class="mt-2 flex-auto space-x-4 justify-end management-buttons hidden">
@@ -68,36 +66,31 @@
               刪除
             </a>
           </div>
-          
+        </div>
   
-        </div>
-        <div class="relative flex flex-col text-gray-400 text-xs font-medium overflow-hidden w-full bg-gray-200 shadow-inner">
+        <div class="relative flex flex-col text-white text-xs font-bold overflow-hidden w-full bg-gray-200 shadow-inner">
           <!-- 上方標籤 -->
-          <div class="w-full flex px-6 py-2 bg-blue-200 z-10">
-            <span class="flex-none">建立日期</span>
-            <span class="ml-auto">{{ service.created_at|date:"Y/m/d H:i" }}</span>
+          <div class="w-full flex px-4 py-1 bg-gray-400 z-10">
+            <span class="flex-none"> 建立日期</span>
+            <span class="ml-auto text-right">{{ service.created_at|date:"Y/m/d H:i" }}</span>
           </div>
-        
           <!-- 分隔線 -->
-          <div class="w-full h-px bg-gray-300"></div>
-        
+          <div class="w-full  bg-gray-400"></div>
+
           <!-- 下方標籤 -->
-          <div class="w-full flex px-6 py-2 bg-blue-200 z-10">
-            <span class="flex-none">最近一次修改日期</span>
-            <span class="ml-auto">{{ service.updated_at|date:"Y/m/d H:i" }}</span>
+          <div class="w-full flex px-4 py-1 bg-gray-400 z-10">
+            <span class="flex-none">最近修改日期</span>
+            <span class="ml-auto text-right">{{ service.updated_at|date:"Y/m/d H:i" }}</span>
           </div>
         </div>
-        
-        
-        
-
-        <!-- Comments Section -->
+  
+        <!-- 評論區域 -->
         <div class="p-4 border-t border-gray-300">
           <h4 class="text-blue-700 font-bold">評論:</h4>
           <ul class="text-gray-700 mt-2">
             {% for comment in service.comments.all %}
             <li class="mb-2">
-              <strong>{{ comment.user.username }}</strong> 
+              <strong>{{ comment.user.username }}</strong>
               <span class="text-xs text-gray-500">({{ comment.created_at|date:"Y/m/d H:i" }})</span>: 
               {{ comment.content }}
               {% if comment.user == request.user %}
@@ -120,7 +113,7 @@
             新增評論
           </a>
         </div>
-   
+      </div>
       {% endfor %}
     {% else %}
     <p class="text-center text-gray-700">
@@ -128,6 +121,9 @@
     </p>
     {% endif %}
   </div>
+  
+
+
 </div>
 
 {% endblock %}
