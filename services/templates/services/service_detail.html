@@ -185,27 +185,30 @@
 
 <script>
   ClassicEditor
-	.create( editorElement, {
-		plugins: [ MediaEmbed, ... ],
-		mediaEmbed: {
-			providers: [
-				{
-					 name: "all"
-					 url: /^youtube\.com\/media\/(\w+)/,
-					 html: match =>
-            "<div style="position:relative; padding-bottom:100%; height:0">" +
-            "<iframe src="..." frameborder="0" " +
-            "style="position:absolute; width:100%; height:100%; top:0; left:0">" +
-            "</iframe>" +
-            "</div>"
-				},
-				...
-			]
-		}
-	} )
-	.then( ... )
-	.catch( ... );
-
+    .create(editorElement, {
+      plugins: [ MediaEmbed, ... ],
+      mediaEmbed: {
+        providers: [
+          {
+            name: "all",
+            url: /^youtube\.com\/media\/(\w+)/,
+            html: match => `
+              <div style="position:relative; padding-bottom:100%; height:0;">
+                <iframe src="..." frameborder="0" 
+                    style="position:absolute; width:100%; height:100%; top:0; left:0;">
+                </iframe>
+              </div>
+            `
+          }
+        ]
+      }
+    })
+    .then(editor => {
+        console.log("Editor was initialized successfully:", editor);
+    })
+    .catch(error => {
+        console.error("An error occurred during editor initialization:", error);
+    });
 </script>
 <script>
   document.querySelectorAll("oembed").forEach(oembed => {
