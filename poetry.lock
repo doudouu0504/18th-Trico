@@ -436,6 +436,20 @@ s3 = ["boto3 (>=1.4.4)"]
 sftp = ["paramiko (>=1.15)"]
 
 [[package]]
+name = "django-taggit"
+version = "6.1.0"
+description = "django-taggit is a reusable Django application for simple tagging."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "django_taggit-6.1.0-py3-none-any.whl", hash = "sha256:ab776264bbc76cb3d7e49e1bf9054962457831bd21c3a42db9138b41956e4cf0"},
+    {file = "django_taggit-6.1.0.tar.gz", hash = "sha256:c4d1199e6df34125dd36db5eb0efe545b254dec3980ce5dd80e6bab3e78757c3"},
+]
+
+[package.dependencies]
+Django = ">=4.1"
+
+[[package]]
 name = "idna"
 version = "3.10"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -809,4 +823,4 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.13"
-content-hash = "ed906cdefc112a9afce64db230a3d3f7275a9c61a84a8ffa1c5b0cd438540214"
+content-hash = "4acff521aebe96b266c7bb9bad72eb6f447827bacb1276df31d684bbf4bb0b08"

@@ -22,6 +22,7 @@ class ServiceForm(forms.ModelForm):
             "premium_description",
             "premium_price",
             "premium_delivery_time",
+            "tags",
         ]
         widgets = {
             "category": forms.CheckboxSelectMultiple(),
