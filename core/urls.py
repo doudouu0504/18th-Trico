@@ -17,7 +17,7 @@ urlpatterns = [
     path("categories/", include("categories.urls")),
     path("comments/", include("comments.urls")),
     path("api/", include("common.urls")),
-    path("ckeditor/", include("ckeditor.urls")), 
+    path("", include("ckeditor.urls")), 
     path("contact/", include("contact.urls")),
     path("search/", include("search.urls")),
     path("notification/", include("notification.urls")),
