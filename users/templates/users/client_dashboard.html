@@ -30,7 +30,14 @@
             >評價與回饋</a
           >
         </li>
-        {% comment %}
+        <li>
+    <a
+        href="{% url 'users:likes' %}"
+        class="rounded-lg hover:bg-blue-100 hover:text-[#004fff] cursor-pointer"
+    >
+        愛心收藏
+    </a>
+</li>
         <li><a href="#" class="rounded-lg hover:bg-blue-100">財務管理</a></li>
         {% endcomment %}
       </ul>
