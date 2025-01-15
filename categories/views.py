@@ -34,7 +34,9 @@ def category(request, id):
 
 def tag(request, tag_name):
     tag = get_object_or_404(Tag, name=tag_name)
-    services = Service.objects.filter(tags__name__in=[tag.name])
+    services = Service.objects.filter(tags__name__in=[tag.name]).annotate(
+        average_rating=Avg("comments__rating")
+    )
     for service in services:
         if request.user.is_authenticated:
             service.is_liked = Like.objects.filter(

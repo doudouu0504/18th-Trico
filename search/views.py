@@ -4,8 +4,8 @@ from services.models import Service
 from .forms import SearchForm
 from services.models import Service
 from django.shortcuts import get_object_or_404
-from .models import Search  # 添加這行
 from services.models import Like
+from django.db.models import Avg
 
 
 def service_detail_view(request, pk):
@@ -29,7 +29,7 @@ def search_view(request):
                 )
                 .select_related("freelancer_user")
                 .all()
-            )
+            ).annotate(average_rating=Avg("comments__rating"))
             for service in results:
                 if request.user.is_authenticated:
                     service.is_liked = Like.objects.filter(
