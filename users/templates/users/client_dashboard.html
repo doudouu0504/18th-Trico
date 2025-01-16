@@ -5,11 +5,10 @@
   <aside class="flex flex-col w-full sm:w-64 overflow-hidden bg-emerald-50 border border-1 rounded-lg hover:shadow-md">
     <div class="p-4 text-white bg-emerald-400"><h1 class="text-lg font-bold">業者主控台</h1></div>
     <nav class="grow-0 sm:grow">
-      <ul class="p-4 menu text-base-content grid grid-cols-4 sm:grid-cols-none sm:block gap-2">
+      <ul class="p-4 menu text-base-content grid grid-cols-3 sm:grid-cols-none sm:block gap-2">
         <li><a href="{% url 'users:profile' %}" class="rounded-lg hover:bg-emerald-200 hover:text-gray-500" >更新個人資料</a></li>
         <li><a href="#" class="rounded-lg hover:bg-emerald-200 hover:text-gray-500">發包進度</a></li>
         <li><a href="{% url 'users:feedback' %}" class="rounded-lg hover:bg-emerald-200 hover:text-gray-500">評價與回饋</a></li>
-        <li><a href="#" class="rounded-lg hover:bg-emerald-200 hover:text-gray-500">財務管理</a></li>
       </ul>
     </nav>
     <!-- 轉換成接案者按鈕 -->
@@ -20,7 +19,7 @@
     {% else %}
     <!-- 申請成為接案者按鈕 -->
     <div class="p-4 border-t">
-      <a href="{% url 'users:apply_freelancer' %}" class="block w-full py-2 font-semibold text-center text-white bg-yellow-500 rounded-lg shadow-md hover:bg-yellow-600">申請成為接案者</a>
+      <a href="{% url 'users:apply_freelancer' %}" class="block w-full py-2 font-semibold text-center text-white bg-blue-500 rounded-lg shadow-md hover:bg-sky-600">申請成為接案者</a>
     </div>
     {% endif %}
   </aside>
