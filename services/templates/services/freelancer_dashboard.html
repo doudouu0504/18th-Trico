@@ -71,19 +71,6 @@
                 </a>
               </div>
             </div>
-  
-            <div class="relative flex flex-col text-white text-[9px] font-medium font-mono overflow-hidden w-full bg-gray-800 rounded-lg shadow-lg">
-              <!-- 上方標籤 -->
-              <div class="w-full flex justify-between items-center px-3 py-1 bg-gray-700 border-b border-gray-600">
-                <span class="uppercase truncate">建立日期</span>
-                <span class="whitespace-nowrap">{{ service.created_at|date:"Y/m/d H:i" }}</span>
-              </div>
-              <!-- 下方標籤 -->
-              <div class="w-full flex justify-between items-center px-3 py-1 bg-gray-700 rounded-b-lg">
-                <span class="uppercase truncate">最近修改日期</span>
-                <span class="whitespace-nowrap">{{ service.updated_at|date:"Y/m/d H:i" }}</span>
-              </div>
-            </div>
           </div>
           {% endfor %}
         {% else %}
