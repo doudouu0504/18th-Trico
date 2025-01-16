@@ -77,3 +77,16 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+h1::after {
+    content: "|";
+    animation: blink 0.5s step-end infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+</style>
