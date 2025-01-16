@@ -105,65 +105,6 @@
     </div>
   </div>
 
-  <!-- 您可能會感興趣 -->
-  <div class="main overflow-hidden flex flex-col justify-between bg-white">
-    <div
-      class="visualBox py-6 px-4 my-5 w-full sm:max-w-[600px] md:max-w-[800px] lg:max-w-[1200px] mx-auto bg-gray-100 rounded-lg hover:shadow-lg">
-      <div class="flex flex-col items-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-800 text-center">你可能感興趣</h1>
-      </div>
-      <div class="services grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        {% if services %}
-        {% for service in services %}
-        {% include "pages/service_card.html" %}
-        {% endfor %}
-        {% else %}
-        <p class="text-center text-gray-500 col-span-full">目前沒有服務資料。</p>
-        {% endif %}
-
-        <!-- 顯示填充卡牌 -->
-        {% for _ in placeholders %}
-        <div class="bg-white p-6 border border-gray-200 transition duration-300">
-          <div class="animate-pulse">
-            <div class="h-40 bg-gray-300 rounded-lg mb-4"></div>
-            <div class="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
-            <div class="h-4 bg-gray-300 rounded w-1/2"></div>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-
-  <!-- 評分最高 -->
-  <div class="main overflow-hidden flex flex-col justify-between bg-white">
-    <div
-      class="visualBox py-6 px-4 my-5 w-full sm:max-w-[600px] md:max-w-[800px] lg:max-w-[1200px] mx-auto bg-gray-100 rounded-lg hover:shadow-lg">
-      <div class="flex flex-col items-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-800 text-center">評分最高</h1>
-      </div>
-      <div class="services grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        {% if services %}
-        {% for service in services %}
-        {% include "pages/service_card.html" %}
-        {% endfor %}
-        {% else %}
-        <p class="text-center text-gray-500 col-span-full">目前沒有服務資料。</p>
-        {% endif %}
-
-        <!-- 顯示填充卡牌 -->
-        {% for _ in placeholders %}
-        <div class="bg-white p-6 border border-gray-200 transition duration-300">
-          <div class="animate-pulse">
-            <div class="h-40 bg-gray-300 rounded-lg mb-4"></div>
-            <div class="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
-            <div class="h-4 bg-gray-300 rounded w-1/2"></div>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
 </div>
 <script>
   document.querySelectorAll("[id^='toggle-like-btn-']").forEach((button) => {
