@@ -8,7 +8,7 @@ def home(request):
     categories = Category.objects.prefetch_related("services")
     services = Service.objects.order_by("-created_at").annotate(
         average_rating=Avg("comments__rating")
-    )[:4]
+    )[:12]
 
     # 判斷每個服務是否已被當前用戶點擊愛心
     for service in services:
