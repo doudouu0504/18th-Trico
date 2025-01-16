@@ -35,12 +35,11 @@
         {{ service.title }}
       </p>
       <div class="flex items-center mt-2">
-        <div class="relative w-5 h-5">
-          <div class="absolute w-full h-full bg-black clip-star"></div>
-        </div>
-        <p class="ml-2 text-sm text-gray-500">
-          {{ service.average_rating|floatformat:1 }}
-        </p>
+        {% if service.average_rating %}
+        <p class="text-lg text-gray-500">⭐ {{ service.average_rating|floatformat:1 }}</p>
+    {% else %}
+        <p class="text-lg text-gray-500">⭐ 0.0 </p>
+    {% endif %}
       </div>
       <p class="text-sm font-semibold text-gray-800">
         費用 $<span class="text-lg"> {{service.standard_price}} </span>起

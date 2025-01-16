@@ -8,7 +8,7 @@ def home(request):
     categories = Category.objects.prefetch_related("services")
     services = Service.objects.order_by("-created_at").annotate(
         average_rating=Avg("comments__rating")
-    )[:4]
+    )[:12]
 
     # 判斷每個服務是否已被當前用戶點擊愛心
     for service in services:
@@ -19,7 +19,7 @@ def home(request):
         else:
             service.is_liked = False
 
-    placeholders = max(0, 4 - services.count())
+    placeholders = max(0, 12 - services.count())
 
     # 未讀通知列表
     unread_notifications = []
@@ -38,6 +38,7 @@ def home(request):
             "unread_notifications": unread_notifications,  # 傳遞未讀通知到模板
         },
     )
+
 
 def portfolio_showcase(request):
     return render(request, "pages/portfolio_showcase.html")
