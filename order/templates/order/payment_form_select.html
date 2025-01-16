@@ -1,176 +1,150 @@
 {% extends "shared/layout.html" %} 
 {% block content %} 
-{% comment %} <body class="font-sans bg-blue-900 h-[100%]" > {% endcomment %}
 
-<div class="bg-indigo-300 font-sans min-h-screen" data-page="plan_order_form">
-  <div class="container mx-auto py-11 px-[10%]">
-
-
-      <div class="flex p-6 overflow-hidden bg-white rounded-lg shadow-lg mt-9">
+  <div class="bg-indigo-300 font-sans min-h-screen flex items-center justify-center" data-page="plan_order_form">
+    <div class="container max-w-4xl bg-white shadow-lg rounded-lg p-8 lg:p-12 mx-4 my-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- 左側內容 -->
-        <div class="w-1/2">
-          <h1 class="mb-6 text-2xl font-bold  text-indigo-600"">選擇支付方式</h1>
-
+        <div>
+          <h1 class="text-3xl font-bold text-indigo-600 mb-6">選擇支付方式</h1>
           <form id="payment-form" method="POST" action="{% url 'order:create_order' %}">
             {% csrf_token %}
-            <!-- 隱藏的服務 ID -->
             <input type="hidden" name="service_id" value="{{ service.id }}">
             <input type="hidden" name="plan" value="{{ selected_plan }}">
-
+  
             <!-- 方案選擇 -->
             <div class="mb-6">
-              <label for="plan" class="block mb-2 font-medium text-gray-900"><strong>方案</strong></label>
+              <label for="plan" class="block text-lg font-medium text-gray-900 mb-2">方案</label>
               <select
-              id="plan"
-              name="plan"
-              class="w-full p-3 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onchange="togglePlanView(this.value)"
-          >
-              <option value="standard" 
-                  {% if not service.premium_price or not service.premium_description or not service.premium_delivery_time or selected_plan == "standard" %}
-                      selected
-                  {% endif %}
+                id="plan"
+                name="plan"
+                class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
-                  一般方案
-              </option>
-              {% if service.premium_price and service.premium_description and service.premium_delivery_time %}
-              <option value="premium" {% if selected_plan == "premium" %}selected{% endif %}>
-                  專業方案
-              </option>
-              {% endif %}
-          </select>
-          
-          </div>
-
+                <option value="standard" {% if selected_plan == "standard" %}selected{% endif %}>一般方案</option>
+                {% if service.premium_price %}
+                <option value="premium" {% if selected_plan == "premium" %}selected{% endif %}>專業方案</option>
+                {% endif %}
+              </select>
+            </div>
+  
             <!-- 支付方式 -->
             <div class="mb-6">
-              <label for="payment-method" class="block text-gray-900 font-medium mb-2"><strong>支付方式</strong></label>
+              <label for="payment-method" class="block text-lg font-medium text-gray-900 mb-2">支付方式</label>
               <select
                 id="payment-method"
                 name="payment_method"
-                class="w-full p-3 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                onchange="togglePaymentMethod()"
+                class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="" disabled selected>請選擇</option>
                 <option value="credit_card">信用卡(20萬以下)</option>
                 <option value="atm">ATM 轉帳(5萬以下)</option>
                 <option value="linepay">Line Pay</option>
-                {% comment %} <option value="googlepay">Google Pay</option> {% endcomment %}
                 <option value="barcode">超商條碼(2萬以下)</option>
               </select>
             </div>
-
+  
             <!-- 購買須知 -->
-            <div class="flex items-center mb-4">
+            <div class="flex items-center mb-6">
               <input
                 type="checkbox"
                 id="terms"
-                class="appearance-none h-4 w-4 border border-blue-700 rounded bg-white checked:bg-blue-900 checked:border-blue-300 focus:ring-2 focus:ring-blue-200"
-                onchange="toggleTermsAgreement()"
+                class="h-4 w-4 border border-gray-300 rounded focus:ring-2 focus:ring-indigo-500"
               />
-              <label for="terms" class="ml-2 text-gray-700">
-                我已閱讀並同意購買須知。
-              </label>
+              <label for="terms" class="ml-2 text-gray-700">我已閱讀並同意購買須知。</label>
               <button
                 type="button"
-                class="ml-4 text-blue-500 underline focus:outline-none"
+                class="ml-4 text-indigo-500 underline focus:outline-none"
                 onclick="showTermsModal()"
               >
                 點我閱讀
               </button>
             </div>
-
+  
             <!-- 按鈕區域 -->
-            <div class="flex justify-between mb-4">
+            <div class="flex justify-between">
               <button
                 type="button"
-                class="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline"
+                class="bg-gray-400 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-500"
                 onclick="history.back();"
               >
                 上一步
               </button>
-                <!-- 假按鈕 -->
               <button
-              id="placeholderButton"
-              class="bg-gray-400 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none"
-              disabled
+                type="submit"
+                id="ecpayButton"
+                class="bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-indigo-700"
               >
-              點選付款
-              </button>
-
-              <!-- Line Pay 按鈕 -->
-              <button
-              type="button"
-              id="linepayButton"
-              class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none"
-              onclick="initiateLinePay()"
-              >
-              點選付款
-              </button>
-
-              <!-- 綠界按鈕 -->
-              <button
-              type="submit"
-              id="ecpayButton"
-              class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none"
-              >
-              點選付款
+                點選付款
               </button>
             </div>
-        </form>
+          </form>
         </div>
-
-        <!-- 右側價格與購買須知 -->
-        <div class="w-1/2 bg-gray-50 p-6 border-l">
+  
+        <!-- 右側價格與說明 -->
+        <div class="bg-gray-50 p-6 rounded-lg border">
           <div id="price-section">
-            <!-- Standard Plan -->
             <div id="standard" class="block">
-              <p class="text-4xl font-bold text-gray-800 mb-2">${{ service.standard_price }}</p>
+              <p class="text-4xl font-bold text-gray-800 mb-4">${{ service.standard_price }}</p>
               <p class="text-gray-600 mb-4"><strong>一般方案：</strong>{{ service.standard_description }}</p>
-              <p class="text-sm text-red-500 mb-4">交付時間：{{ service.standard_delivery_time }} 天</p>
+              <p class="text-sm text-red-500">交付時間：{{ service.standard_delivery_time }} 天</p>
             </div>
-            <!-- Premium Plan -->
-            {% if service.premium_price and service.premium_description and service.premium_delivery_time %}
+            {% if service.premium_price %}
             <div id="premium" class="hidden">
-              <p class="text-4xl font-bold text-gray-800 mb-2">${{ service.premium_price }}</p>
+              <p class="text-4xl font-bold text-gray-800 mb-4">${{ service.premium_price }}</p>
               <p class="text-gray-600 mb-4"><strong>專業方案：</strong>{{ service.premium_description }}</p>
-              <p class="text-sm text-red-500 mb-4">交付時間：{{ service.premium_delivery_time }} 天</p>
+              <p class="text-sm text-red-500">交付時間：{{ service.premium_delivery_time }} 天</p>
             </div>
             {% endif %}
           </div>
-
-
         </div>
       </div>
     </div>
   </div>
 
-    <!-- 購買須知彈窗 -->
-    <div id="terms-modal" class="fixed inset-0 bg-indigo-100 bg-opacity-95 flex items-center justify-center hidden z-50">
-      <div class="bg-white w-11/12 max-w-2xl p-8 rounded-lg shadow-xl relative">
-        <button
-          class="absolute top-4 right-4 text-indigo-600-600 hover:text-gray-800 focus:outline-none text-2xl"
-          onclick="closeTermsModal()"
-        >
-          ✕
-        </button>
-        <h2 class="text-3xl font-bold mb-6 text-indigo-600 text-center">購買須知</h2>
-        <div class="text-gray-700 leading-relaxed space-y-4">
-          <p>
-            感謝您選擇三合Trico作為您的接案與服務交易平台！在進行交易前，請詳細閱讀並同意以下購買須知：
-          </p>
-          <ul class="list-disc pl-6 ">
-            <li><strong class="text-indigo-500">平台角色與責任：</strong> 三合Trico僅提供接案者與服務購買者之間的交易媒介，平台不參與交易內容，也不對交易過程中的任何糾紛負法律責任。然而，我們致力於維護交易的公平性，並為雙方提供必要的溝通與協助工具。</li>
-            <li><strong class="text-indigo-500">服務交易流程：</strong> 請在購買前詳細閱讀服務提供者的描述與條款，包括但不限於價格、交付期限、服務內容等。若有疑問，請在下單前通過平台內的訊息系統與服務提供者進行充分溝通，確保對服務內容達成共識。</li>
-            <li><strong class="text-indigo-500">付款與安全：</strong> 所有交易須通過平台的安全付款系統完成，平台不支持或鼓勵任何形式的私下交易。支付款項將暫存於平台，待服務確認完成後再劃轉給服務提供者，確保雙方的交易安全。</li>
-            <li><strong class="text-indigo-500">退款與爭議處理：</strong> 若對服務不滿意，請於服務完成後 5 日內通過平台提交爭議申請，並提供相關證據。我們的仲裁團隊將根據平台規則和雙方提供的材料進行仲裁。過期未提交的爭議將視為交易已完成，平台不再受理相關問題。</li>
-            <li><strong class="text-indigo-500">隱私與數據安全：</strong> 我們承諾保護用戶的個人資料和隱私，所有交易數據僅用於服務所需，並符合相關隱私法規。禁止用戶在平台內分享敏感個人信息，如身份證號碼、銀行賬戶信息等。</li>
-            <li><strong class="text-indigo-500">禁止行為：</strong> 平台禁止任何欺詐、虛假宣傳、侵犯知識產權或其他違反法律的行為。一旦發現，將立即停用相關賬戶並保留追究法律責任的權利。</li>
-          </ul>
-        </div>
+  <div id="terms-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="relative bg-white w-11/12 max-w-lg mx-auto rounded-lg shadow-lg p-6 overflow-y-auto max-h-[90vh]">
+      <!-- 關閉按鈕 -->
+      <button
+        class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 focus:outline-none text-2xl"
+        onclick="closeTermsModal()"
+      >
+        ✕
+      </button>
+      <!-- 標題 -->
+      <h2 class="text-2xl font-bold mb-6 text-indigo-600 text-center">購買須知</h2>
+      <!-- 內容 -->
+      <div class="text-gray-700 leading-relaxed space-y-4">
+        <p>感謝您選擇三合Trico作為您的接案與服務交易平台！在進行交易前，請詳細閱讀並同意以下購買須知：</p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li>
+            <strong class="text-indigo-500">平台角色與責任：</strong>
+            三合Trico僅提供接案者與服務購買者之間的交易媒介，平台不參與交易內容，也不對交易過程中的任何糾紛負法律責任。然而，我們致力於維護交易的公平性，並為雙方提供必要的溝通與協助工具。
+          </li>
+          <li>
+            <strong class="text-indigo-500">服務交易流程：</strong>
+            請在購買前詳細閱讀服務提供者的描述與條款，包括但不限於價格、交付期限、服務內容等。
+          </li>
+          <li>
+            <strong class="text-indigo-500">付款與安全：</strong>
+            所有交易須通過平台的安全付款系統完成。
+          </li>
+          <li>
+            <strong class="text-indigo-500">退款與爭議處理：</strong>
+            若對服務不滿意，請於服務完成後5日內通過平台提交爭議申請。
+          </li>
+          <li>
+            <strong class="text-indigo-500">隱私與數據安全：</strong>
+            我們承諾保護用戶的個人資料和隱私。
+          </li>
+          <li>
+            <strong class="text-indigo-500">禁止行為：</strong>
+            平台禁止任何欺詐、虛假宣傳、侵犯知識產權等行為。
+          </li>
+        </ul>
       </div>
     </div>
-
+  </div>
+  
 <script>
   function showTermsModal() {
     document.getElementById("terms-modal").classList.remove("hidden");
