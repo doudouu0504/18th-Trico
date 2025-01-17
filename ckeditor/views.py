@@ -1,11 +1,9 @@
-
 from django.http import JsonResponse
 from django.conf import settings
 from django.core.files.storage import default_storage
 from PIL import Image
 import os
 from django.views.decorators.csrf import csrf_exempt
-
 
 
 def process_file_for_browse(original_file_path, processed_file_path):
@@ -20,6 +18,7 @@ def process_file_for_browse(original_file_path, processed_file_path):
 
 @csrf_exempt
 def file_upload_view(request):
+
     if request.method == "POST" and request.FILES.get("upload"):
         file = request.FILES["upload"]
 
@@ -34,12 +33,16 @@ def file_upload_view(request):
         # 返回處理後的檔案 URL
         file_url = default_storage.url(f"browse/{file.name}")
 
-        return JsonResponse({
-            "url": file_url,
-            "uploaded": True,
-        })
+        return JsonResponse(
+            {
+                "url": file_url,
+                "uploaded": True,
+            }
+        )
 
-    return JsonResponse({"uploaded": False, "error": {"message": "Invalid upload request"}})
+    return JsonResponse(
+        {"uploaded": False, "error": {"message": "Invalid upload request"}}
+    )
 
 
 def file_browse_view(request):
@@ -52,31 +55,27 @@ def file_browse_view(request):
     if default_storage.exists(folder):
         for file_name in default_storage.listdir(folder)[1]:
             file_url = default_storage.url(f"browse/{file_name}")
-            files.append({
-                "url": file_url,
-                "name": file_name,
-            })
+            files.append(
+                {
+                    "url": file_url,
+                    "name": file_name,
+                }
+            )
 
     return JsonResponse({"files": files})
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.core.files.storage import default_storage
-from PIL import Image
-import os
 
 
 def process_file_to_browse_s3(original_file_path, output_path):
     """
     從 upload 處理檔案並上傳到 browse 資料夾
     """
-    with default_storage.open(original_file_path, 'rb') as original_file:
+    with default_storage.open(original_file_path, "rb") as original_file:
         with Image.open(original_file) as img:
             # 縮圖大小
             img.thumbnail((300, 300))
             # 將處理後的圖片存到 browse 資料夾
-            with default_storage.open(output_path, 'wb') as output_file:
+            with default_storage.open(output_path, "wb") as output_file:
                 img.save(output_file, format=img.format)
-
 
 
 @csrf_exempt
@@ -95,13 +94,16 @@ def file_upload_view(request):
         # 返回處理後的檔案 URL
         file_url = default_storage.url(browse_path)
 
-        return JsonResponse({
-            "url": file_url,
-            "uploaded": True,
-        })
+        return JsonResponse(
+            {
+                "url": file_url,
+                "uploaded": True,
+            }
+        )
 
-    return JsonResponse({"uploaded": False, "error": {"message": "Invalid upload request"}})
-
+    return JsonResponse(
+        {"uploaded": False, "error": {"message": "Invalid upload request"}}
+    )
 
 
 def file_browse_view(request):
@@ -114,13 +116,11 @@ def file_browse_view(request):
     # 使用 S3 列出 browse 資料夾內的所有檔案
     for file_name in default_storage.listdir(browse_folder)[1]:
         file_url = default_storage.url(f"{browse_folder}{file_name}")
-        files.append({
-            "url": file_url,
-            "name": file_name,
-        })
+        files.append(
+            {
+                "url": file_url,
+                "name": file_name,
+            }
+        )
 
     return JsonResponse({"files": files})
-
-
-
-
