@@ -103,10 +103,10 @@
         <div class="flex items-center">
           <label for="category" class="text-gray-700 font-medium">
             <strong>
-              分類：
+              分類：(可複選)
             </strong>
           </label>
-          <span class="text-red-500 text-sm ml-1">*必填(可複選)</span>
+          <span class="text-red-500 text-sm ml-1">*必填</span>
         </div>
 
 
@@ -185,10 +185,10 @@
         <div class="flex items-center">
           <label for="photo" class="text-gray-700 font-medium">
             <strong>
-              封面圖片：
+              封面圖片：(上傳一張吸引人的封面圖片，讓使用者對您更感興趣) 
             </strong>
           </label>
-          <span class="text-red-500 text-sm ml-1">*必填(上傳一張吸引人的封面圖片，讓使用者對您更感興趣) </span>
+          <span class="text-red-500 text-sm ml-1">*必填</span>
         </div>
         <input
           type="file"
@@ -281,7 +281,7 @@
 
         <!-- Premium Plan Fields -->
         <div
-          class="m-2 pt-4 bg-gray-300 p-4 rounded-md w-1/2 {% if form.premium_title.value %}block{% else %}hidden{% endif %} space-y-2"
+          class="m-2 pt-4 p-4 bg-indigo-100 border border-1 rounded-md w-1/2 {% if form.premium_title.value %}block{% else %}hidden{% endif %} space-y-2"
           id="premium-plan-container"
         >
         
